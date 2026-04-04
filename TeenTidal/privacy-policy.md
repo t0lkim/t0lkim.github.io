@@ -34,7 +34,6 @@ TeenTidal uses Tidal's Player SDK and EventSender for music playback. These comp
 ## Third-party services
 
 - **Tidal API** — used to search, browse, and stream music. No other third-party services, APIs, SDKs, or libraries are used.
-- **No advertising.** No ad networks, no ad tracking, no ad identifiers.
 - **No analytics.** No Firebase, no Amplitude, no Mixpanel, no anything.
 - **No social features.** No sharing, no social login, no contact list access.
 
