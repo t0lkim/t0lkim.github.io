@@ -50,10 +50,6 @@ TeenTidal requests no special device permissions — no camera, microphone, loca
 
 TeenTidal filters explicit content using metadata provided by Tidal's API. The accuracy of this filtering depends on record labels correctly tagging their content. TeenTidal applies this filter at both the catalogue and playback layers, but cannot guarantee completeness of upstream metadata.
 
-## In-app purchases
-
-None. TeenTidal is free with no in-app purchases.
-
 ## Data deletion
 
 Delete the app. All local data is removed. There is no account, no cloud sync, and no residual data on any server.
