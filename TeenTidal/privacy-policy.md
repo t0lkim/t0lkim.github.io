@@ -61,7 +61,3 @@ Delete the app. All local data is removed. There is no account, no cloud sync, a
 ## Changes to this policy
 
 If this policy changes, the updated version will be published here with a new effective date.
-
-## Contact
-
-For questions about this privacy policy, contact: mlott@mlott.com
