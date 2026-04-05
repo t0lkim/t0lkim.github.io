@@ -154,6 +154,49 @@ Video: `assets/walkthrough.mp4` (v0.3.0-alpha, iPhone 17 Pro)
 
 ---
 
+## Tidal Developer Platform Compliance
+
+TeenTidal is built to comply with Tidal's [Developer Guidelines (v3.0)](https://developer.tidal.com/documentation/guidelines/guidelines-developer-guidelines) and [Developer Terms of Service (v3.0)](https://developer.tidal.com/documentation/guidelines/guidelines-developer-terms). This section documents how each requirement is met.
+
+### Playback
+
+Tidal requires that playback is **only available through an official, unmodified version of the TIDAL Player SDK module**. TeenTidal uses the official `tidal-sdk-ios` (v0.11.9) Player module for all playback operations. No custom playback implementation exists — the SDK handles all audio streaming, DRM, and content delivery.
+
+### Authentication
+
+Tidal mandates OAuth 2.1 with PKCE for user authentication. TeenTidal implements the Authorization Code Flow with PKCE via `ASWebAuthenticationSession`. The client secret was removed from the app binary in v0.3.0 — the app operates as a PKCE-only public client. Tokens are stored in the iOS Keychain via the SDK's credential provider, and refresh is handled automatically.
+
+### Content Access
+
+- **No content modification:** TeenTidal does not edit, remix, alter, or re-encode any Tidal content. The explicit content filter operates on metadata (`explicit == true` flag) — it controls which content is *presented* to the user, not the content itself.
+- **No content storage:** No Tidal audio or video content is stored locally. The download queue in v0.3.0 tracks *intent* only — actual offline download requires the Tidal Offliner SDK and production credentials.
+- **Temporary caching only:** API response metadata (album titles, artist names, artwork URLs) is cached with tiered TTLs (5–30 minutes) and cleared on logout. No indefinite storage of Tidal content.
+- **No stream ripping:** TeenTidal cannot capture, record, or export audio streams. Playback is entirely within the Tidal Player SDK's controlled pipeline.
+
+### API Usage
+
+- **JSON:API v2 compliance:** All API requests use the correct `Accept: application/vnd.api+json` header and the `include` parameter for compound documents, per the JSON:API specification.
+- **Rate limiting:** Batch requests are sequential (not concurrent) to avoid triggering HTTP 429 responses. Search is debounced at 500ms. No scraping, crawling, or automated mass data retrieval.
+- **Server-side filtering:** Search requests use `explicitFilter=EXCLUDE` where supported by the API, reducing unnecessary data transfer.
+
+### Prohibited Uses — Compliance
+
+| Tidal Restriction | TeenTidal Compliance |
+|---|---|
+| No AI/ML use of content | No AI or machine learning features. Content metadata is used only for display and filtering. |
+| No visual synchronisation | No video sync, slideshow, or visual media output from audio content. |
+| No content mixing/remixing | Audio content is played unmodified through the official Player SDK. |
+| No data scraping | API used only for catalogue browsing and search. No bulk data extraction. |
+| No competing service | TeenTidal is a parental filter layer over Tidal, not a competing music service. Users must have their own Tidal subscription. |
+| No commercial use | TeenTidal is a personal/family tool, not a commercial product. Source code is proprietary and not distributed. |
+| Branding compliance | Tidal branding and attribution will be included per Design Guidelines before any public release. |
+
+### Production Mode
+
+TeenTidal is currently in development mode. Moving to production requires submitting the application for formal review by Tidal, including source code review for compliance. The app is parked pending this process. The development mode limitation (`PENotAllowed` for streaming) is the expected behaviour for unreviewed applications.
+
+---
+
 ## Current Status
 
 **Status:** Parked — Alpha Complete  
