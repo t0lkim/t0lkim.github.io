@@ -338,23 +338,23 @@ PipeWire (audio server / multiplexer)
     <h2>Touchscreen + physical controls</h2>
     <p>The UI renders via Rust + Slint (GPU-accelerated, OpenGL ES on VideoCore VI). No X11 or Wayland &mdash; direct framebuffer rendering. The display shows album artwork, VU meters, now-playing metadata, source buttons, and transport controls.</p>
 
-    <div class="ui-wireframe">+----------------------------------------------------------------------+
-|                                                                      |
-|  +---------------------------+  +----------------------------------+ |
-|  |                           |  |                                  | |
-|  |      Album Artwork        |  |      VU Meter / Spectrum         | |
-|  |       (600x600)           |  |       Visualisation              | |
-|  |                           |  |        (L + R)                   | |
-|  +---------------------------+  +----------------------------------+ |
-|                                                                      |
-|  +------------------------------------------------------------------+|
-|  |  Track: Song Title                              Artist Name      ||
-|  |  Album: Album Title                             FLAC 24/96      ||
-|  +------------------------------------------------------------------+|
-|                                                                      |
-|  [ BBC ] [ TDAL ] [ PLEX ] [ RDIO ]      [<<] [  > / ||  ] [>>]    |
-|                                                                      |
-+----------------------------------------------------------------------+</div>
+    <div class="ui-wireframe">+-----------------------------------------------------------------------+
+|                                                                       |
+|  +---------------------------+  +----------------------------------+  |
+|  |                           |  |                                  |  |
+|  |      Album Artwork        |  |      VU Meter / Spectrum         |  |
+|  |       (600x600)           |  |       Visualisation              |  |
+|  |                           |  |        (L + R)                   |  |
+|  +---------------------------+  +----------------------------------+  |
+|                                                                       |
+|  +-----------------------------------------------------------------+  |
+|  |  Track: Song Title                              Artist Name     |  |
+|  |  Album: Album Title                             FLAC 24/96      |  |
+|  +-----------------------------------------------------------------+  |
+|                                                                       |
+|     [ BBC ] [ TDAL ] [ PLEX ] [ RDIO ]      [<<] [  > / ||  ] [>>]    |
+|                                                                       |
++-----------------------------------------------------------------------+</div>
 
     <p>Physical buttons mirror the touchscreen sources (GPIO-connected). A rotary encoder provides volume control. All controls work with the display off.</p>
   </section>

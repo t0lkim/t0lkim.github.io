@@ -5,8 +5,8 @@ description: Cybersecurity & operational engineering technical leader
 bio: "Cybersecurity & Operational Engineering Technical Leader | Security Architecture | Counter-Censorship | Infrastructure Security"
 location: Singapore
 pinned:
-  - name: TeenTidal
-    url: ./TeenTidal/
+  - name: teen-tidal
+    url: ./teen-tidal/
     desc: "Native iOS parental content filter for Tidal. Two-layer explicit content filtering with no bypassable settings."
     lang: Swift
   - name: pg-harden
@@ -67,7 +67,7 @@ Strategic Cybersecurity leader with over 15 years of experience in Security Arch
 
 ### &#x1F680; Projects
 
-#### [TeenTidal](./TeenTidal/)
+#### [TeenTidal](./teen-tidal/)
 Native iOS app wrapping Tidal's SDK with two-layer explicit content filtering. Structural parental controls with no user-bypassable settings. Currently in alpha, pending Tidal developer programme access.
 
 #### [pg-harden](./pg-harden/)
@@ -76,14 +76,14 @@ PostgreSQL security hardening scanner. Checks SCRAM authentication, SSL enforcem
 #### [TidalPlaylistBuilder](./tidal-playlist-builder/)
 Build Tidal playlists from BBC programmes, CSV, and text files. Automates playlist creation from external track listings.
 
-#### [image-video-organiser](https://github.com/t0lkim/media-organiser)
+#### [MMM (MyMediaManager)](./mmm/)
 Image and video organiser with deduplication, EXIF-based renaming, and date-based directory structure.
 
 #### [TheStreamDeck](./the-stream-deck/)
 Raspberry Pi-based unified streaming audio appliance with touchscreen, physical VU meters, and instant source switching across Tidal, Plexamp, BBC radio, and internet radio.
 
-#### [patreon-dl](https://github.com/t0lkim/patreon-dl)
-Download media content from Patreon creators you subscribe to.
+#### [PatronVault](./patron-vault/)
+Download and archive media content from Patreon creators you subscribe to. Cookie-based auth against Patreon's internal JSON:API.
 
-#### [teachable-dl](https://github.com/t0lkim/teachable-dl)
-Download course content from Teachable platforms you have access to.
+#### [CourseVault](./course-vault/)
+Download and archive course content from Teachable platforms. Browser cookie extraction, curriculum enumeration, video download with metadata embedding.

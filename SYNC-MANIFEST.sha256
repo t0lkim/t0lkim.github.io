@@ -1,0 +1,15 @@
+# Markdown → HTML Sync Manifest
+# SHA256 of markdown source files. When a hash differs from this file,
+# the corresponding HTML in site/ needs regenerating.
+# Format: SHA256  markdown-path  →  site-path
+#
+# Check sync: sha256sum -c SYNC-MANIFEST.sha256
+# (will show FAILED for any out-of-sync files)
+
+a4bfd2c30b8fbca7a959430480be72120060a5ac4353db09e52e2d363dd89c4e  markdown-files/teen-tidal/index.md  # → site/teen-tidal/index.html [exists]
+03505bc596ed76858ffc1d39489f3073653ae6353068652501614e74da689b32  markdown-files/pg-harden/index.md  # → site/pg-harden/index.html [exists]
+c19a78b05be90ac8cb9156c951b27368caa6defe09a969298fddb24ad2a55695  markdown-files/the-stream-deck/index.md  # → site/the-stream-deck/index.html [exists]
+0f7a0ff24ac42387ab028f5c0fad0717af53c3e48e4a7717cf8dd1f7bbf13c05  markdown-files/tidal-playlist-builder/index.md  # → site/tidal-playlist-builder/index.html [exists]
+48536250e97d7cd97920970d51d6ed1e998b518e5778c22a5f1799e5c0fd5ff7  markdown-files/patron-vault/index.md  # → site/patron-vault/index.html [NEEDS BUILD]
+e589d980a124aa62718a703f4ec8f064a8def80ce2e86cad2c71a5f2a437d715  markdown-files/course-vault/index.md  # → site/course-vault/index.html [NEEDS BUILD]
+81c9feaa7553f2cf703c9246898c1c5d6b04d18d563a27bd5f8c6f8a6897142d  markdown-files/mmm/index.md  # → site/mmm/index.html [NEEDS BUILD]
