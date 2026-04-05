@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TheStreamDeck — Case Study</title>
+  <meta name="description" content="A Raspberry Pi-based unified streaming audio appliance with touchscreen, physical VU meters, and instant source switching.">
+  <link rel="stylesheet" href="../assets/css/base.css">
+  <link rel="stylesheet" href="../assets/css/teentidal.css">
+  <style>
+    .hero::before {
+      background:
+        radial-gradient(ellipse 600px 300px at 50% 40%, rgba(210, 153, 34, 0.06) 0%, transparent 70%),
+        radial-gradient(ellipse 400px 200px at 70% 60%, rgba(0, 201, 167, 0.04) 0%, transparent 60%);
+    }
+    .hw-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin: 24px 0;
+    }
+    @media (max-width: 600px) { .hw-grid { grid-template-columns: 1fr; } }
+    .hw-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px;
+    }
+    .hw-card .hw-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 6px;
+    }
+    .hw-card h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: var(--text);
+    }
+    .hw-card p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 0;
+    }
+    .signal-path {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px;
+      margin: 24px 0;
+      font-family: 'SF Mono', Menlo, monospace;
+      font-size: 12px;
+      line-height: 1.7;
+      color: var(--text-muted);
+      overflow-x: auto;
+      white-space: pre;
+    }
+    .source-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: 12px;
+      margin: 24px 0;
+    }
+    @media (max-width: 768px) { .source-row { grid-template-columns: 1fr 1fr; } }
+    .src-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+    }
+    .src-card .src-icon {
+      font-size: 1.8rem;
+      margin-bottom: 8px;
+    }
+    .src-card h4 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .src-card .src-quality {
+      font-size: 0.75rem;
+      color: var(--teal);
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .src-card p {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+      margin-bottom: 0;
+    }
+    .ui-wireframe {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px;
+      margin: 24px 0;
+      font-family: 'SF Mono', Menlo, monospace;
+      font-size: 11px;
+      line-height: 1.5;
+      color: var(--text-muted);
+      overflow-x: auto;
+      white-space: pre;
+    }
+    .spec-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 0.85rem;
+    }
+    .spec-table th {
+      text-align: left;
+      padding: 8px 12px;
+      border-bottom: 2px solid var(--border);
+      color: var(--text);
+      font-weight: 600;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .spec-table td {
+      padding: 8px 12px;
+      border-bottom: 1px solid rgba(48, 54, 61, 0.3);
+      color: var(--text-muted);
+    }
+    .spec-table td:first-child {
+      color: var(--text);
+      font-weight: 500;
+    }
+    .phase-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 20px 0;
+    }
+    @media (max-width: 600px) { .phase-grid { grid-template-columns: 1fr; } }
+    .phase-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+    }
+    .phase-card .phase-num {
+      font-size: 2rem;
+      font-weight: 700;
+      color: rgba(0, 201, 167, 0.15);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .phase-card h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .phase-card .phase-time {
+      font-size: 0.75rem;
+      color: var(--teal);
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .phase-card p {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <a href="/" class="home-btn" title="Home"><svg width="18" height="18" viewBox="0 0 16 16"><path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6.5 6.5A.5.5 0 0 0 1.5 8.5v5a.5.5 0 0 0 .5.5h3.5a.5.5 0 0 0 .5-.5V11h4v2.5a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-5a.5.5 0 0 0-.146-.354L8.354 1.146ZM2.5 13V8.707l5.5-5.5 5.5 5.5V13H11v-2.5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0-.5.5V13H2.5Z"/></svg></a>
+
+  <!-- Hero -->
+  <header class="hero">
+    <div class="container">
+      <div class="hero-badge">Case Study</div>
+      <h1>The<span class="accent">StreamDeck</span></h1>
+      <p class="hero-sub">A Raspberry Pi-based unified streaming audio appliance. One device, one amp input, instant source switching, album art on screen, and physical analogue VU meters.</p>
+    </div>
+  </header>
+
+  <div class="divider"></div>
+
+  <!-- Problem -->
+  <section class="container fade-in">
+    <div class="section-label">The Problem</div>
+    <h2>Too many sources, too much friction</h2>
+    <p>An audiophile with multiple streaming subscriptions &mdash; Tidal HiFi Plus, Plexamp (local library), BBC 6 Music, internet radio &mdash; experiences frustrating, slow source switching when listening through a high-quality integrated amplifier. Each service runs on a different device, requiring manual amp input selection.</p>
+    <p>The fragmented workflow disrupts listening sessions, adds unnecessary physical interaction, and wastes the visual potential of album artwork during playback.</p>
+
+    <div class="problem-card">
+      <div class="label">Problem Statement</div>
+      <blockquote>Switching between audio sources requires changing physical devices and amp inputs &mdash; slow, disruptive, and frustrating. No unified device exists that consolidates all streaming sources into a single digital output with instant switching.</blockquote>
+    </div>
+
+    <div class="constraints">
+      <div class="constraint"><span class="icon">&times;</span> Each source = different device</div>
+      <div class="constraint"><span class="icon">&times;</span> Manual amp input switching</div>
+      <div class="constraint"><span class="icon">&times;</span> No album art during playback</div>
+      <div class="constraint"><span class="icon">&times;</span> Broken listening flow</div>
+      <div class="constraint"><span class="icon">&times;</span> Underuse of paid subscriptions</div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Solution -->
+  <section class="container fade-in">
+    <div class="section-label">The Solution</div>
+    <h2>One device, one input, instant switching</h2>
+    <p>TheStreamDeck consolidates BBC 6 Music, Tidal HiFi Plus, Plexamp, and internet radio into a single Raspberry Pi 4 appliance with a touchscreen, physical source buttons, real-time VU meter visualisation, and S/PDIF digital output to an integrated amplifier.</p>
+
+    <div class="layers">
+      <div class="layer">
+        <div class="layer-num">&#x1F3B5;</div>
+        <h3>4 Sources, 1 Output</h3>
+        <p>BBC 6 Music (MPD), Tidal HiFi Plus (Tidal Connect), Plexamp (headless), and internet radio &mdash; all routed through PipeWire to a single S/PDIF optical output.</p>
+      </div>
+      <div class="layer">
+        <div class="layer-num">&#x26A1;</div>
+        <h3>&lt; 3 Second Switching</h3>
+        <p>Physical buttons and touchscreen for instant source selection. A Rust daemon manages source lifecycle &mdash; stop current, start new, update UI. No amp input changes needed.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Audio Sources -->
+  <section class="container fade-in">
+    <div class="section-label">Audio Sources</div>
+    <h2>Four sources, unified</h2>
+
+    <div class="source-row">
+      <div class="src-card">
+        <div class="src-icon">&#x1F4FB;</div>
+        <h4>BBC 6 Music</h4>
+        <div class="src-quality">320kbps AAC</div>
+        <p>MPD player, HLS stream. ICY metadata for now-playing info.</p>
+      </div>
+      <div class="src-card">
+        <div class="src-icon">&#x1F3B6;</div>
+        <h4>Tidal HiFi Plus</h4>
+        <div class="src-quality">Lossless FLAC 24/96</div>
+        <p>Tidal Connect via Podman. Cast from phone, Pi renders audio.</p>
+      </div>
+      <div class="src-card">
+        <div class="src-icon">&#x1F4BF;</div>
+        <h4>Plexamp</h4>
+        <div class="src-quality">FLAC (local library)</div>
+        <p>Headless Node.js player. Cast-based control from any client.</p>
+      </div>
+      <div class="src-card">
+        <div class="src-icon">&#x1F310;</div>
+        <h4>Internet Radio</h4>
+        <div class="src-quality">Variable</div>
+        <p>MPD with preset stations. Shoutcast, Icecast, HLS streams.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Hardware -->
+  <section class="container fade-in">
+    <div class="section-label">Hardware Architecture</div>
+    <h2>Purpose-built audio appliance</h2>
+
+    <div class="hw-grid">
+      <div class="hw-card">
+        <div class="hw-label">Compute</div>
+        <h4>Raspberry Pi 4 Model B</h4>
+        <p>Quad A72 @ 1.5GHz, VideoCore VI GPU. PiOS Lite 64-bit. Wired Ethernet for reliability.</p>
+      </div>
+      <div class="hw-card">
+        <div class="hw-label">Digital Transport</div>
+        <h4>HiFiBerry Digi2 Pro</h4>
+        <p>S/PDIF output (TOSLINK optical + coax). Dual oscillator, low jitter. 192kHz/24-bit. NOT a DAC &mdash; pure digital transport.</p>
+      </div>
+      <div class="hw-card">
+        <div class="hw-label">Display</div>
+        <h4>5" Touchscreen</h4>
+        <p>IPS capacitive touch. HDMI + USB (no GPIO conflict). Fits 70mm case height to match amplifier form factor.</p>
+      </div>
+      <div class="hw-card">
+        <div class="hw-label">VU Meter DAC</div>
+        <h4>MCP4922</h4>
+        <p>Dual 12-bit SPI DAC driving L/R analogue panel meters. 4096 steps, zero jitter. Powered from Pi's 3.3V rail.</p>
+      </div>
+      <div class="hw-card">
+        <div class="hw-label">VU Meters</div>
+        <h4>Analogue Panel Meters</h4>
+        <p>Moving-coil needle meters. Software VU ballistics (300ms IIR filter). Series resistor + trim pot per channel for calibration.</p>
+      </div>
+      <div class="hw-card">
+        <div class="hw-label">Amplifier</div>
+        <h4>NAD C 3xx Series</h4>
+        <p>Optical digital input, Cirrus Logic internal DAC. All D/A conversion happens in the amp &mdash; the Pi stays purely digital.</p>
+      </div>
+    </div>
+
+    <div class="signal-path">Streaming Source (Tidal / Plexamp / MPD)
+    |
+    v
+PipeWire (audio server / multiplexer)
+    |
+    +---> HiFiBerry Digi2 Pro (I2S -> S/PDIF)
+    |         |
+    |         +---> TOSLINK optical cable
+    |                   |
+    |                   v
+    |              Amplifier optical input
+    |                   |
+    |                   v
+    |              Internal DAC (D/A conversion)
+    |                   |
+    |                   v
+    |              Amplifier stage -> Speakers
+    |
+    +---> PipeWire monitor source (audio tap)
+              |
+              v
+         VU Meter / Spectrum (cpal + RustFFT -> display + MCP4922)</div>
+
+    <p><strong>Why Digi HAT, not DAC HAT:</strong> The Pi stays purely digital &mdash; no analogue stages on the Pi side. The amplifier's Cirrus Logic DAC is purpose-built with dedicated power regulation and shielding. Using a DAC HAT would mean unnecessary double conversion (digital &rarr; HAT DAC &rarr; analogue &rarr; amp). TOSLINK optical provides galvanic isolation, eliminating ground loop hum from the Pi's switching PSU.</p>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- UI -->
+  <section class="container fade-in">
+    <div class="section-label">User Interface</div>
+    <h2>Touchscreen + physical controls</h2>
+    <p>The UI renders via Rust + Slint (GPU-accelerated, OpenGL ES on VideoCore VI). No X11 or Wayland &mdash; direct framebuffer rendering. The display shows album artwork, VU meters, now-playing metadata, source buttons, and transport controls.</p>
+
+    <div class="ui-wireframe">+----------------------------------------------------------------------+
+|                                                                      |
+|  +---------------------------+  +----------------------------------+ |
+|  |                           |  |                                  | |
+|  |      Album Artwork        |  |      VU Meter / Spectrum         | |
+|  |       (600x600)           |  |       Visualisation              | |
+|  |                           |  |        (L + R)                   | |
+|  +---------------------------+  +----------------------------------+ |
+|                                                                      |
+|  +------------------------------------------------------------------+|
+|  |  Track: Song Title                              Artist Name      ||
+|  |  Album: Album Title                             FLAC 24/96      ||
+|  +------------------------------------------------------------------+|
+|                                                                      |
+|  [ BBC ] [ TDAL ] [ PLEX ] [ RDIO ]      [<<] [  > / ||  ] [>>]    |
+|                                                                      |
++----------------------------------------------------------------------+</div>
+
+    <p>Physical buttons mirror the touchscreen sources (GPIO-connected). A rotary encoder provides volume control. All controls work with the display off.</p>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Design Decisions -->
+  <section class="container fade-in">
+    <div class="section-label">Design Decisions</div>
+    <h2>Why it works this way</h2>
+
+    <ul class="decision-list">
+      <li>
+        <strong>Digital transport over DAC HAT</strong>
+        <span>The amplifier's internal Cirrus Logic DAC is objectively superior to any ~$30 Pi HAT DAC. Keeping the Pi purely digital avoids double D/A conversion and eliminates ground loop hum via TOSLINK galvanic isolation. The HiFiBerry Digi2 Pro provides bit-perfect S/PDIF with dual oscillators for low jitter.</span>
+      </li>
+      <li>
+        <strong>MCP4922 SPI DAC for VU meters over PWM</strong>
+        <span>Hardware PWM on GPIO 18 conflicts with the HiFiBerry's PCM_CLK. Software PWM produces visible needle jitter (~13 usable steps). The MCP4922 gives 4096 steps with zero jitter via SPI &mdash; proven superior in head-to-head testing. Total cost: ~$4 for the IC.</span>
+      </li>
+      <li>
+        <strong>PipeWire as the audio multiplexer</strong>
+        <span>PipeWire is the default audio server on PiOS Bookworm. It natively multiplexes all sources (MPD, Tidal Connect, Plexamp) into a single output. Monitor sources provide an audio tap for VU meter visualisation without affecting the main signal path.</span>
+      </li>
+      <li>
+        <strong>Rust + Slint for the UI</strong>
+        <span>Purpose-built for embedded touchscreens. GPU-accelerated via OpenGL ES on VideoCore VI. Works with framebuffer directly &mdash; no X11/Wayland needed. Keeps the entire codebase in Rust. VU meter renders at 60fps with ~8-15% CPU overhead.</span>
+      </li>
+      <li>
+        <strong>Cast-based control model for Tidal and Plexamp</strong>
+        <span>The Pi is the renderer, not the controller. Tidal Connect and Plexamp both support cast-based playback &mdash; control from your phone, audio plays through the Pi. This avoids building complex playback UIs and leverages the native apps' full feature sets.</span>
+      </li>
+      <li>
+        <strong>435mm width form factor</strong>
+        <span>Designed to match the NAD C 3xx amplifier width. The case height is locked to 70mm (matching the NAD C 338 profile). This constrains the display to 5" max and the VU meters to 45-50mm &mdash; deliberate trade-offs for visual coherence in the listening position.</span>
+      </li>
+      <li>
+        <strong>Software VU ballistics over mechanical damping</strong>
+        <span>A 300ms IIR filter in software implements VU-standard ballistics (1-1.5% overshoot). Budget analogue meters have poor mechanical damping, so software compensation is essential. Higher-quality meters can rely on their own inertia with only a gentle 50ms smoothing pass.</span>
+      </li>
+    </ul>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Evolution -->
+  <section class="container fade-in">
+    <div class="section-label">Evolution</div>
+    <h2>How it took shape</h2>
+
+    <div class="evo-version">
+      <div class="evo-header">
+        <span class="evo-badge">v0.1.0</span>
+        <span class="evo-date">4 April 2026</span>
+        <div class="evo-title">Problem Statement &amp; Technical Specification</div>
+      </div>
+      <div class="evo-grid">
+        <div class="evo-card">
+          <div class="evo-card-label arch">Architecture</div>
+          <p>Hardware architecture designed: Pi 4B + HiFiBerry Digi2 Pro + NAD optical input. First-principles analysis confirmed Digi HAT over DAC HAT. Software stack defined: PiOS Lite, PipeWire, MPD, Tidal Connect (Podman), Plexamp headless.</p>
+        </div>
+        <div class="evo-card">
+          <div class="evo-card-label added">Added</div>
+          <p>Source switching architecture with Rust daemon + Slint UI. VU visualisation pipeline: cpal + RustFFT (NEON-accelerated on aarch64). Architecture diagram Rev A. 758-line research file.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="evo-divider"></div>
+
+    <div class="evo-version">
+      <div class="evo-header">
+        <span class="evo-badge">v0.2.0</span>
+        <span class="evo-date">5 April 2026</span>
+        <div class="evo-title">VU Meter Subsystem &amp; Display Upgrade</div>
+      </div>
+      <div class="evo-grid">
+        <div class="evo-card">
+          <div class="evo-card-label added">Added</div>
+          <p>MCP4922 dual SPI DAC circuit designed. KiCad schematic authored. VU meter driver wiring defined with series resistor + trim pot calibration. Printable screen templates for UI sketching.</p>
+        </div>
+        <div class="evo-card">
+          <div class="evo-card-label changed">Changed</div>
+          <p>Display upgraded from 7" DSI (720p) to 13.3" HDMI (1080p). UI layout updated for full HD canvas. GPIO allocation revised for SPI DAC. BOM updated.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="evo-divider"></div>
+
+    <div class="evo-version">
+      <div class="evo-header">
+        <span class="evo-badge">v0.3.0</span>
+        <span class="evo-date">5 April 2026</span>
+        <div class="evo-title">Form Factor &amp; Industrial Design</div>
+      </div>
+      <div class="evo-grid">
+        <div class="evo-card">
+          <div class="evo-card-label changed">Changed</div>
+          <p>Display revised from 13.3" to 5" to fit 70mm case height matching amplifier form factor. VU meters resized from 85mm to 45-50mm. Case width locked to 435mm (standard hi-fi component width).</p>
+        </div>
+        <div class="evo-card">
+          <div class="evo-card-label added">Added</div>
+          <p>Front panel concept diagram. Blank wireframe PDFs for sketching. Case wireframe PDFs with four VU meter layout options (circular + rectangular).</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Build Plan -->
+  <section class="container fade-in">
+    <div class="section-label">Build Plan</div>
+    <h2>Five phases to first sound</h2>
+
+    <div class="phase-grid">
+      <div class="phase-card">
+        <div class="phase-num">1</div>
+        <h4>Audio Foundation</h4>
+        <div class="phase-time">Week 1</div>
+        <p>PiOS setup, PipeWire config, HiFiBerry Digi2 Pro I2S output. MPD playing BBC 6 Music through TOSLINK. First sound through the amplifier.</p>
+      </div>
+      <div class="phase-card">
+        <div class="phase-num">2</div>
+        <h4>All Sources Online</h4>
+        <div class="phase-time">Week 2</div>
+        <p>Tidal Connect container, Plexamp headless, internet radio presets. Source Controller daemon with GPIO button switching. &lt;3s switching verified.</p>
+      </div>
+      <div class="phase-card">
+        <div class="phase-num">3</div>
+        <h4>Display &amp; UI</h4>
+        <div class="phase-time">Week 3</div>
+        <p>Touchscreen integration. Slint UI with album art, now-playing, source buttons, transport controls. Metadata retrieval from all sources.</p>
+      </div>
+      <div class="phase-card">
+        <div class="phase-num">4</div>
+        <h4>VU Meters</h4>
+        <div class="phase-time">Week 4</div>
+        <p>MCP4922 wiring and driver. cpal audio capture from PipeWire monitor. RustFFT analysis. Software ballistics. Physical meter calibration.</p>
+      </div>
+      <div class="phase-card">
+        <div class="phase-num">5</div>
+        <h4>Case &amp; Polish</h4>
+        <div class="phase-time">Week 5</div>
+        <p>435mm x 70mm enclosure. Component mounting. Cable management. Boot optimisation. Final integration testing.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Status -->
+  <section class="container fade-in">
+    <div class="section-label">Current Status</div>
+
+    <div class="status-banner">
+      <div class="status-left">
+        <div class="status-label">Project Status</div>
+        <div class="status-value"><span class="dot"></span>Design Complete &mdash; v0.3.1</div>
+      </div>
+      <div class="status-meta">
+        <div class="meta-item">
+          <div class="meta-label">Platform</div>
+          <div class="meta-value">Raspberry Pi 4</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Language</div>
+          <div class="meta-value">Rust + Slint</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Phase</div>
+          <div class="meta-value">Pre-build</div>
+        </div>
+      </div>
+    </div>
+
+    <p>Hardware architecture, VU meter circuit design (KiCad schematic), form factor, and software stack are fully specified. The project is ready to begin Phase 1 (audio foundation) once the hardware is assembled. Key components: Pi 4B (owned), HiFiBerry Digi2 Pro (to order), 5" touchscreen (to order), MCP4922 + VU meters (to order).</p>
+  </section>
+
+  <div class="divider"></div>
+
+  <footer class="footer container">
+    <p class="footer-copy">&copy; 2026 t0lkim</p>
+  </footer>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>

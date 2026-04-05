@@ -79,6 +79,9 @@ Build Tidal playlists from BBC programmes, CSV, and text files. Automates playli
 #### [image-video-organiser](https://github.com/t0lkim/media-organiser)
 Image and video organiser with deduplication, EXIF-based renaming, and date-based directory structure.
 
+#### [TheStreamDeck](./the-stream-deck/)
+Raspberry Pi-based unified streaming audio appliance with touchscreen, physical VU meters, and instant source switching across Tidal, Plexamp, BBC radio, and internet radio.
+
 #### [patreon-dl](https://github.com/t0lkim/patreon-dl)
 Download media content from Patreon creators you subscribe to.
 
