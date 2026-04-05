@@ -1,0 +1,65 @@
+/* ── t0lkim.dev — Standard Content Pages ─────────────── */
+
+.page-content {
+  padding: 80px 24px 40px;
+  max-width: 800px;
+}
+
+.page-content h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.page-content h2 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-top: 32px;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+
+.page-content h3 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-top: 24px;
+  margin-bottom: 10px;
+  color: var(--text);
+}
+
+.page-content p {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  margin-bottom: 12px;
+}
+
+.page-content ul, .page-content ol {
+  padding-left: 1.5em;
+  margin-bottom: 12px;
+}
+
+.page-content li {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  margin-bottom: 4px;
+}
+
+.page-content strong { color: var(--text); }
+
+.page-content a { color: var(--teal); }
+
+.page-content hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 24px 0;
+}
+
+.page-content blockquote {
+  border-left: 3px solid var(--teal);
+  padding-left: 16px;
+  margin: 16px 0;
+  color: var(--text-muted);
+  font-style: italic;
+}

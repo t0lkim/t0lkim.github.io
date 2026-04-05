@@ -1,0 +1,264 @@
+/* ── t0lkim.dev — Profile Page (GitHub README style) ── */
+
+/* ── Page Layout ─────────────────────────────────────── */
+.page {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 24px 32px;
+  display: flex;
+  gap: 24px;
+}
+
+/* ── Sidebar ─────────────────────────────────────────── */
+.sidebar {
+  width: 296px;
+  flex-shrink: 0;
+  padding-top: 8px;
+}
+
+.avatar {
+  width: 296px;
+  height: 296px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  object-fit: cover;
+  margin-bottom: 16px;
+}
+
+.sidebar-name {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.sidebar-handle {
+  font-size: 20px;
+  font-weight: 300;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+
+.sidebar-bio {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+.sidebar-meta {
+  font-size: 14px;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 12px;
+  margin-bottom: 16px;
+}
+
+.sidebar-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.sidebar-meta-item svg { fill: var(--text-muted); flex-shrink: 0; }
+.sidebar-meta-item a { color: var(--blue); }
+
+.sidebar-stats {
+  font-size: 14px;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 12px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.sidebar-stats svg { fill: var(--text-muted); }
+.sidebar-stats strong { color: var(--text); font-weight: 600; }
+
+/* ── Main Content ────────────────────────────────────── */
+.main { flex: 1; min-width: 0; }
+
+/* ── README Card ─────────────────────────────────────── */
+.readme {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  margin-bottom: 24px;
+}
+
+.readme-header {
+  padding: 8px 16px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  border-radius: 6px 6px 0 0;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text);
+}
+
+.readme-header svg { fill: var(--text-muted); }
+
+.readme-body { padding: 32px 40px; }
+
+/* ── Markdown Typography ─────────────────────────────── */
+.readme-body h1 {
+  font-size: 2em;
+  font-weight: 600;
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.readme-body h2 {
+  font-size: 1.5em;
+  font-weight: 600;
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+  color: var(--text);
+}
+
+.readme-body h3 {
+  font-size: 1.25em;
+  font-weight: 600;
+  margin-top: 24px;
+  margin-bottom: 16px;
+}
+
+.readme-body h4 {
+  font-size: 1em;
+  font-weight: 600;
+  margin-top: 16px;
+  margin-bottom: 8px;
+}
+
+.readme-body h4 a { color: var(--blue); }
+
+.readme-body p {
+  margin-bottom: 16px;
+  color: var(--text);
+}
+
+.readme-body ul {
+  padding-left: 2em;
+  margin-bottom: 16px;
+}
+
+.readme-body li { margin-bottom: 4px; }
+.readme-body li strong { color: var(--text); }
+
+.readme-body hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 24px 0;
+}
+
+/* ── Shields.io Badges ───────────────────────────────── */
+.badges {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.badges img {
+  height: 28px;
+  vertical-align: middle;
+}
+
+/* ── Project Descriptions ────────────────────────────── */
+.project-desc {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+
+/* ── Pinned Repos ────────────────────────────────────── */
+.pinned-heading {
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+.pinned-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.pinned-card {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  transition: border-color 0.2s;
+}
+
+.pinned-card:hover { border-color: var(--blue); text-decoration: none; }
+
+.pinned-card-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--blue);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pinned-card-name .repo-icon { fill: var(--text-muted); }
+
+.pinned-card-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  flex: 1;
+  margin-bottom: 12px;
+}
+
+.pinned-card-meta {
+  display: flex;
+  gap: 16px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.pinned-lang {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.lang-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.lang-swift { background: #F05138; }
+.lang-ts { background: #3178C6; }
+.lang-rust { background: #DEA584; }
+
+/* ── Responsive ──────────────────────────────────────── */
+@media (max-width: 768px) {
+  .page { flex-direction: column; padding: 16px; }
+  .sidebar {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .avatar { width: 200px; height: 200px; font-size: 3.5rem; }
+  .sidebar-meta-item { justify-content: center; }
+  .sidebar-stats { justify-content: center; }
+  .pinned-grid { grid-template-columns: 1fr; }
+  .readme-body { padding: 24px 16px; }
+}

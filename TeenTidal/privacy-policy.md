@@ -1,6 +1,8 @@
 ---
-layout: default
+layout: page
 title: TeenTidal — Privacy Policy
+back_link: ./
+back_text: TeenTidal Case Study
 ---
 
 # TeenTidal — Privacy Policy

@@ -1,0 +1,17 @@
+# Jekyll
+_site/
+.sass-cache/
+.jekyll-cache/
+.jekyll-metadata
+
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Editor
+*.swp
+*.swo
+*~
+
+# Do not publish changelog
+CHANGELOG.md

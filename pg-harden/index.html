@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>pg-harden — Case Study</title>
+  <meta name="description" content="A Rust CLI tool for PostgreSQL security hardening — scan, report, and enforce deny-all security posture.">
+  <link rel="stylesheet" href="../assets/css/base.css">
+  <link rel="stylesheet" href="../assets/css/teentidal.css">
+  <style>
+    /* pg-harden overrides */
+    .hero::before {
+      background:
+        radial-gradient(ellipse 600px 300px at 50% 40%, rgba(222, 165, 132, 0.06) 0%, transparent 70%),
+        radial-gradient(ellipse 400px 200px at 70% 60%, rgba(0, 201, 167, 0.04) 0%, transparent 60%);
+    }
+    .check-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+      margin: 20px 0;
+    }
+    @media (max-width: 768px) {
+      .check-grid { grid-template-columns: 1fr; }
+    }
+    @media (min-width: 769px) and (max-width: 1024px) {
+      .check-grid { grid-template-columns: 1fr 1fr; }
+    }
+    .check-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+    }
+    .check-card .severity {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .severity.critical { color: #F85149; }
+    .severity.high { color: #D29922; }
+    .severity.medium { color: #58A6FF; }
+    .severity.low { color: var(--text-muted); }
+    .check-card h4 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+      font-family: 'SF Mono', Menlo, monospace;
+      color: var(--text);
+    }
+    .check-card p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+      margin-bottom: 0;
+    }
+    .terminal {
+      background: #161B22;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 24px 0;
+    }
+    .terminal-bar {
+      background: #21262D;
+      padding: 8px 14px;
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+    .terminal-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+    .terminal-dot.red { background: #F85149; }
+    .terminal-dot.yellow { background: #D29922; }
+    .terminal-dot.green { background: #3FB950; }
+    .terminal-title {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-left: 8px;
+      font-family: 'SF Mono', Menlo, monospace;
+    }
+    .terminal-body {
+      padding: 16px 20px;
+      font-family: 'SF Mono', Menlo, monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--text-muted);
+      overflow-x: auto;
+    }
+    .terminal-body .prompt { color: var(--teal); }
+    .terminal-body .cmd { color: var(--text); }
+    .terminal-body .critical-text { color: #F85149; font-weight: 600; }
+    .terminal-body .high-text { color: #D29922; }
+    .terminal-body .pass-text { color: #3FB950; }
+    .terminal-body .dim { color: #484F58; }
+
+    .arch-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px;
+      margin: 24px 0;
+      font-family: 'SF Mono', Menlo, monospace;
+      font-size: 12px;
+      line-height: 1.7;
+      color: var(--text-muted);
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    .roadmap-item {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 20px;
+      align-items: flex-start;
+    }
+    .roadmap-phase {
+      flex-shrink: 0;
+      width: 64px;
+      height: 64px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+    .roadmap-phase.done {
+      background: rgba(63, 185, 80, 0.12);
+      color: #3FB950;
+      border: 1px solid rgba(63, 185, 80, 0.25);
+    }
+    .roadmap-phase.current {
+      background: var(--teal-dim);
+      color: var(--teal);
+      border: 1px solid rgba(0, 201, 167, 0.25);
+    }
+    .roadmap-phase.planned {
+      background: rgba(139, 148, 158, 0.08);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+    .roadmap-body { flex: 1; }
+    .roadmap-body h4 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .roadmap-body .status-tag {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+    .status-tag.done { background: rgba(63, 185, 80, 0.15); color: #3FB950; }
+    .status-tag.active { background: var(--teal-dim); color: var(--teal); }
+    .status-tag.planned { background: rgba(139, 148, 158, 0.1); color: var(--text-muted); }
+    .roadmap-body p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <a href="/" class="home-btn" title="Home"><svg width="18" height="18" viewBox="0 0 16 16"><path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6.5 6.5A.5.5 0 0 0 1.5 8.5v5a.5.5 0 0 0 .5.5h3.5a.5.5 0 0 0 .5-.5V11h4v2.5a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-5a.5.5 0 0 0-.146-.354L8.354 1.146ZM2.5 13V8.707l5.5-5.5 5.5 5.5V13H11v-2.5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0-.5.5V13H2.5Z"/></svg></a>
+
+  <!-- Hero -->
+  <header class="hero">
+    <div class="container">
+      <div class="hero-badge">Case Study</div>
+      <h1>pg-<span class="accent">harden</span></h1>
+      <p class="hero-sub">A Rust CLI for PostgreSQL security hardening. Scan, report, and enforce a deny-all security posture across your database fleet.</p>
+    </div>
+  </header>
+
+  <div class="divider"></div>
+
+  <!-- Problem -->
+  <section class="container fade-in">
+    <div class="section-label">The Problem</div>
+    <h2>PostgreSQL ships open by default</h2>
+    <p>PostgreSQL's out-of-the-box configuration prioritises ease of setup over security. Default installs allow local trust authentication, MD5 password hashing, unencrypted connections, and unrestricted public schema access. Most hardening guides are checklists that require manual, repetitive work across every instance.</p>
+    <p>As infrastructure grows &mdash; especially in environments with multiple PostgreSQL instances across LXC containers and VMs &mdash; there's no practical way to verify that every database meets a consistent security baseline without a dedicated tool.</p>
+
+    <div class="problem-card">
+      <div class="label">Problem Statement</div>
+      <blockquote>No single-binary tool exists to scan, report on, and enforce a deny-all PostgreSQL security posture across local and remote instances, with rollback capability and CI/CD integration.</blockquote>
+    </div>
+
+    <div class="constraints">
+      <div class="constraint"><span class="icon">&times;</span> Default config allows trust auth</div>
+      <div class="constraint"><span class="icon">&times;</span> MD5 hashing still prevalent</div>
+      <div class="constraint"><span class="icon">&times;</span> SSL often disabled</div>
+      <div class="constraint"><span class="icon">&times;</span> Manual hardening doesn't scale</div>
+      <div class="constraint"><span class="icon">&times;</span> No drift detection between instances</div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Solution -->
+  <section class="container fade-in">
+    <div class="section-label">The Solution</div>
+    <h2>Scan, report, harden, rollback</h2>
+    <p><code>pg-harden</code> is a single Rust binary with <strong>no runtime dependencies</strong> beyond OpenSSH for remote mode. It scans PostgreSQL instances against a comprehensive security checklist, reports findings with severity levels, applies hardening profiles, and tracks every change for rollback.</p>
+
+    <div class="layers">
+      <div class="layer">
+        <div class="layer-num">1</div>
+        <h3>Scan &amp; Report</h3>
+        <p>30+ security checks across authentication, SSL/TLS, connections, logging, privileges, extensions, and network exposure. Output as coloured terminal, Markdown, JSON, or HTML.</p>
+      </div>
+      <div class="layer">
+        <div class="layer-num">2</div>
+        <h3>Harden &amp; Rollback</h3>
+        <p>Apply hardening profiles (minimal, standard, strict) with dry-run preview. Every change is tracked and reversible. Baseline snapshots enable drift detection over time.</p>
+      </div>
+    </div>
+
+    <div class="terminal">
+      <div class="terminal-bar">
+        <div class="terminal-dot red"></div>
+        <div class="terminal-dot yellow"></div>
+        <div class="terminal-dot green"></div>
+        <span class="terminal-title">pg-harden scan</span>
+      </div>
+      <div class="terminal-body">
+<span class="prompt">$</span> <span class="cmd">pg-harden scan -H 192.0.2.10</span>
+<span class="dim">pg-harden v0.2.1 — PostgreSQL Security Hardening</span>
+<span class="dim">Scanning PostgreSQL 18.3 at 192.0.2.10:5432...</span>
+
+<span class="pass-text">PASS</span>  <span class="cmd">auth-scram</span>     SCRAM-SHA-256 authentication enforced
+<span class="pass-text">PASS</span>  <span class="cmd">ssl-enabled</span>    SSL/TLS connection active
+
+<span class="dim">Summary: 2 passed, 0 failed</span>
+<span class="dim">Exit code: 0</span>
+      </div>
+    </div>
+
+    <div class="terminal">
+      <div class="terminal-bar">
+        <div class="terminal-dot red"></div>
+        <div class="terminal-dot yellow"></div>
+        <div class="terminal-dot green"></div>
+        <span class="terminal-title">multi-target scan</span>
+      </div>
+      <div class="terminal-body">
+<span class="prompt">$</span> <span class="cmd">pg-harden scan -H 192.0.2.0/28 -f json</span>
+<span class="dim">Expanding CIDR 192.0.2.0/28 → 14 hosts</span>
+<span class="dim">Scanning sequentially...</span>
+
+<span class="dim">── 192.0.2.1 ──</span>
+<span class="pass-text">PASS</span>  auth-scram | <span class="pass-text">PASS</span>  ssl-enabled
+
+<span class="dim">── 192.0.2.2 ──</span>
+<span class="critical-text">FAIL</span>  auth-scram | <span class="pass-text">PASS</span>  ssl-enabled
+
+<span class="dim">Overall: 1 host with findings (exit code: 2)</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Architecture -->
+  <section class="container fade-in">
+    <div class="section-label">Architecture</div>
+    <h2>Local and remote execution</h2>
+    <p><code>pg-harden</code> runs locally on the database server or remotely via SSH. In remote mode, a stateless agent binary is SCP'd to the target, executed, and returns JSON results. The agent is cached for future runs.</p>
+
+    <div class="arch-box">Local Machine                          Remote Host (LXC/VM)
+
+┌──────────────┐     SSH + SCP        ┌──────────────────┐
+│  pg-harden   │ ───────────────────▶ │ pg-harden-agent  │
+│    (CLI)     │                      │   (stateless)    │
+└──────────────┘                      └────────┬─────────┘
+      ▲                                        │
+      │         JSON response         ┌────────▼─────────┐
+      │◀──────────────────────────────│   PostgreSQL     │
+                                      │   + OS checks    │
+                                      └──────────────────┘</div>
+
+    <p><strong>Design principles:</strong> Single binary, no runtime dependencies beyond OpenSSH, non-destructive by default (scan without changes), all changes reversible, practical hardening over checkbox compliance.</p>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Security Checks -->
+  <section class="container fade-in">
+    <div class="section-label">Security Checks</div>
+    <h2>Deny-all posture</h2>
+    <p>The philosophy: <strong>locked down by default, explicitly open what's needed</strong> &mdash; like nftables drop-all inbound. Currently 3 checks implemented (v0.2.1), with 30+ planned across 7 categories.</p>
+
+    <div class="check-grid">
+      <div class="check-card">
+        <div class="severity critical">Critical</div>
+        <h4>auth-scram</h4>
+        <p>SCRAM-SHA-256 enforced, MD5 disabled</p>
+      </div>
+      <div class="check-card">
+        <div class="severity critical">Critical</div>
+        <h4>ssl-enabled</h4>
+        <p>SSL/TLS connection enforcement</p>
+      </div>
+      <div class="check-card">
+        <div class="severity critical">Critical</div>
+        <h4>auth-pghba</h4>
+        <p>pg_hba.conf audit — no trust, no md5</p>
+      </div>
+      <div class="check-card">
+        <div class="severity high">High</div>
+        <h4>ssl-require</h4>
+        <p>hostssl enforced in pg_hba.conf</p>
+      </div>
+      <div class="check-card">
+        <div class="severity high">High</div>
+        <h4>conn-listen</h4>
+        <p>listen_addresses not wildcard '*'</p>
+      </div>
+      <div class="check-card">
+        <div class="severity high">High</div>
+        <h4>priv-public</h4>
+        <p>Revoke CREATE on public schema</p>
+      </div>
+      <div class="check-card">
+        <div class="severity high">High</div>
+        <h4>log-pgaudit</h4>
+        <p>pgaudit extension installed and configured</p>
+      </div>
+      <div class="check-card">
+        <div class="severity high">High</div>
+        <h4>net-allowed</h4>
+        <p>pg_hba.conf allowed CIDR review</p>
+      </div>
+      <div class="check-card">
+        <div class="severity medium">Medium</div>
+        <h4>log-connections</h4>
+        <p>Connection logging enabled</p>
+      </div>
+      <div class="check-card">
+        <div class="severity medium">Medium</div>
+        <h4>conn-timeout</h4>
+        <p>Idle transaction timeout set</p>
+      </div>
+      <div class="check-card">
+        <div class="severity medium">Medium</div>
+        <h4>ext-risky</h4>
+        <p>Dangerous extensions audit (dblink, plpythonu)</p>
+      </div>
+      <div class="check-card">
+        <div class="severity medium">Medium</div>
+        <h4>conf-checksums</h4>
+        <p>Data checksums enabled</p>
+      </div>
+    </div>
+
+    <p>Optional OS-level checks (with <code>--os</code> flag) cover PGDATA permissions, sysctl tuning, systemd hardening, and firewall rules.</p>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Evolution -->
+  <section class="container fade-in">
+    <div class="section-label">Evolution</div>
+    <h2>How it was built</h2>
+
+    <div class="evo-version">
+      <div class="evo-header">
+        <span class="evo-badge">v0.1.0</span>
+        <span class="evo-date">10 February 2026</span>
+        <div class="evo-title">CLI Skeleton &amp; First Checks</div>
+      </div>
+      <div class="evo-grid">
+        <div class="evo-card">
+          <div class="evo-card-label added">Added</div>
+          <p>Clap-based CLI with <code>scan</code> subcommand. 3 checks: <code>auth-scram</code>, <code>ssl-enabled</code>, <code>auth-pghba</code>. Connection via TCP host (<code>-H</code>) or Unix socket (<code>-s</code>). Coloured text and JSON output formats.</p>
+        </div>
+        <div class="evo-card">
+          <div class="evo-card-label arch">Architecture</div>
+          <p>Check filtering with include (<code>-c</code>) and exclude (<code>-x</code>). Offline mode (<code>--offline</code>) for file-based checks. Environment variable support for all PG connection params.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="evo-divider"></div>
+
+    <div class="evo-version">
+      <div class="evo-header">
+        <span class="evo-badge">v0.2.0</span>
+        <span class="evo-date">11 February 2026</span>
+        <div class="evo-title">Multi-Target &amp; Network Scanning</div>
+      </div>
+      <div class="evo-grid">
+        <div class="evo-card">
+          <div class="evo-card-label added">Added</div>
+          <p>CIDR target support &mdash; <code>-H 192.168.1.0/24</code> expands to individual hosts via <code>ipnet</code> crate. Network and broadcast addresses excluded automatically. IPv4 and IPv6 supported.</p>
+        </div>
+        <div class="evo-card">
+          <div class="evo-card-label added">Added</div>
+          <p>Hostname DNS resolution &mdash; <code>-H db.example.com</code> resolves via <code>ToSocketAddrs</code>. Dual-stack hosts scan all IPs. Deduplication prevents scanning the same IP twice.</p>
+        </div>
+        <div class="evo-card">
+          <div class="evo-card-label added">Added</div>
+          <p>Repeatable <code>-H</code> flag &mdash; combine CIDR blocks, hostnames, and bare IPs freely. Per-host report grouping with individual summaries and aggregate overall line.</p>
+        </div>
+        <div class="evo-card">
+          <div class="evo-card-label changed">Changed</div>
+          <p>JSON output restructured to <code>hosts[]</code> array for multi-target. Help text expanded to 9 usage examples. 428 insertions across 9 files.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="evo-divider"></div>
+
+    <div class="evo-version">
+      <div class="evo-header">
+        <span class="evo-badge">v0.2.1</span>
+        <span class="evo-date">11 February 2026</span>
+        <div class="evo-title">Polish &amp; Verification</div>
+      </div>
+      <div class="evo-grid">
+        <div class="evo-card">
+          <div class="evo-card-label fixed">Fixed</div>
+          <p>Help text alignment &mdash; example descriptions aligned to a consistent column. Tested against PostgreSQL 18.3 on hardened Debian 13 LXC: 2/2 checks pass (SCRAM-SHA-256, SSL).</p>
+        </div>
+        <div class="evo-card">
+          <div class="evo-card-label arch">Spec</div>
+          <p>Deny-all hardening specification authored &mdash; comprehensive lockdown checklist covering connection controls, authentication, privilege minimisation, audit logging, network security, and BCP.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Design Decisions -->
+  <section class="container fade-in">
+    <div class="section-label">Design Decisions</div>
+    <h2>Why it works this way</h2>
+
+    <ul class="decision-list">
+      <li>
+        <strong>Rust for a single static binary</strong>
+        <span>No Python, no Node, no runtime dependencies. The binary runs on any Linux system without installing anything. This is critical for scanning database servers where you don't want to install tooling.</span>
+      </li>
+      <li>
+        <strong>SSH-based remote execution over agent frameworks</strong>
+        <span>Instead of requiring an agent daemon on every host, <code>pg-harden</code> SCP's a stateless agent binary on demand and executes it via SSH. The agent is cached for performance but can be removed with <code>--no-cache</code>. This piggybacks on existing SSH infrastructure &mdash; no new network services, no new attack surface.</span>
+      </li>
+      <li>
+        <strong>Deny-all philosophy over compliance checkboxes</strong>
+        <span>Most hardening tools map to CIS benchmarks and report pass/fail against a checklist. <code>pg-harden</code> starts from the opposite direction: everything is denied by default, and the tool verifies that only explicitly permitted access exists. This catches misconfigurations that checkbox compliance misses.</span>
+      </li>
+      <li>
+        <strong>Non-destructive by default</strong>
+        <span><code>pg-harden scan</code> never modifies anything. <code>pg-harden harden</code> requires explicit invocation and supports <code>--dry-run</code>. Every change is logged with a rollback manifest. This makes it safe to run in production without risk of accidental lockout.</span>
+      </li>
+      <li>
+        <strong>Exit codes for CI/CD</strong>
+        <span>Exit 0 = all pass, 1 = warnings, 2 = critical findings, 3 = connection error. This makes <code>pg-harden</code> a native CI/CD gate &mdash; add it to your pipeline and fail the build if security posture degrades.</span>
+      </li>
+      <li>
+        <strong>CIDR expansion for fleet scanning</strong>
+        <span>Instead of listing every host, <code>-H 192.0.2.0/24</code> scans the entire subnet. Combined with per-host JSON output, this enables fleet-wide security posture reporting from a single command.</span>
+      </li>
+    </ul>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Roadmap -->
+  <section class="container fade-in">
+    <div class="section-label">Roadmap</div>
+    <h2>What's next</h2>
+
+    <div class="roadmap-item">
+      <div class="roadmap-phase done">1</div>
+      <div class="roadmap-body">
+        <h4>CLI + Core Checks <span class="status-tag done">Complete</span></h4>
+        <p>Clap skeleton, PostgreSQL connection, 3 checks (auth-scram, ssl-enabled, auth-pghba), text and JSON output, multi-target CIDR scanning, hostname resolution.</p>
+      </div>
+    </div>
+
+    <div class="roadmap-item">
+      <div class="roadmap-phase current">2</div>
+      <div class="roadmap-body">
+        <h4>Full Check Suite <span class="status-tag active">Next</span></h4>
+        <p>Implement remaining 27+ checks from the deny-all spec: connection controls, privilege minimisation, pgaudit integration, extension auditing, network exposure review. Severity-based filtering and thresholds.</p>
+      </div>
+    </div>
+
+    <div class="roadmap-item">
+      <div class="roadmap-phase planned">3</div>
+      <div class="roadmap-body">
+        <h4>Reporting <span class="status-tag planned">Planned</span></h4>
+        <p>Markdown, HTML, and JSON report generation. CIS PostgreSQL Benchmark mapping. Executive summary with prioritised remediation steps.</p>
+      </div>
+    </div>
+
+    <div class="roadmap-item">
+      <div class="roadmap-phase planned">4</div>
+      <div class="roadmap-body">
+        <h4>Hardening Engine <span class="status-tag planned">Planned</span></h4>
+        <p>Apply hardening profiles (minimal, standard, strict). Dry-run preview. Configuration change tracking with rollback manifests. Feature toggles for granular control.</p>
+      </div>
+    </div>
+
+    <div class="roadmap-item">
+      <div class="roadmap-phase planned">5</div>
+      <div class="roadmap-body">
+        <h4>Remote Mode <span class="status-tag planned">Planned</span></h4>
+        <p>SSH agent execution model. SCP binary to target, execute, return JSON. Agent caching. Jump host support (<code>-J bastion@gateway</code>).</p>
+      </div>
+    </div>
+
+    <div class="roadmap-item">
+      <div class="roadmap-phase planned">6</div>
+      <div class="roadmap-body">
+        <h4>OS-Level Checks <span class="status-tag planned">Planned</span></h4>
+        <p>PGDATA permissions, config file permissions, sysctl tuning, systemd hardening, firewall rule audit. Enabled via <code>--os</code> flag.</p>
+      </div>
+    </div>
+
+    <div class="roadmap-item">
+      <div class="roadmap-phase planned">7</div>
+      <div class="roadmap-body">
+        <h4>Baseline &amp; Drift Detection <span class="status-tag planned">Planned</span></h4>
+        <p>Save security state as baseline snapshots. Compare current state against baseline to detect configuration drift. Named baselines for pre/post-upgrade comparison.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Status -->
+  <section class="container fade-in">
+    <div class="section-label">Current Status</div>
+
+    <div class="status-banner">
+      <div class="status-left">
+        <div class="status-label">Project Status</div>
+        <div class="status-value"><span class="dot"></span>Active &mdash; v0.2.1</div>
+      </div>
+      <div class="status-meta">
+        <div class="meta-item">
+          <div class="meta-label">Language</div>
+          <div class="meta-value">Rust (edition 2024)</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Checks</div>
+          <div class="meta-value">3 / 30+ planned</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">License</div>
+          <div class="meta-value">MIT</div>
+        </div>
+      </div>
+    </div>
+
+    <p><code>pg-harden</code> v0.2.1 is functional for SCRAM and SSL verification across single hosts and CIDR subnets. The deny-all hardening specification is complete and drives the Phase 2 check suite expansion. Tested against PostgreSQL 18.3 on custom hardened Debian 13 LXC containers.</p>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Footer -->
+  <footer class="footer container">
+    <div class="footer-links">
+      <a href="https://github.com/t0lkim/pg-harden">Source on GitHub</a>
+    </div>
+    <p class="footer-copy">&copy; 2026 t0lkim</p>
+  </footer>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>

@@ -1,0 +1,149 @@
+/* ── t0lkim.dev — Shared Base Styles ─────────────────── */
+
+:root {
+  --bg: #0D1117;
+  --surface: #161B22;
+  --surface-hover: #1C2129;
+  --border: #30363D;
+  --border-subtle: #21262D;
+  --text: #E6EDF3;
+  --text-muted: #8B949E;
+  --teal: #00C9A7;
+  --teal-dim: rgba(0, 201, 167, 0.15);
+  --teal-glow: rgba(0, 201, 167, 0.08);
+  --blue: #58A6FF;
+  --red: #F85149;
+  --red-dim: rgba(248, 81, 73, 0.15);
+  --green: #3FB950;
+  --yellow: #D29922;
+}
+
+/* ── Reset ───────────────────────────────────────────── */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* ── Base Typography ─────────────────────────────────── */
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', 'Noto Sans', system-ui, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+code {
+  background: rgba(0, 201, 167, 0.08);
+  color: var(--teal);
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-family: 'SF Mono', Menlo, monospace;
+}
+
+/* ── Layout Utilities ────────────────────────────────── */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ── Divider ─────────────────────────────────────────── */
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border) 20%, var(--border) 80%, transparent);
+  margin: 40px auto;
+  max-width: 800px;
+}
+
+/* ── Section Labels ──────────────────────────────────── */
+.section-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 16px;
+}
+
+/* ── Tag Pills ───────────────────────────────────────── */
+.tag {
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 6px;
+  background: var(--teal-dim);
+  color: var(--teal);
+  border: 1px solid rgba(0, 201, 167, 0.2);
+}
+
+/* ── Home Button ─────────────────────────────────────── */
+.home-btn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: border-color 0.2s, background 0.2s;
+  z-index: 100;
+}
+
+.home-btn:hover {
+  border-color: var(--teal);
+  background: var(--surface-hover, #1C2129);
+  text-decoration: none;
+}
+
+.home-btn svg {
+  fill: var(--text-muted);
+  transition: fill 0.2s;
+}
+
+.home-btn:hover svg { fill: var(--teal); }
+
+/* ── Scroll Fade-in ──────────────────────────────────── */
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Footer ──────────────────────────────────────────── */
+.footer {
+  padding: 40px 0;
+  text-align: center;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-bottom: 20px;
+}
+
+.footer-links a {
+  color: var(--teal);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: opacity 0.2s;
+}
+
+.footer-links a:hover { opacity: 0.8; text-decoration: none; }
+
+.footer-copy {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}

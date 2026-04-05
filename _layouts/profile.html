@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ page.title | default: site.title }}</title>
+  <meta name="description" content="{{ page.description | default: site.description }}">
+  <link rel="stylesheet" href="{{ '/assets/css/base.css' | relative_url }}">
+  <link rel="stylesheet" href="{{ '/assets/css/profile.css' | relative_url }}">
+</head>
+<body>
+
+  <div class="page">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <img class="avatar" src="{{ '/assets/avatar.gif' | relative_url }}" alt="t0lkim">
+      <div class="sidebar-name">{{ page.author | default: "Mike Lott" }}</div>
+      <div class="sidebar-handle">t0lkim</div>
+      <div class="sidebar-bio">{{ page.bio }}</div>
+
+      <div class="sidebar-meta">
+        <div class="sidebar-meta-item">
+          <svg height="16" width="16" viewBox="0 0 16 16"><path d="M11.536 3.464a5 5 0 0 1 0 7.072L8 14.07l-3.536-3.535a5 5 0 1 1 7.072-7.072v.001Zm1.06 8.132a6.5 6.5 0 1 0-9.192 0l3.535 3.536a1.5 1.5 0 0 0 2.122 0l3.535-3.536ZM8 9a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/></svg>
+          <span>{{ page.location | default: "Singapore" }}</span>
+        </div>
+        <div class="sidebar-meta-item">
+          <svg height="16" width="16" viewBox="0 0 16 16"><path d="M7.775 3.275a.75.75 0 0 0 1.06 1.06l1.25-1.25a2 2 0 1 1 2.83 2.83l-2.5 2.5a2 2 0 0 1-2.83 0 .75.75 0 0 0-1.06 1.06 3.5 3.5 0 0 0 4.95 0l2.5-2.5a3.5 3.5 0 0 0-4.95-4.95l-1.25 1.25Zm-.025 5.45a.75.75 0 0 0-1.06-1.06l-1.25 1.25a2 2 0 1 1-2.83-2.83l2.5-2.5a2 2 0 0 1 2.83 0 .75.75 0 1 0 1.06-1.06 3.5 3.5 0 0 0-4.95 0l-2.5 2.5a3.5 3.5 0 0 0 4.95 4.95l1.25-1.25Z"/></svg>
+          <a href="https://t0lkim.dev">t0lkim.dev</a>
+        </div>
+        <div class="sidebar-meta-item">
+          <svg height="16" width="16" viewBox="0 0 16 16"><path d="M1.75 2h12.5c.966 0 1.75.784 1.75 1.75v8.5A1.75 1.75 0 0 1 14.25 14H1.75A1.75 1.75 0 0 1 0 12.25v-8.5C0 2.784.784 2 1.75 2ZM1.5 12.251c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V5.809L8.38 9.397a.75.75 0 0 1-.76 0L1.5 5.809v6.442Zm0-8.251v1.388l5.89 3.39a.248.248 0 0 0 .22.006l5.89-3.396V4a.25.25 0 0 0-.25-.25H1.75a.25.25 0 0 0-.25.25Z"/></svg>
+          <a href="mailto:me@t0lkim.dev">me@t0lkim.dev</a>
+        </div>
+      </div>
+
+      <div class="sidebar-stats">
+        <svg height="16" width="16" viewBox="0 0 16 16"><path d="M2 5.5a3.5 3.5 0 1 1 5.898 2.549 5.508 5.508 0 0 1 3.034 4.084.75.75 0 1 1-1.482.235 4.001 4.001 0 0 0-6.9 0 .75.75 0 0 1-1.482-.236A5.507 5.507 0 0 1 3.102 8.05 3.493 3.493 0 0 1 2 5.5ZM11 4a3.001 3.001 0 0 1 2.22 5.018 5.01 5.01 0 0 1 2.56 3.012.749.749 0 0 1-.885.954.752.752 0 0 1-.549-.514 3.507 3.507 0 0 0-2.522-2.372.75.75 0 0 1-.574-.73v-.352a.75.75 0 0 1 .416-.672A1.5 1.5 0 0 0 11 5.5.75.75 0 0 1 11 4Zm-5.5-.5a2 2 0 1 0-.001 3.999A2 2 0 0 0 5.5 3.5Z"/></svg>
+        <span><strong>3</strong> followers</span> &middot;
+        <span><strong>31</strong> following</span>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main">
+      <div class="readme">
+        <div class="readme-header">
+          <svg height="16" width="16" viewBox="0 0 16 16"><path d="M0 1.75A.75.75 0 0 1 .75 1h4.253c1.227 0 2.317.59 3 1.501A3.743 3.743 0 0 1 11.006 1h4.245a.75.75 0 0 1 .75.75v10.5a.75.75 0 0 1-.75.75h-4.507a2.25 2.25 0 0 0-1.591.659l-.622.621a.75.75 0 0 1-1.06 0l-.622-.621A2.25 2.25 0 0 0 5.258 13H.75a.75.75 0 0 1-.75-.75Zm7.251 10.324.004-5.073-.002-2.253A2.25 2.25 0 0 0 5.003 2.5H1.5v9h3.757a3.75 3.75 0 0 1 1.994.574ZM8.755 4.75l-.004 7.322a3.752 3.752 0 0 1 1.992-.572H14.5v-9h-3.495a2.25 2.25 0 0 0-2.25 2.25Z"/></svg>
+          t0lkim / README.md
+        </div>
+        <div class="readme-body">
+          {{ content }}
+        </div>
+      </div>
+
+      {% if page.pinned %}
+      <div class="pinned-heading">Pinned</div>
+      <div class="pinned-grid">
+        {% for repo in page.pinned %}
+        <a href="{{ repo.url }}" class="pinned-card">
+          <div class="pinned-card-name">
+            <svg class="repo-icon" height="16" width="16" viewBox="0 0 16 16"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z"/></svg>
+            {{ repo.name }}
+          </div>
+          <div class="pinned-card-desc">{{ repo.desc }}</div>
+          <div class="pinned-card-meta">
+            <span class="pinned-lang"><span class="lang-dot lang-{{ repo.lang | downcase }}"></span> {{ repo.lang }}</span>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </main>
+  </div>
+
+</body>
+</html>
