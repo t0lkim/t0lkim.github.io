@@ -14,7 +14,7 @@ pinned:
     desc: "PostgreSQL security hardening scanner. SCRAM auth, SSL, and pg_hba checks."
     lang: Rust
   - name: TidalPlaylistBuilder
-    url: https://github.com/t0lkim/tidal-playlist-builder
+    url: ./tidal-playlist-builder/
     desc: "Build Tidal playlists from BBC programmes, CSV, and text files."
     lang: Rust
   - name: image-video-organiser
@@ -73,7 +73,7 @@ Native iOS app wrapping Tidal's SDK with two-layer explicit content filtering. S
 #### [pg-harden](./pg-harden/)
 PostgreSQL security hardening scanner. Checks SCRAM authentication, SSL enforcement, and pg_hba configuration against security best practices.
 
-#### [TidalPlaylistBuilder](https://github.com/t0lkim/tidal-playlist-builder)
+#### [TidalPlaylistBuilder](./tidal-playlist-builder/)
 Build Tidal playlists from BBC programmes, CSV, and text files. Automates playlist creation from external track listings.
 
 #### [image-video-organiser](https://github.com/t0lkim/media-organiser)
