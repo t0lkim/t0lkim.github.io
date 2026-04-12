@@ -1,10 +1,10 @@
 # t0lkim.dev
 
-> Personal portfolio and project case studies by Mike Lott — Cybersecurity & Operational Engineering Technical Leader based in Singapore.
+> Mike Lott — Cybersecurity & Operational Engineering
 
 ## About the Author
 
-Mike Lott (t0lkim) is a cybersecurity leader with 15+ years of experience in Security Architecture, Counter-Censorship Engineering, and Infrastructure Security at companies including ExpressVPN, Facebook/Meta, and GoDaddy. CISSP and GSLC certified.
+Cybersecurity leader with 15+ years of experience in Security Architecture, Counter-Censorship Engineering, and Infrastructure Security at companies including ExpressVPN, Facebook/Meta, and GoDaddy. CISSP and GSLC certified.
 
 ## Projects
 
@@ -12,9 +12,6 @@ Mike Lott (t0lkim) is a cybersecurity leader with 15+ years of experience in Sec
 - [pg-harden](https://t0lkim.dev/pg-harden/): PostgreSQL security hardening scanner checking SCRAM auth, SSL, and pg_hba. Built in Rust.
 - [TidalPlaylistBuilder](https://t0lkim.dev/tidal-playlist-builder/): Build Tidal playlists from BBC programmes, CSV, and text files. Built in Rust.
 - [TheStreamDeck](https://t0lkim.dev/the-stream-deck/): Raspberry Pi streaming audio appliance with touchscreen, VU meters, and 4-source switching.
-- [PatronVault](https://t0lkim.dev/patron-vault/): Patreon media archival tool using cookie-based auth against JSON:API. Built in Rust.
-- [CourseVault](https://t0lkim.dev/course-vault/): Teachable course archival tool with browser cookie extraction. Built in Go.
-- [MMM (MyMediaManager)](https://t0lkim.dev/mmm/): Image/video organiser with deduplication and EXIF-based renaming. Built in Rust.
 
 ## Links
 

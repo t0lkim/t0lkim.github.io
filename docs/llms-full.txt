@@ -1,37 +1,10 @@
 # t0lkim.dev — Full Content
 
-> Personal portfolio and project case studies by Mike Lott — Cybersecurity & Operational Engineering Technical Leader based in Singapore.
+> Mike Lott — Cybersecurity & Operational Engineering
 
 ## About Mike Lott
 
-Mike Lott (t0lkim) is a strategic cybersecurity leader with over 15 years of experience in Security Architecture, Security Operations & Engineering, Counter-Censorship, and Infrastructure Security across major tech companies. Based in Singapore.
-
-### Professional Experience
-
-- Cybersecurity Architect (Staff), ExpressVPN (2024-2025)
-- Head of Counter-Censorship (Product Enablement), ExpressVPN (2024)
-- Manager, Operations Engineering, ExpressVPN (2022-2024)
-- Information Security Engineer, ERAD Operations, Facebook/Meta (2021-2022)
-- Infrastructure & Operations Security Engineer, Facebook/Meta (2019-2021)
-- Data Center Site Manager, Facebook/Meta (2014-2019)
-- Manager, Data Center Operations, GoDaddy (2012-2014)
-- GNU/Linux Engineer, GoDaddy (2011-2012)
-
-### Skills
-
-- Security Architecture and Design
-- Counter-Censorship Engineering: protocol obfuscation, TLS fingerprinting, hostile network operations
-- Infrastructure Security: data centre physical/logical security, Red Team operations
-- Operations Engineering: NOC, incident management, globally distributed teams
-- Software Engineering: Swift, Rust, TypeScript, Python, Go, Bash
-- Infrastructure: Linux, Podman, PostgreSQL, Terraform, Fedora CoreOS
-
-### Certifications
-
-- CISSP — (ISC)2
-- GIAC Security Leadership (GSLC) — SANS
-- Assessing & Exploiting Control Systems & IIoT — Black Hat / InGuardians
-- Threat Modeling for Security Professionals — Adam Shostack
+Cybersecurity leader with 15+ years of experience in Security Architecture, Counter-Censorship Engineering, and Infrastructure Security at companies including ExpressVPN, Facebook/Meta, and GoDaddy. CISSP and GSLC certified.
 
 ---
 
@@ -44,7 +17,6 @@ Mike Lott (t0lkim) is a strategic cybersecurity leader with over 15 years of exp
 **How does TeenTidal work?** TeenTidal uses two independent filtering layers: metadata-level filtering (checking Tidal's explicit flag on tracks, albums, and playlists) and a secondary content analysis layer. Both must pass before content plays. There are no user-facing settings to disable filtering — the controls are structural, not configurable.
 
 **Language:** Swift | **Platform:** iOS | **Status:** Alpha, pending Tidal developer programme access
-
 ---
 
 ## Project: pg-harden
@@ -56,7 +28,6 @@ Mike Lott (t0lkim) is a strategic cybersecurity leader with over 15 years of exp
 **How does pg-harden work?** pg-harden connects to PostgreSQL instances and checks SCRAM authentication enforcement, SSL/TLS configuration, pg_hba rules, public schema access, and other security settings against best practices. It produces structured reports and can enforce remediation.
 
 **Language:** Rust | **Category:** Security Tools
-
 ---
 
 ## Project: TidalPlaylistBuilder
@@ -68,7 +39,6 @@ Mike Lott (t0lkim) is a strategic cybersecurity leader with over 15 years of exp
 **How does TidalPlaylistBuilder work?** It authenticates via OAuth device flow, parses track listings from multiple input formats (BBC programme pages, CSV files, plain text), fuzzy-matches tracks against Tidal's catalogue, and creates or updates playlists via the Tidal API. The anthology system organises large collections into numbered volumes.
 
 **Language:** Rust | **Authentication:** OAuth 2.0 device flow
-
 ---
 
 ## Project: TheStreamDeck
@@ -80,39 +50,5 @@ Mike Lott (t0lkim) is a strategic cybersecurity leader with over 15 years of exp
 **How does TheStreamDeck work?** One Raspberry Pi drives all four audio sources through a single amp input. A touchscreen displays album artwork and controls. Physical VU meters show real-time audio levels. Source switching is instant — tap a button on the touchscreen to change from Tidal to BBC radio without touching the amplifier.
 
 **Platform:** Raspberry Pi | **Sources:** Tidal HiFi Plus, Plexamp, BBC 6 Music, internet radio
-
 ---
 
-## Project: PatronVault
-
-**What is PatronVault?** PatronVault is a Rust CLI for downloading and archiving media content from Patreon creators you subscribe to.
-
-**What problem does PatronVault solve?** Patreon has no export feature for patrons. If a creator deletes a post, changes tiers, or leaves the platform, paid content is lost. The official API is creator-focused with no subscriber-facing download endpoints.
-
-**How does PatronVault work?** PatronVault authenticates via browser cookies against Patreon's internal JSON:API, enumerates posts and media attachments, and downloads everything with metadata preservation.
-
-**Language:** Rust | **Authentication:** Cookie-based
-
----
-
-## Project: CourseVault
-
-**What is CourseVault?** CourseVault is a Go CLI for downloading and archiving course content from Teachable platforms.
-
-**What problem does CourseVault solve?** Online courses on Teachable have no built-in download or export feature. If your subscription lapses or the course is removed, you lose access to material you paid for.
-
-**How does CourseVault work?** CourseVault extracts browser cookies for authentication, enumerates the full course curriculum, and downloads every video at original quality with metadata embedding, preserving the course structure.
-
-**Language:** Go | **Authentication:** Browser cookie extraction
-
----
-
-## Project: MMM (MyMediaManager)
-
-**What is MMM?** MMM (MyMediaManager) is a Rust CLI for organising images and videos with deduplication, EXIF-based renaming, and date-based directory structure.
-
-**What problem does MMM solve?** Photos and videos accumulate across phones, cameras, SD cards, and cloud downloads. The same image exists in multiple places under different names. Camera-assigned filenames carry no meaningful information. Manual sorting is impractical at scale.
-
-**How does MMM work?** MMM reads EXIF metadata from media files, renames them with date-based conventions, deduplicates by content hash, and organises into a clean date-based directory structure.
-
-**Language:** Rust | **Category:** Media Organisation

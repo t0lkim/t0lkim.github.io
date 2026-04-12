@@ -27,7 +27,7 @@
       {
         "@type": "SoftwareSourceCode",
         "name": "TidalPlaylistBuilder",
-        "description": "Build Tidal playlists from BBC programmes, CSV files, and curated text track listings. Rust CLI with OAuth device flow and anthology support.",
+        "description": "TidalPlaylistBuilder is a Rust CLI that builds Tidal playlists from BBC programmes, CSV files, and curated text track listings, with support for multi-volume artist anthologies.",
         "programmingLanguage": "Rust",
         "author": { "@type": "Person", "name": "Mike Lott", "url": "https://t0lkim.dev" },
         "url": "https://t0lkim.dev/tidal-playlist-builder/",
@@ -59,128 +59,7 @@
   </script>
   <link rel="stylesheet" href="../assets/css/base.css">
   <link rel="stylesheet" href="../assets/css/teentidal.css">
-  <style>
-    .hero::before {
-      background:
-        radial-gradient(ellipse 600px 300px at 50% 40%, rgba(0, 201, 167, 0.06) 0%, transparent 70%),
-        radial-gradient(ellipse 400px 200px at 30% 60%, rgba(88, 166, 255, 0.04) 0%, transparent 60%);
-    }
-    .anthology-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      margin: 24px 0;
-    }
-    @media (max-width: 600px) { .anthology-grid { grid-template-columns: 1fr; } }
-    .anthology-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 18px;
-    }
-    .anthology-card h4 {
-      font-size: 0.95rem;
-      font-weight: 600;
-      margin-bottom: 4px;
-      color: var(--text);
-    }
-    .anthology-card .volumes {
-      font-size: 0.8rem;
-      color: var(--teal);
-      margin-bottom: 8px;
-    }
-    .anthology-card p {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      line-height: 1.5;
-      margin-bottom: 0;
-    }
-    .source-cards {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 12px;
-      margin: 24px 0;
-    }
-    @media (max-width: 768px) { .source-cards { grid-template-columns: 1fr; } }
-    .source-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 18px;
-      text-align: center;
-    }
-    .source-card .icon {
-      font-size: 2rem;
-      margin-bottom: 8px;
-    }
-    .source-card h4 {
-      font-size: 0.95rem;
-      font-weight: 600;
-      margin-bottom: 6px;
-    }
-    .source-card p {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      line-height: 1.4;
-      margin-bottom: 0;
-    }
-    .terminal {
-      background: #161B22;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      overflow: hidden;
-      margin: 24px 0;
-    }
-    .terminal-bar {
-      background: #21262D;
-      padding: 8px 14px;
-      display: flex;
-      gap: 6px;
-      align-items: center;
-    }
-    .terminal-dot { width: 10px; height: 10px; border-radius: 50%; }
-    .terminal-dot.red { background: #F85149; }
-    .terminal-dot.yellow { background: #D29922; }
-    .terminal-dot.green { background: #3FB950; }
-    .terminal-title {
-      font-size: 11px;
-      color: var(--text-muted);
-      margin-left: 8px;
-      font-family: 'SF Mono', Menlo, monospace;
-    }
-    .terminal-body {
-      padding: 16px 20px;
-      font-family: 'SF Mono', Menlo, monospace;
-      font-size: 13px;
-      line-height: 1.6;
-      color: var(--text-muted);
-      overflow-x: auto;
-    }
-    .terminal-body .prompt { color: var(--teal); }
-    .terminal-body .cmd { color: var(--text); }
-    .terminal-body .dim { color: #484F58; }
-    .terminal-body .pass-text { color: #3FB950; }
-    .vol-list {
-      list-style: none;
-      margin: 12px 0;
-      padding: 0;
-    }
-    .vol-list li {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      padding: 6px 0;
-      border-bottom: 1px solid rgba(48, 54, 61, 0.3);
-      display: flex;
-      gap: 8px;
-    }
-    .vol-list li:last-child { border-bottom: none; }
-    .vol-num {
-      color: var(--teal);
-      font-weight: 600;
-      font-size: 0.8rem;
-      white-space: nowrap;
-    }
-  </style>
+  <style></style>
 </head>
 <body>
 

@@ -1,40 +1,15 @@
----
-layout: profile
-title: Mike Lott — t0lkim.dev
-description: Cybersecurity & operational engineering technical leader
-bio: "Cybersecurity & Operational Engineering Technical Leader | Security Architecture | Counter-Censorship | Infrastructure Security"
-location: Singapore
-pinned:
-  - name: teen-tidal
-    url: ./teen-tidal/
-    desc: "Native iOS parental content filter for Tidal. Two-layer explicit content filtering with no bypassable settings."
-    lang: Swift
-  - name: pg-harden
-    url: ./pg-harden/
-    desc: "PostgreSQL security hardening scanner. SCRAM auth, SSL, and pg_hba checks."
-    lang: Rust
-  - name: TidalPlaylistBuilder
-    url: ./tidal-playlist-builder/
-    desc: "Build Tidal playlists from BBC programmes, CSV, and text files."
-    lang: Rust
-  - name: image-video-organiser
-    url: https://github.com/t0lkim/media-organiser
-    desc: "EXIF-based media organiser with deduplication and date-based directory structure."
-    lang: Rust
----
-
 # Mike Lott
 
 ## Cybersecurity & Operational Engineering | Security Architecture | Counter-Censorship
 
 Strategic Cybersecurity leader with over 15 years of experience in Security Architecture, Security Operations & Engineering, Counter-Censorship, and Infrastructure Security across major tech companies such as ExpressVPN, Facebook/Meta, and GoDaddy. Experience in designing secure, scalable systems, leading global security initiatives, and driving operational resilience in high-threat environments.
 
-### &#x1F464; About Me
+### About Me
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/t0lkim/)
 [![Personal Site](https://img.shields.io/badge/Personal_Site-1f2937?style=for-the-badge&logo=rss&logoColor=white)](https://t0lkim.dev)
 
-### &#x1F4BC; Professional Experience
+### Professional Experience
 
 - Cybersecurity Architect (Staff), ExpressVPN (2024–2025)
 - Head of Counter-Censorship (Product Enablement), ExpressVPN (2024)
@@ -45,7 +20,7 @@ Strategic Cybersecurity leader with over 15 years of experience in Security Arch
 - Manager, Data Center Operations, GoDaddy (2012–2014)
 - GNU/Linux Engineer, GoDaddy (2011–2012)
 
-### &#x1F6E0;&#xFE0F; Skills
+### Skills
 
 - **Security Architecture and Design**
 - **Counter-Censorship Engineering**: Protocol obfuscation, TLS fingerprinting, hostile network operations
@@ -55,7 +30,7 @@ Strategic Cybersecurity leader with over 15 years of experience in Security Arch
 - **Infrastructure**: Linux, Podman, PostgreSQL, Terraform, Fedora CoreOS
 - **Threat Modeling and Security Governance**
 
-### &#x1F393; Education & Certifications
+### Education & Certifications
 
 - Certified Information Systems Security Professional (CISSP) — (ISC)2
 - GIAC Security Leadership (GSLC) — SANS
@@ -65,25 +40,25 @@ Strategic Cybersecurity leader with over 15 years of experience in Security Arch
 - ITILv3 Foundation — Pearson VUE
 - BA (Hons), Interior Design — Ravensbourne College of Design & Communication, UK
 
-### &#x1F680; Projects
+### Projects
 
-#### [TeenTidal](./teen-tidal/)
+#### [TeenTidal](https://t0lkim.dev/teen-tidal/)
 Native iOS app wrapping Tidal's SDK with two-layer explicit content filtering. Structural parental controls with no user-bypassable settings. Currently in alpha, pending Tidal developer programme access.
 
-#### [pg-harden](./pg-harden/)
+#### [pg-harden](https://t0lkim.dev/pg-harden/)
 PostgreSQL security hardening scanner. Checks SCRAM authentication, SSL enforcement, and pg_hba configuration against security best practices.
 
-#### [TidalPlaylistBuilder](./tidal-playlist-builder/)
+#### [TidalPlaylistBuilder](https://t0lkim.dev/tidal-playlist-builder/)
 Build Tidal playlists from BBC programmes, CSV, and text files. Automates playlist creation from external track listings.
 
-#### [MMM (MyMediaManager)](./mmm/)
+#### [MMM (MyMediaManager)](https://t0lkim.dev/mmm/)
 Image and video organiser with deduplication, EXIF-based renaming, and date-based directory structure.
 
-#### [TheStreamDeck](./the-stream-deck/)
+#### [TheStreamDeck](https://t0lkim.dev/the-stream-deck/)
 Raspberry Pi-based unified streaming audio appliance with touchscreen, physical VU meters, and instant source switching across Tidal, Plexamp, BBC radio, and internet radio.
 
-#### [PatronVault](./patron-vault/)
+#### [PatronVault](https://t0lkim.dev/patron-vault/)
 Download and archive media content from Patreon creators you subscribe to. Cookie-based auth against Patreon's internal JSON:API.
 
-#### [CourseVault](./course-vault/)
+#### [CourseVault](https://t0lkim.dev/course-vault/)
 Download and archive course content from Teachable platforms. Browser cookie extraction, curriculum enumeration, video download with metadata embedding.

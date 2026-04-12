@@ -1,9 +1,3 @@
-# Jekyll
-_site/
-.sass-cache/
-.jekyll-cache/
-.jekyll-metadata
-
 # macOS
 .DS_Store
 **/.DS_Store
@@ -12,6 +6,9 @@ _site/
 *.swp
 *.swo
 *~
+
+# Go build artifacts
+tools/seogen/seogen
 
 # Do not publish changelog
 CHANGELOG.md

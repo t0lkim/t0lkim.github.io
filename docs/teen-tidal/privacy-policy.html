@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TeenTidal — Privacy Policy</title>
+  <meta name="description" content="Privacy policy for TeenTidal — a native iOS parental content filter for Tidal.">
+  <meta name="author" content="Mike Lott">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#00C9A7">
+  <link rel="canonical" href="https://t0lkim.dev/teen-tidal/privacy-policy.html">
+  <!-- Open Graph -->
+  <meta property="og:title" content="TeenTidal — Privacy Policy">
+  <meta property="og:description" content="Privacy policy for TeenTidal — a native iOS parental content filter for Tidal.">
+  <meta property="og:url" content="https://t0lkim.dev/teen-tidal/privacy-policy.html">
+  <meta property="og:site_name" content="t0lkim.dev">
+  <meta property="og:type" content="article">
+  <meta property="og:locale" content="en_SG">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="TeenTidal — Privacy Policy">
+  <meta name="twitter:description" content="Privacy policy for TeenTidal — a native iOS parental content filter for Tidal.">
+  <link rel="stylesheet" href="../assets/css/base.css">
+  <link rel="stylesheet" href="../assets/css/page.css">
+</head>
+<body>
+
+  <a href="/" class="home-btn" title="Home"><svg width="18" height="18" viewBox="0 0 16 16"><path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6.5 6.5A.5.5 0 0 0 1.5 8.5v5a.5.5 0 0 0 .5.5h3.5a.5.5 0 0 0 .5-.5V11h4v2.5a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-5a.5.5 0 0 0-.146-.354L8.354 1.146ZM2.5 13V8.707l5.5-5.5 5.5 5.5V13H11v-2.5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0-.5.5V13H2.5Z"/></svg></a>
+
+  <div class="container page-content">
+
+<h1>TeenTidal — Privacy Policy</h1>
+
+<p><strong>Effective date:</strong> 4 April 2026</p>
+
+<hr>
+
+<h2>What TeenTidal collects</h2>
+
+<p><strong>Nothing.</strong> TeenTidal does not collect, store, or transmit any personal information to any server we operate. We have no backend, no database, no analytics.</p>
+
+<h2>Data stored on your device</h2>
+
+<p>TeenTidal stores the following locally on your device only, using iOS's built-in storage (UserDefaults):</p>
+
+<ul>
+<li>Favourite tracks, albums, and artists</li>
+<li>Playlists you create</li>
+<li>Download queue entries</li>
+</ul>
+
+<p>This data never leaves your device. Deleting the app permanently removes all of it.</p>
+
+<h2>Authentication</h2>
+
+<p>TeenTidal uses Tidal's official SDK for login. Your Tidal account credentials are handled entirely by Tidal's authentication framework — TeenTidal does not access, store, or transmit your username or password.</p>
+
+<h2>Tidal SDK telemetry</h2>
+
+<p>TeenTidal uses Tidal's Player SDK and EventSender for music playback. These components may collect playback telemetry (e.g. track plays, errors) as part of Tidal's standard SDK behaviour. This data is governed by <a href="https://tidal.com/privacy">Tidal's Privacy Policy</a>, not ours — we have no access to it and no control over it.</p>
+
+<h2>Third-party services</h2>
+
+<ul>
+<li><strong>Tidal API</strong> — used to search, browse, and stream music. No other third-party services, APIs, SDKs, or libraries are used.</li>
+<li><strong>No analytics.</strong> No Firebase, no Amplitude, no Mixpanel, no anything.</li>
+<li><strong>No social features.</strong> No sharing, no social login, no contact list access.</li>
+</ul>
+
+<h2>Network activity</h2>
+
+<p>TeenTidal communicates exclusively with Tidal's API servers to authenticate, search for content, and stream music. It makes no other network requests.</p>
+
+<h2>Permissions</h2>
+
+<p>TeenTidal requests no special device permissions — no camera, microphone, location, contacts, or photo library access.</p>
+
+<h2>Content filtering</h2>
+
+<p>TeenTidal filters explicit content using metadata provided by Tidal's API. The accuracy of this filtering depends on record labels correctly tagging their content. TeenTidal applies this filter at both the catalogue and playback layers, but cannot guarantee completeness of upstream metadata.</p>
+
+<h2>Data deletion</h2>
+
+<p>Delete the app. All local data is removed. There is no account, no cloud sync, and no residual data on any server.</p>
+
+<h2>Changes to this policy</h2>
+
+<p>If this policy changes, the updated version will be published here with a new effective date.</p>
+
+  </div>
+
+  <div class="divider"></div>
+
+  <footer class="footer container">
+    <div class="footer-links">
+      <a href="./">TeenTidal Case Study</a>
+    </div>
+    <p class="footer-copy">&copy; 2026 t0lkim</p>
+  </footer>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>

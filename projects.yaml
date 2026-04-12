@@ -1,0 +1,196 @@
+site:
+  url: https://t0lkim.dev
+  title: t0lkim.dev
+  author: Mike Lott
+  author_url: https://t0lkim.dev
+  author_handle: t0lkim
+  locale: en_SG
+  theme_color: "#00C9A7"
+  description: "Mike Lott — Cybersecurity & Operational Engineering"
+  bio: >-
+    Cybersecurity leader with 15+ years of experience in Security Architecture,
+    Counter-Censorship Engineering, and Infrastructure Security at companies
+    including ExpressVPN, Facebook/Meta, and GoDaddy. CISSP and GSLC certified.
+
+projects:
+  - name: TeenTidal
+    slug: teen-tidal
+    title: "TeenTidal — Case Study"
+    description: "How a parenting gap in Tidal's content filtering led to building a native iOS app with two-layer explicit content protection."
+    keywords: "TeenTidal, parental controls, Tidal, iOS app, content filtering, explicit content, Swift, music streaming, child safety"
+    language: Swift
+    category: Parental Controls
+    operating_system: iOS
+    css: teentidal.css
+    page_style: "/* page-specific overrides only */"
+    sitemap_priority: "0.8"
+    faq:
+      - q: "What is TeenTidal?"
+        a: "TeenTidal is a native iOS app that wraps Tidal's SDK with two-layer explicit content filtering, providing structural parental controls with no user-bypassable settings."
+      - q: "Why can't parents use Tidal's built-in content filter?"
+        a: "Tidal's explicit content toggle can be re-enabled by any user from within the app. iOS Screen Time's Clean restriction only applies to Apple Music, not third-party apps like Tidal."
+      - q: "How does TeenTidal filter explicit content?"
+        a: "TeenTidal uses two independent filtering layers: metadata-level filtering checking Tidal's explicit flag, and a secondary content analysis layer. Both must pass before content plays."
+    llms_summary: "Native iOS parental content filter for Tidal with two-layer explicit content filtering. Built in Swift."
+    llms_full: |
+      **What is TeenTidal?** TeenTidal is a native iOS app that wraps Tidal's SDK with two-layer explicit content filtering. It provides structural parental controls with no user-bypassable settings.
+
+      **What problem does TeenTidal solve?** Tidal's built-in explicit content toggle can be re-enabled by any user from within the app. iOS Screen Time's "Clean" restriction only applies to Apple Music, not third-party apps. Parents have no reliable way to give children safe access to Tidal.
+
+      **How does TeenTidal work?** TeenTidal uses two independent filtering layers: metadata-level filtering (checking Tidal's explicit flag on tracks, albums, and playlists) and a secondary content analysis layer. Both must pass before content plays. There are no user-facing settings to disable filtering — the controls are structural, not configurable.
+
+      **Language:** Swift | **Platform:** iOS | **Status:** Alpha, pending Tidal developer programme access
+
+  - name: pg-harden
+    slug: pg-harden
+    title: "pg-harden — Case Study"
+    description: "A Rust CLI tool for PostgreSQL security hardening — scan, report, and enforce deny-all security posture."
+    keywords: "pg-harden, PostgreSQL, security hardening, Rust CLI, SCRAM authentication, SSL, pg_hba, database security"
+    language: Rust
+    category: Security Tools
+    css: teentidal.css
+    sitemap_priority: "0.8"
+    faq:
+      - q: "What is pg-harden?"
+        a: "pg-harden is a Rust CLI tool for PostgreSQL security hardening that scans, reports, and enforces a deny-all security posture across database instances."
+      - q: "Why does PostgreSQL need hardening?"
+        a: "PostgreSQL ships with permissive defaults including local trust authentication, MD5 password hashing, unencrypted connections, and unrestricted public schema access. These must be secured for production use."
+      - q: "What does pg-harden check?"
+        a: "pg-harden checks SCRAM authentication enforcement, SSL/TLS configuration, pg_hba rules, public schema access, and other security settings against best practices."
+    llms_summary: "PostgreSQL security hardening scanner checking SCRAM auth, SSL, and pg_hba. Built in Rust."
+    llms_full: |
+      **What is pg-harden?** pg-harden is a Rust CLI tool for PostgreSQL security hardening. It scans, reports, and enforces a deny-all security posture across database instances.
+
+      **What problem does pg-harden solve?** PostgreSQL ships with permissive defaults — local trust authentication, MD5 password hashing, unencrypted connections, and unrestricted public schema access. Hardening guides require manual, repetitive work across every instance. There is no practical way to verify consistent security baselines across a fleet.
+
+      **How does pg-harden work?** pg-harden connects to PostgreSQL instances and checks SCRAM authentication enforcement, SSL/TLS configuration, pg_hba rules, public schema access, and other security settings against best practices. It produces structured reports and can enforce remediation.
+
+      **Language:** Rust | **Category:** Security Tools
+
+  - name: TidalPlaylistBuilder
+    slug: tidal-playlist-builder
+    title: "TidalPlaylistBuilder — Case Study"
+    description: "Build Tidal playlists from BBC programmes, CSV files, and curated text track listings. Rust CLI with OAuth device flow and anthology support."
+    keywords: "TidalPlaylistBuilder, Tidal, playlist, BBC, CSV, Rust CLI, OAuth, music, anthology, automation"
+    language: Rust
+    category: Music Tools
+    css: teentidal.css
+    sitemap_priority: "0.8"
+    faq:
+      - q: "What is TidalPlaylistBuilder?"
+        a: "TidalPlaylistBuilder is a Rust CLI that builds Tidal playlists from BBC programmes, CSV files, and curated text track listings, with support for multi-volume artist anthologies."
+      - q: "Can you import playlists into Tidal?"
+        a: "Tidal has no built-in import feature. TidalPlaylistBuilder solves this by parsing track listings from BBC programmes, CSV files, and plain text, then fuzzy-matching and creating playlists via the Tidal API."
+    llms_summary: "Build Tidal playlists from BBC programmes, CSV, and text files. Built in Rust."
+    llms_full: |
+      **What is TidalPlaylistBuilder?** TidalPlaylistBuilder is a Rust CLI that builds Tidal playlists from BBC programmes, CSV files, and curated text track listings. It supports multi-volume artist anthologies.
+
+      **What problem does TidalPlaylistBuilder solve?** Tidal has no way to import playlists from external sources. Building comprehensive artist anthologies (hundreds of tracks spanning decades) manually is impractical — each track must be searched and added individually.
+
+      **How does TidalPlaylistBuilder work?** It authenticates via OAuth device flow, parses track listings from multiple input formats (BBC programme pages, CSV files, plain text), fuzzy-matches tracks against Tidal's catalogue, and creates or updates playlists via the Tidal API. The anthology system organises large collections into numbered volumes.
+
+      **Language:** Rust | **Authentication:** OAuth 2.0 device flow
+
+  - name: TheStreamDeck
+    slug: the-stream-deck
+    title: "TheStreamDeck — Case Study"
+    description: "A Raspberry Pi-based unified streaming audio appliance with touchscreen, physical VU meters, and instant source switching."
+    keywords: "TheStreamDeck, Raspberry Pi, streaming audio, HiFi, VU meters, Tidal, Plexamp, BBC radio, touchscreen appliance"
+    language:
+      - Python
+      - Bash
+    category: Audio Streaming
+    css: teentidal.css
+    sitemap_priority: "0.8"
+    faq:
+      - q: "What is TheStreamDeck?"
+        a: "TheStreamDeck is a Raspberry Pi-based unified streaming audio appliance with a touchscreen display, physical analogue VU meters, and instant source switching across Tidal, Plexamp, BBC radio, and internet radio."
+      - q: "Why build a custom streaming appliance?"
+        a: "Multiple streaming subscriptions each run on different devices, requiring manual amp input selection. TheStreamDeck unifies all sources through one device and one amp input with instant switching."
+    llms_summary: "Raspberry Pi streaming audio appliance with touchscreen, VU meters, and 4-source switching."
+    llms_full: |
+      **What is TheStreamDeck?** TheStreamDeck is a Raspberry Pi-based unified streaming audio appliance with a touchscreen display, physical analogue VU meters, and instant source switching across Tidal, Plexamp, BBC radio, and internet radio.
+
+      **What problem does TheStreamDeck solve?** An audiophile with multiple streaming subscriptions experiences frustrating source switching — each service runs on a different device, requiring manual amp input selection. The fragmented workflow disrupts listening sessions.
+
+      **How does TheStreamDeck work?** One Raspberry Pi drives all four audio sources through a single amp input. A touchscreen displays album artwork and controls. Physical VU meters show real-time audio levels. Source switching is instant — tap a button on the touchscreen to change from Tidal to BBC radio without touching the amplifier.
+
+      **Platform:** Raspberry Pi | **Sources:** Tidal HiFi Plus, Plexamp, BBC 6 Music, internet radio
+
+  - name: PatronVault
+    slug: patron-vault
+    title: "PatronVault — Case Study"
+    description: "A Rust CLI for downloading and archiving media content from Patreon creators you subscribe to."
+    keywords: "PatronVault, Patreon, media archival, Rust CLI, download, cookie authentication, JSON API"
+    language: Rust
+    category: Media Archival
+    css: teentidal.css
+    sitemap_priority: "0.8"
+    faq:
+      - q: "What is PatronVault?"
+        a: "PatronVault is a Rust CLI for downloading and archiving media content from Patreon creators you subscribe to."
+      - q: "Why can't you download Patreon content?"
+        a: "Patreon has no export feature for patrons. If a creator deletes a post, changes tiers, or leaves the platform, paid content is lost. The official API is creator-focused with no subscriber-facing download endpoints."
+    llms_summary: "Patreon media archival tool using cookie-based auth against JSON:API. Built in Rust."
+    llms_full: |
+      **What is PatronVault?** PatronVault is a Rust CLI for downloading and archiving media content from Patreon creators you subscribe to.
+
+      **What problem does PatronVault solve?** Patreon has no export feature for patrons. If a creator deletes a post, changes tiers, or leaves the platform, paid content is lost. The official API is creator-focused with no subscriber-facing download endpoints.
+
+      **How does PatronVault work?** PatronVault authenticates via browser cookies against Patreon's internal JSON:API, enumerates posts and media attachments, and downloads everything with metadata preservation.
+
+      **Language:** Rust | **Authentication:** Cookie-based
+
+  - name: CourseVault
+    slug: course-vault
+    title: "CourseVault — Case Study"
+    description: "A Go CLI for downloading and archiving course content from Teachable platforms."
+    keywords: "CourseVault, Teachable, course download, Go CLI, video archival, online learning, cookie authentication"
+    language: Go
+    category: Media Archival
+    css: teentidal.css
+    sitemap_priority: "0.8"
+    faq:
+      - q: "What is CourseVault?"
+        a: "CourseVault is a Go CLI for downloading and archiving course content from Teachable platforms."
+      - q: "Why build a Teachable downloader?"
+        a: "Online courses on Teachable have no built-in download or export feature. If your subscription lapses or the course is removed, you lose access to material you paid for."
+    llms_summary: "Teachable course archival tool with browser cookie extraction. Built in Go."
+    llms_full: |
+      **What is CourseVault?** CourseVault is a Go CLI for downloading and archiving course content from Teachable platforms.
+
+      **What problem does CourseVault solve?** Online courses on Teachable have no built-in download or export feature. If your subscription lapses or the course is removed, you lose access to material you paid for.
+
+      **How does CourseVault work?** CourseVault extracts browser cookies for authentication, enumerates the full course curriculum, and downloads every video at original quality with metadata embedding, preserving the course structure.
+
+      **Language:** Go | **Authentication:** Browser cookie extraction
+
+  - name: MMM (MyMediaManager)
+    slug: mmm
+    title: "MMM (MyMediaManager) — Case Study"
+    description: "A Rust CLI for organising images and videos with deduplication, EXIF-based renaming, and date-based directory structure."
+    keywords: "MMM, MyMediaManager, media organiser, Rust CLI, EXIF, deduplication, photo management"
+    language: Rust
+    category: Media Organisation
+    css: teentidal.css
+    sitemap_priority: "0.8"
+    faq:
+      - q: "What is MMM?"
+        a: "MMM (MyMediaManager) is a Rust CLI for organising images and videos with deduplication, EXIF-based renaming, and date-based directory structure."
+      - q: "How does MMM organise media?"
+        a: "MMM reads EXIF metadata from media files, renames them with date-based conventions, deduplicates by content hash, and organises into a clean date-based directory structure."
+    llms_summary: "Image/video organiser with deduplication and EXIF-based renaming. Built in Rust."
+    llms_full: |
+      **What is MMM?** MMM (MyMediaManager) is a Rust CLI for organising images and videos with deduplication, EXIF-based renaming, and date-based directory structure.
+
+      **What problem does MMM solve?** Photos and videos accumulate across phones, cameras, SD cards, and cloud downloads. The same image exists in multiple places under different names. Camera-assigned filenames carry no meaningful information. Manual sorting is impractical at scale.
+
+      **How does MMM work?** MMM reads EXIF metadata from media files, renames them with date-based conventions, deduplicates by content hash, and organises into a clean date-based directory structure.
+
+      **Language:** Rust | **Category:** Media Organisation
+
+extra_pages:
+  - url: "https://t0lkim.dev/teen-tidal/privacy-policy.html"
+    lastmod: "2026-04-05"
+    changefreq: yearly
+    priority: "0.3"
