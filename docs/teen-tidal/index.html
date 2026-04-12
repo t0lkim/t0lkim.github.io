@@ -5,6 +5,67 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TeenTidal — Case Study</title>
   <meta name="description" content="How a parenting gap in Tidal's content filtering led to building a native iOS app with two-layer explicit content protection.">
+  <meta name="keywords" content="TeenTidal, parental controls, Tidal, iOS app, content filtering, explicit content, Swift, music streaming, child safety">
+  <meta name="author" content="Mike Lott">
+  <link rel="canonical" href="https://t0lkim.dev/teen-tidal/">
+  <!-- Open Graph -->
+  <meta property="og:title" content="TeenTidal — Case Study">
+  <meta property="og:description" content="How a parenting gap in Tidal's content filtering led to building a native iOS app with two-layer explicit content protection.">
+  <meta property="og:url" content="https://t0lkim.dev/teen-tidal/">
+  <meta property="og:site_name" content="t0lkim.dev">
+  <meta property="og:type" content="article">
+  <meta property="og:locale" content="en_SG">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="TeenTidal — Case Study">
+  <meta name="twitter:description" content="How a parenting gap in Tidal's content filtering led to building a native iOS app with two-layer explicit content protection.">
+  <!-- JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "SoftwareSourceCode",
+        "name": "TeenTidal",
+        "description": "Native iOS app wrapping Tidal's SDK with two-layer explicit content filtering. Structural parental controls with no user-bypassable settings.",
+        "programmingLanguage": "Swift",
+        "author": { "@type": "Person", "name": "Mike Lott", "url": "https://t0lkim.dev" },
+        "url": "https://t0lkim.dev/teen-tidal/",
+        "applicationCategory": "Parental Controls",
+        "operatingSystem": "iOS"
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is TeenTidal?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "TeenTidal is a native iOS app that wraps Tidal's SDK with two-layer explicit content filtering, providing structural parental controls with no user-bypassable settings."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Why can't parents use Tidal's built-in content filter?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Tidal's explicit content toggle can be re-enabled by any user from within the app. iOS Screen Time's Clean restriction only applies to Apple Music, not third-party apps like Tidal."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How does TeenTidal filter explicit content?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "TeenTidal uses two independent filtering layers: metadata-level filtering checking Tidal's explicit flag, and a secondary content analysis layer. Both must pass before content plays."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
   <link rel="stylesheet" href="../assets/css/base.css">
   <link rel="stylesheet" href="../assets/css/teentidal.css">
   <style>/* page-specific overrides only */</style>

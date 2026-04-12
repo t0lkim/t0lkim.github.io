@@ -1,0 +1,23 @@
+User-agent: *
+Allow: /
+
+# AI crawlers — explicitly welcomed
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Bytespider
+Disallow: /
+
+Sitemap: https://t0lkim.dev/sitemap.xml

@@ -5,6 +5,66 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>pg-harden — Case Study</title>
   <meta name="description" content="A Rust CLI tool for PostgreSQL security hardening — scan, report, and enforce deny-all security posture.">
+  <meta name="keywords" content="pg-harden, PostgreSQL, security hardening, Rust CLI, SCRAM authentication, SSL, pg_hba, database security">
+  <meta name="author" content="Mike Lott">
+  <link rel="canonical" href="https://t0lkim.dev/pg-harden/">
+  <!-- Open Graph -->
+  <meta property="og:title" content="pg-harden — Case Study">
+  <meta property="og:description" content="A Rust CLI tool for PostgreSQL security hardening — scan, report, and enforce deny-all security posture.">
+  <meta property="og:url" content="https://t0lkim.dev/pg-harden/">
+  <meta property="og:site_name" content="t0lkim.dev">
+  <meta property="og:type" content="article">
+  <meta property="og:locale" content="en_SG">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="pg-harden — Case Study">
+  <meta name="twitter:description" content="A Rust CLI tool for PostgreSQL security hardening — scan, report, and enforce deny-all security posture.">
+  <!-- JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "SoftwareSourceCode",
+        "name": "pg-harden",
+        "description": "PostgreSQL security hardening scanner. Checks SCRAM authentication, SSL enforcement, and pg_hba configuration against security best practices.",
+        "programmingLanguage": "Rust",
+        "author": { "@type": "Person", "name": "Mike Lott", "url": "https://t0lkim.dev" },
+        "url": "https://t0lkim.dev/pg-harden/",
+        "applicationCategory": "Security Tools"
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is pg-harden?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "pg-harden is a Rust CLI tool for PostgreSQL security hardening that scans, reports, and enforces a deny-all security posture across database instances."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Why does PostgreSQL need hardening?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "PostgreSQL ships with permissive defaults including local trust authentication, MD5 password hashing, unencrypted connections, and unrestricted public schema access. These must be secured for production use."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What does pg-harden check?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "pg-harden checks SCRAM authentication enforcement, SSL/TLS configuration, pg_hba rules, public schema access, and other security settings against best practices."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
   <link rel="stylesheet" href="../assets/css/base.css">
   <link rel="stylesheet" href="../assets/css/teentidal.css">
   <style>

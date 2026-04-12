@@ -1,12 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{ page.title | default: site.title }}</title>
-  <meta name="description" content="{{ page.description | default: site.description }}">
-  <link rel="stylesheet" href="{{ '/assets/css/base.css' | relative_url }}">
+  {% include head.html %}
   <link rel="stylesheet" href="{{ '/assets/css/profile.css' | relative_url }}">
+
+  <!-- JSON-LD: Person -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Mike Lott",
+    "alternateName": "t0lkim",
+    "url": "https://t0lkim.dev",
+    "jobTitle": "Cybersecurity & Operational Engineering Technical Leader",
+    "description": "{{ page.description | default: site.description }}",
+    "knowsAbout": ["Security Architecture", "Counter-Censorship Engineering", "Infrastructure Security", "Operations Engineering", "Swift", "Rust", "TypeScript", "Python", "Go"],
+    "sameAs": [
+      "https://www.linkedin.com/in/t0lkim/",
+      "https://github.com/t0lkim"
+    ],
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Singapore",
+      "addressCountry": "SG"
+    }
+  }
+  </script>
 </head>
 <body>
 
