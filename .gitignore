@@ -7,8 +7,15 @@
 *.swo
 *~
 
-# Go build artifacts
-tools/seogen/seogen
+# Internal tooling
+tools/
+check-sync.sh
+SYNC-MANIFEST.sha256
 
-# Do not publish changelog
+# Internal config and documentation
+projects.yaml
+SEO.md
 CHANGELOG.md
+
+# Source markdown (HTML output in docs/ is what gets served)
+markdown-files/
