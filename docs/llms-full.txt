@@ -8,7 +8,7 @@ Cybersecurity leader with 15+ years of experience in Security Architecture, Coun
 
 ---
 
-## Project: TeenTidal
+## Project: teen-tidal
 
 **What is TeenTidal?** TeenTidal is a native iOS app that wraps Tidal's SDK with two-layer explicit content filtering. It provides structural parental controls with no user-bypassable settings.
 
