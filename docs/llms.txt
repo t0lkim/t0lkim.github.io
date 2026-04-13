@@ -8,10 +8,10 @@ Cybersecurity leader with 15+ years of experience in Security Architecture, Coun
 
 ## Projects
 
-- [TeenTidal](https://t0lkim.dev/teen-tidal/): Native iOS parental content filter for Tidal with two-layer explicit content filtering. Built in Swift.
-- [pg-harden](https://t0lkim.dev/pg-harden/): PostgreSQL security hardening scanner checking SCRAM auth, SSL, and pg_hba. Built in Rust.
-- [TidalPlaylistBuilder](https://t0lkim.dev/tidal-playlist-builder/): Build Tidal playlists from BBC programmes, CSV, and text files. Built in Rust.
-- [TheStreamDeck](https://t0lkim.dev/the-stream-deck/): Raspberry Pi streaming audio appliance with touchscreen, VU meters, and 4-source switching.
+- [TeenTidal](https://t0lkim.dev/projects/teen-tidal/): Native iOS parental content filter for Tidal with two-layer explicit content filtering. Built in Swift.
+- [pg-harden](https://t0lkim.dev/projects/pg-harden/): PostgreSQL security hardening scanner checking SCRAM auth, SSL, and pg_hba. Built in Rust.
+- [TidalPlaylistBuilder](https://t0lkim.dev/projects/tidal-playlist-builder/): Build Tidal playlists from BBC programmes, CSV, and text files. Built in Rust.
+- [TheStreamDeck](https://t0lkim.dev/projects/the-stream-deck/): Raspberry Pi streaming audio appliance with touchscreen, VU meters, and 4-source switching.
 
 ## Links
 
