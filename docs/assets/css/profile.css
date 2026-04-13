@@ -200,7 +200,23 @@
   transition: border-color 0.2s;
 }
 
-.pinned-card:hover { border-color: var(--blue); text-decoration: none; }
+.pinned-card:hover { border-color: var(--blue); }
+
+.pinned-card-links {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+  font-size: 12px;
+}
+
+.pinned-link {
+  color: var(--blue);
+  text-decoration: none;
+}
+
+.pinned-link:hover {
+  text-decoration: underline;
+}
 
 .pinned-card-name {
   font-size: 14px;
