@@ -44,57 +44,194 @@
   }
   </script>
   <link rel="stylesheet" href="./assets/css/base.css">
-  <link rel="stylesheet" href="./assets/css/profile.css">
+  <link rel="stylesheet" href="./assets/css/teentidal.css">
+  <style>
+    /* ── Homepage-specific styling ── */
+
+    .section-label {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 16px;
+    }
+
+    /* ── About section ── */
+    .s-about > p {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+    .s-about > p a img {
+      height: 28px;
+      vertical-align: middle;
+    }
+
+    /* ── Experience section ── */
+    .s-experience > ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .s-experience > ul > li {
+      position: relative;
+      padding: 14px 20px;
+      margin-bottom: 8px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* ── Skills section ── */
+    .s-skills > ul {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 0;
+    }
+    .s-skills > ul > li {
+      padding: 8px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+    .s-skills > ul > li strong {
+      color: var(--text);
+    }
+
+    /* ── Certifications / Education sections ── */
+    .s-certs > ul,
+    .s-education > ul,
+    .s-other-edu > ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .s-certs > ul > li,
+    .s-education > ul > li,
+    .s-other-edu > ul > li {
+      padding: 12px 20px;
+      margin-bottom: 8px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+    }
+
+    /* ── Projects pinned grid ── */
+    .pinned-heading {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 16px;
+    }
+    .pinned-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 600px) {
+      .pinned-grid { grid-template-columns: 1fr; }
+    }
+    .pinned-card {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      transition: border-color 0.2s;
+      background: var(--surface);
+    }
+    .pinned-card:hover { border-color: var(--teal); }
+    .pinned-card-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--teal);
+      margin-bottom: 8px;
+    }
+    .pinned-card-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      flex: 1;
+      margin-bottom: 12px;
+    }
+    .pinned-card-meta {
+      display: flex;
+      gap: 16px;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+    .pinned-card-links {
+      display: flex;
+      gap: 12px;
+      font-size: 12px;
+    }
+    .pinned-link {
+      color: var(--blue);
+      text-decoration: none;
+    }
+    .pinned-link:hover { text-decoration: underline; }
+    .lang-dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 4px;
+      vertical-align: middle;
+    }
+    .lang-swift { background: #F05138; }
+    .lang-rust { background: #DEA584; }
+    .lang-go { background: #00ADD8; }
+    .lang-typescript { background: #3178C6; }
+    .lang-python { background: #3776AB; }
+    .lang-bash { background: #4EAA25; }
+  </style>
 </head>
 <body>
 
-  <div class="page">
+  <!-- Hero -->
+  <header class="hero">
+    <div class="container">
+      <h1>Mike <span class=\"accent\">Lott</span></h1>
+      <p class="hero-sub">Strategic Cybersecurity leader. Security Architecture, Counter-Censorship Engineering, and Infrastructure Security across ExpressVPN, Facebook/Meta, and GoDaddy.</p>
+    </div>
+  </header>
 
-    <!-- Sidebar -->
-    <aside class="sidebar">
-      <img class="avatar" src="./assets/avatar.gif" alt="t0lkim">
-      <div class="sidebar-name">Mike Lott</div>
-      <div class="sidebar-handle">t0lkim</div>
-      <div class="sidebar-bio">Cybersecurity leader with 15+ years of experience in Security Architecture, Counter-Censorship Engineering, and Infrastructure Security at companies including ExpressVPN, Facebook/Meta, and GoDaddy. CISSP and GSLC certified.</div>
+  <div class="divider"></div>
 
-      <div class="sidebar-meta">
-        <div class="sidebar-meta-item">
-          <svg height="16" width="16" viewBox="0 0 16 16"><path d="M11.536 3.464a5 5 0 0 1 0 7.072L8 14.07l-3.536-3.535a5 5 0 1 1 7.072-7.072v.001Zm1.06 8.132a6.5 6.5 0 1 0-9.192 0l3.535 3.536a1.5 1.5 0 0 0 2.122 0l3.535-3.536ZM8 9a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/></svg>
-          <span>Singapore</span>
-        </div>
-        <div class="sidebar-meta-item">
-          <svg height="16" width="16" viewBox="0 0 16 16"><path d="M7.775 3.275a.75.75 0 0 0 1.06 1.06l1.25-1.25a2 2 0 1 1 2.83 2.83l-2.5 2.5a2 2 0 0 1-2.83 0 .75.75 0 0 0-1.06 1.06 3.5 3.5 0 0 0 4.95 0l2.5-2.5a3.5 3.5 0 0 0-4.95-4.95l-1.25 1.25Zm-.025 5.45a.75.75 0 0 0-1.06-1.06l-1.25 1.25a2 2 0 1 1-2.83-2.83l2.5-2.5a2 2 0 0 1 2.83 0 .75.75 0 1 0 1.06-1.06 3.5 3.5 0 0 0-4.95 0l-2.5 2.5a3.5 3.5 0 0 0 4.95 4.95l1.25-1.25Z"/></svg>
-          <a href="https://t0lkim.dev">t0lkim.dev</a>
-        </div>
-        <div class="sidebar-meta-item">
-          <svg height="16" width="16" viewBox="0 0 16 16"><path d="M1.75 2h12.5c.966 0 1.75.784 1.75 1.75v8.5A1.75 1.75 0 0 1 14.25 14H1.75A1.75 1.75 0 0 1 0 12.25v-8.5C0 2.784.784 2 1.75 2ZM1.5 12.251c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V5.809L8.38 9.397a.75.75 0 0 1-.76 0L1.5 5.809v6.442Zm0-8.251v1.388l5.89 3.39a.248.248 0 0 0 .22.006l5.89-3.396V4a.25.25 0 0 0-.25-.25H1.75a.25.25 0 0 0-.25.25Z"/></svg>
-          <a href="mailto:me@t0lkim.dev">me@t0lkim.dev</a>
-        </div>
-      </div>
-
-      <div class="sidebar-stats">
-        <svg height="16" width="16" viewBox="0 0 16 16"><path d="M2 5.5a3.5 3.5 0 1 1 5.898 2.549 5.508 5.508 0 0 1 3.034 4.084.75.75 0 1 1-1.482.235 4.001 4.001 0 0 0-6.9 0 .75.75 0 0 1-1.482-.236A5.507 5.507 0 0 1 3.102 8.05 3.493 3.493 0 0 1 2 5.5ZM11 4a3.001 3.001 0 0 1 2.22 5.018 5.01 5.01 0 0 1 2.56 3.012.749.749 0 0 1-.885.954.752.752 0 0 1-.549-.514 3.507 3.507 0 0 0-2.522-2.372.75.75 0 0 1-.574-.73v-.352a.75.75 0 0 1 .416-.672A1.5 1.5 0 0 0 11 5.5.75.75 0 0 1 11 4Zm-5.5-.5a2 2 0 1 0-.001 3.999A2 2 0 0 0 5.5 3.5Z"/></svg>
-        <span><strong>3</strong> followers</span> &middot;
-        <span><strong>31</strong> following</span>
-      </div>
-    </aside>
-
-    <!-- Main Content -->
-    <main class="main">
-      <div class="readme">
-        <div class="readme-header">
-          <svg height="16" width="16" viewBox="0 0 16 16"><path d="M0 1.75A.75.75 0 0 1 .75 1h4.253c1.227 0 2.317.59 3 1.501A3.743 3.743 0 0 1 11.006 1h4.245a.75.75 0 0 1 .75.75v10.5a.75.75 0 0 1-.75.75h-4.507a2.25 2.25 0 0 0-1.591.659l-.622.621a.75.75 0 0 1-1.06 0l-.622-.621A2.25 2.25 0 0 0 5.258 13H.75a.75.75 0 0 1-.75-.75Zm7.251 10.324.004-5.073-.002-2.253A2.25 2.25 0 0 0 5.003 2.5H1.5v9h3.757a3.75 3.75 0 0 1 1.994.574ZM8.755 4.75l-.004 7.322a3.752 3.752 0 0 1 1.992-.572H14.5v-9h-3.495a2.25 2.25 0 0 0-2.25 2.25Z"/></svg>
-          t0lkim / README.md
-        </div>
-        <div class="readme-body">
-<h1 id="mike-lott">Mike Lott</h1>
-<h2 id="cybersecurity--operational-engineering--security-architecture--counter-censorship">Cybersecurity &amp; Operational Engineering | Security Architecture | Counter-Censorship</h2>
-<p>Strategic Cybersecurity leader with over 15 years of experience in Security Architecture, Security Operations &amp; Engineering, Counter-Censorship, and Infrastructure Security across major tech companies such as ExpressVPN, Facebook/Meta, and GoDaddy. Experience in designing secure, scalable systems, leading global security initiatives, and driving operational resilience in high-threat environments.</p>
-<h3 id="about-me">About Me</h3>
+  <!-- About -->
+  <section class="container fade-in">
+    <div class="section-label">About</div>
+    <div class="s-about">
+      <p>Strategic Cybersecurity leader with over 15 years of experience in Security Architecture, Security Operations &amp; Engineering, Counter-Censorship, and Infrastructure Security across major tech companies such as ExpressVPN, Facebook/Meta, and GoDaddy. Experience in designing secure, scalable systems, leading global security initiatives, and driving operational resilience in high-threat environments.</p>
 <p><a href="https://www.linkedin.com/in/t0lkim/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&amp;logo=linkedin&amp;logoColor=white" alt="LinkedIn"></a>
 <a href="https://t0lkim.dev"><img src="https://img.shields.io/badge/Personal_Site-1f2937?style=for-the-badge&amp;logo=rss&amp;logoColor=white" alt="Personal Site"></a></p>
-<h3 id="professional-experience">Professional Experience</h3>
-<ul>
+<hr>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Experience -->
+  <section class="container fade-in">
+    <div class="section-label">Professional Experience</div>
+    <div class="s-experience">
+      <ul>
 <li>Cybersecurity Architect (Staff), ExpressVPN (2024–2025)</li>
 <li>Head of Counter-Censorship (Product Enablement), ExpressVPN (2024)</li>
 <li>Manager, Operations Engineering, ExpressVPN (2022–2024)</li>
@@ -104,8 +241,17 @@
 <li>Manager, Data Center Operations, GoDaddy (2012–2014)</li>
 <li>GNU/Linux Engineer, GoDaddy (2011–2012)</li>
 </ul>
-<h3 id="skills">Skills</h3>
-<ul>
+<hr>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Skills -->
+  <section class="container fade-in">
+    <div class="section-label">Skills</div>
+    <div class="s-skills">
+      <ul>
 <li><strong>Security Architecture and Design</strong></li>
 <li><strong>Counter-Censorship Engineering</strong>: Protocol obfuscation, TLS fingerprinting, hostile network operations</li>
 <li><strong>Infrastructure Security</strong>: Data centre physical/logical security, Red Team operations</li>
@@ -114,146 +260,168 @@
 <li><strong>Infrastructure</strong>: GNU/Linux, Podman, PostgreSQL, Terraform, Fedora CoreOS</li>
 <li><strong>Threat Modelling and Security Governance</strong></li>
 </ul>
-<h3 id="industry-certifications">Industry Certifications</h3>
-<ul>
+<hr>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Projects -->
+  <section class="container fade-in">
+    <div class="pinned-heading">Projects</div>
+    <div class="pinned-grid">
+      <div class="pinned-card">
+        <div class="pinned-card-name">teen-tidal</div>
+        <div class="pinned-card-desc">Native iOS parental content filter for Tidal. Two-layer explicit content filtering with no bypassable settings.</div>
+        <div class="pinned-card-meta">
+          <span><span class="lang-dot lang-swift"></span> Swift</span>
+        </div>
+        <div class="pinned-card-links">
+          <a href="./projects/teen-tidal/" class="pinned-link">Case Study</a>
+          <a href="https://github.com/t0lkim/teen-tidal" class="pinned-link">Source</a>
+        </div>
+      </div>
+      <div class="pinned-card">
+        <div class="pinned-card-name">pg-harden</div>
+        <div class="pinned-card-desc">PostgreSQL security hardening scanner. SCRAM auth, SSL, and pg_hba checks.</div>
+        <div class="pinned-card-meta">
+          <span><span class="lang-dot lang-rust"></span> Rust</span>
+        </div>
+        <div class="pinned-card-links">
+          <a href="./projects/pg-harden/" class="pinned-link">Case Study</a>
+          <a href="https://github.com/t0lkim/pg-harden" class="pinned-link">Source</a>
+        </div>
+      </div>
+      <div class="pinned-card">
+        <div class="pinned-card-name">TidalPlaylistBuilder</div>
+        <div class="pinned-card-desc">Build Tidal playlists from BBC programmes, CSV, and text files.</div>
+        <div class="pinned-card-meta">
+          <span><span class="lang-dot lang-rust"></span> Rust</span>
+        </div>
+        <div class="pinned-card-links">
+          <a href="./projects/tidal-playlist-builder/" class="pinned-link">Case Study</a>
+          <a href="https://github.com/t0lkim/tidal-playlist-builder" class="pinned-link">Source</a>
+        </div>
+      </div>
+      <div class="pinned-card">
+        <div class="pinned-card-name">TheStreamDeck</div>
+        <div class="pinned-card-desc">Raspberry Pi streaming audio appliance. Touchscreen, VU meters, instant 4-source switching.</div>
+        <div class="pinned-card-meta">
+          <span><span class="lang-dot lang-python"></span> Python</span>
+        </div>
+        <div class="pinned-card-links">
+          <a href="./projects/the-stream-deck/" class="pinned-link">Case Study</a>
+          <a href="https://github.com/t0lkim/the-stream-deck" class="pinned-link">Source</a>
+        </div>
+      </div>
+      <div class="pinned-card">
+        <div class="pinned-card-name">PatronVault</div>
+        <div class="pinned-card-desc">Patreon media archival tool. Cookie-based auth against Patreon's internal JSON:API.</div>
+        <div class="pinned-card-meta">
+          <span><span class="lang-dot lang-rust"></span> Rust</span>
+        </div>
+        <div class="pinned-card-links">
+          <a href="./projects/patron-vault/" class="pinned-link">Case Study</a>
+          <a href="https://github.com/t0lkim/patron-vault" class="pinned-link">Source</a>
+        </div>
+      </div>
+      <div class="pinned-card">
+        <div class="pinned-card-name">CourseVault</div>
+        <div class="pinned-card-desc">Teachable course archival tool. Browser cookie extraction, curriculum enumeration, video download.</div>
+        <div class="pinned-card-meta">
+          <span><span class="lang-dot lang-go"></span> Go</span>
+        </div>
+        <div class="pinned-card-links">
+          <a href="./projects/course-vault/" class="pinned-link">Case Study</a>
+          <a href="https://github.com/t0lkim/course-vault" class="pinned-link">Source</a>
+        </div>
+      </div>
+      <div class="pinned-card">
+        <div class="pinned-card-name">image-video-organiser</div>
+        <div class="pinned-card-desc">EXIF-based media organiser with deduplication and date-based directory structure.</div>
+        <div class="pinned-card-meta">
+          <span><span class="lang-dot lang-rust"></span> Rust</span>
+        </div>
+        <div class="pinned-card-links">
+          <a href="./projects/mmm/" class="pinned-link">Case Study</a>
+          <a href="https://github.com/t0lkim/mmm" class="pinned-link">Source</a>
+        </div>
+      </div>
+      <div class="pinned-card">
+        <div class="pinned-card-name">session-manager</div>
+        <div class="pinned-card-desc">LLM-agnostic session orchestrator. Entity-tag overlap, conflict detection, relevance-filtered context injection.</div>
+        <div class="pinned-card-meta">
+          <span><span class="lang-dot lang-rust"></span> Rust</span>
+        </div>
+        <div class="pinned-card-links">
+          <a href="./projects/session-manager/" class="pinned-link">Case Study</a>
+          <a href="https://github.com/t0lkim/session-manager" class="pinned-link">Source</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Certifications -->
+  <section class="container fade-in">
+    <div class="section-label">Industry Certifications</div>
+    <div class="s-certs">
+      <ul>
 <li>Certified Information Systems Security Professional (CISSP) — (ISC)2</li>
 <li>GIAC Security Leadership (GSLC) — SANS</li>
 <li>Assessing &amp; Exploiting Control Systems &amp; IIoT — Black Hat/InGuardians</li>
 <li>Terrorism and Counterterrorism — LDE Centre for Safety and Security</li>
 <li>ITILv3 Foundation — Pearson VUE</li>
 </ul>
-<h3 id="formal-education">Formal Education</h3>
-<ul>
+<hr>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Formal Education -->
+  <section class="container fade-in">
+    <div class="section-label">Formal Education</div>
+    <div class="s-education">
+      <ul>
 <li>BA (Hons), Interior Design — Ravensbourne College of Design &amp; Communication, UK</li>
 <li>Level 3 Foundation Diploma in Art &amp; Design, Brighton Metropolitan College, UK</li>
 </ul>
-<h3 id="other-education">Other Education</h3>
-<ul>
+<hr>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Other Education -->
+  <section class="container fade-in">
+    <div class="section-label">Other Education</div>
+    <div class="s-other-edu">
+      <ul>
 <li>Apnea Academy International, Instructor</li>
 <li>GNVQ Level 3 Site Carpentry, Brighton Metropolitan College, UK</li>
 </ul>
+    </div>
+  </section>
 
-        </div>
-      </div>
+  <div class="divider"></div>
 
-      <div class="pinned-heading">Projects</div>
-      <div class="pinned-grid">
-        <div class="pinned-card">
-          <div class="pinned-card-name">
-            <svg class="repo-icon" height="16" width="16" viewBox="0 0 16 16"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z"/></svg>
-            teen-tidal
-          </div>
-          <div class="pinned-card-desc">Native iOS parental content filter for Tidal. Two-layer explicit content filtering with no bypassable settings.</div>
-          <div class="pinned-card-meta">
-            <span class="pinned-lang"><span class="lang-dot lang-swift"></span> Swift</span>
-          </div>
-          <div class="pinned-card-links">
-            <a href="./projects/teen-tidal/" class="pinned-link">Case Study</a>
-            <a href="https://github.com/t0lkim/teen-tidal" class="pinned-link">Source</a>
-          </div>
-        </div>
-        <div class="pinned-card">
-          <div class="pinned-card-name">
-            <svg class="repo-icon" height="16" width="16" viewBox="0 0 16 16"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z"/></svg>
-            pg-harden
-          </div>
-          <div class="pinned-card-desc">PostgreSQL security hardening scanner. SCRAM auth, SSL, and pg_hba checks.</div>
-          <div class="pinned-card-meta">
-            <span class="pinned-lang"><span class="lang-dot lang-rust"></span> Rust</span>
-          </div>
-          <div class="pinned-card-links">
-            <a href="./projects/pg-harden/" class="pinned-link">Case Study</a>
-            <a href="https://github.com/t0lkim/pg-harden" class="pinned-link">Source</a>
-          </div>
-        </div>
-        <div class="pinned-card">
-          <div class="pinned-card-name">
-            <svg class="repo-icon" height="16" width="16" viewBox="0 0 16 16"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z"/></svg>
-            TidalPlaylistBuilder
-          </div>
-          <div class="pinned-card-desc">Build Tidal playlists from BBC programmes, CSV, and text files.</div>
-          <div class="pinned-card-meta">
-            <span class="pinned-lang"><span class="lang-dot lang-rust"></span> Rust</span>
-          </div>
-          <div class="pinned-card-links">
-            <a href="./projects/tidal-playlist-builder/" class="pinned-link">Case Study</a>
-            <a href="https://github.com/t0lkim/tidal-playlist-builder" class="pinned-link">Source</a>
-          </div>
-        </div>
-        <div class="pinned-card">
-          <div class="pinned-card-name">
-            <svg class="repo-icon" height="16" width="16" viewBox="0 0 16 16"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z"/></svg>
-            TheStreamDeck
-          </div>
-          <div class="pinned-card-desc">Raspberry Pi streaming audio appliance. Touchscreen, VU meters, instant 4-source switching.</div>
-          <div class="pinned-card-meta">
-            <span class="pinned-lang"><span class="lang-dot lang-python"></span> Python</span>
-          </div>
-          <div class="pinned-card-links">
-            <a href="./projects/the-stream-deck/" class="pinned-link">Case Study</a>
-            <a href="https://github.com/t0lkim/the-stream-deck" class="pinned-link">Source</a>
-          </div>
-        </div>
-        <div class="pinned-card">
-          <div class="pinned-card-name">
-            <svg class="repo-icon" height="16" width="16" viewBox="0 0 16 16"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z"/></svg>
-            PatronVault
-          </div>
-          <div class="pinned-card-desc">Patreon media archival tool. Cookie-based auth against Patreon's internal JSON:API.</div>
-          <div class="pinned-card-meta">
-            <span class="pinned-lang"><span class="lang-dot lang-rust"></span> Rust</span>
-          </div>
-          <div class="pinned-card-links">
-            <a href="./projects/patron-vault/" class="pinned-link">Case Study</a>
-            <a href="https://github.com/t0lkim/patron-vault" class="pinned-link">Source</a>
-          </div>
-        </div>
-        <div class="pinned-card">
-          <div class="pinned-card-name">
-            <svg class="repo-icon" height="16" width="16" viewBox="0 0 16 16"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z"/></svg>
-            CourseVault
-          </div>
-          <div class="pinned-card-desc">Teachable course archival tool. Browser cookie extraction, curriculum enumeration, video download.</div>
-          <div class="pinned-card-meta">
-            <span class="pinned-lang"><span class="lang-dot lang-go"></span> Go</span>
-          </div>
-          <div class="pinned-card-links">
-            <a href="./projects/course-vault/" class="pinned-link">Case Study</a>
-            <a href="https://github.com/t0lkim/course-vault" class="pinned-link">Source</a>
-          </div>
-        </div>
-        <div class="pinned-card">
-          <div class="pinned-card-name">
-            <svg class="repo-icon" height="16" width="16" viewBox="0 0 16 16"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z"/></svg>
-            image-video-organiser
-          </div>
-          <div class="pinned-card-desc">EXIF-based media organiser with deduplication and date-based directory structure.</div>
-          <div class="pinned-card-meta">
-            <span class="pinned-lang"><span class="lang-dot lang-rust"></span> Rust</span>
-          </div>
-          <div class="pinned-card-links">
-            <a href="./projects/mmm/" class="pinned-link">Case Study</a>
-            <a href="https://github.com/t0lkim/mmm" class="pinned-link">Source</a>
-          </div>
-        </div>
-        <div class="pinned-card">
-          <div class="pinned-card-name">
-            <svg class="repo-icon" height="16" width="16" viewBox="0 0 16 16"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.249.249 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z"/></svg>
-            session-manager
-          </div>
-          <div class="pinned-card-desc">LLM-agnostic session orchestrator. Entity-tag overlap, conflict detection, relevance-filtered context injection.</div>
-          <div class="pinned-card-meta">
-            <span class="pinned-lang"><span class="lang-dot lang-rust"></span> Rust</span>
-          </div>
-          <div class="pinned-card-links">
-            <a href="./projects/session-manager/" class="pinned-link">Case Study</a>
-            <a href="https://github.com/t0lkim/session-manager" class="pinned-link">Source</a>
-          </div>
-        </div>
-      </div>
+  <!-- Footer -->
+  <footer class="footer container">
+    <p class="footer-copy">&copy; 2026 t0lkim</p>
+  </footer>
 
-    </main>
-  </div>
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
 
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
 </body>
 </html>
