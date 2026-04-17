@@ -69,6 +69,365 @@
   <link rel="stylesheet" href="../../assets/css/base.css">
   <link rel="stylesheet" href="../../assets/css/teentidal.css">
   <style>/* page-specific overrides only */</style>
+  <style>
+    /* ── Section-specific styling for rendered markdown ── */
+
+    /* ── Problem section ── */
+    .s-problem blockquote {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+      margin: 28px 0;
+      font-style: italic;
+      border-left: 3px solid var(--red);
+      position: relative;
+    }
+    .s-problem blockquote::before {
+      content: 'PROBLEM STATEMENT';
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 12px;
+      font-style: normal;
+    }
+    .s-problem blockquote p {
+      font-size: 1.1rem;
+      color: var(--text);
+      line-height: 1.7;
+    }
+    .s-problem > ul,
+    .s-problem > p + ul {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 24px 0;
+    }
+    .s-problem > ul li,
+    .s-problem > p + ul li {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: var(--red-dim);
+      border: 1px solid rgba(248, 81, 73, 0.25);
+      border-radius: 8px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .s-problem > ul li::before,
+    .s-problem > p + ul li::before {
+      content: '\00d7';
+      color: var(--red);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    /* ── Solution section ── */
+    .s-solution > h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+    .s-solution > p {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 12px;
+      position: relative;
+      overflow: hidden;
+      font-size: 0.95rem;
+    }
+    .s-solution > p::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--teal), transparent);
+    }
+    .s-solution > p strong {
+      color: var(--teal);
+    }
+
+    /* ── Parental Controls section ── */
+    .s-parental > h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .s-parental > p {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 22px;
+      margin-bottom: 12px;
+      font-size: 0.95rem;
+    }
+    .s-parental > p strong {
+      color: var(--teal);
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    /* ── Parent Dashboard section ── */
+    .s-dashboard > h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .s-dashboard > p {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 22px;
+      margin-bottom: 12px;
+      font-size: 0.95rem;
+    }
+    .s-dashboard > p strong {
+      color: var(--teal);
+    }
+
+    /* ── Architecture section ── */
+    .s-arch > h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .s-arch > p {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 22px;
+      margin-bottom: 12px;
+      font-size: 0.95rem;
+    }
+    .s-arch > p strong {
+      color: var(--teal);
+    }
+
+    /* ── Audio Features section ── */
+    .s-audio > h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .s-audio > p {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 22px;
+      margin-bottom: 12px;
+      font-size: 0.95rem;
+    }
+    .s-audio > p strong {
+      color: var(--teal);
+    }
+
+    /* ── Security Audit section ── */
+    .s-security > h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .s-security > p {
+      font-size: 0.95rem;
+    }
+    .s-security > p + ul {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 22px 18px 38px;
+      margin-bottom: 16px;
+    }
+    .s-security > p + ul li {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 4px;
+    }
+    .s-security > p + ul li:last-child { margin-bottom: 0; }
+
+    /* ── Evolution section ── */
+    .s-evolution {
+      position: relative;
+      padding-left: 32px;
+    }
+    .s-evolution::before {
+      content: '';
+      position: absolute;
+      left: 8px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, var(--teal), var(--border));
+    }
+    .s-evolution > h3 {
+      position: relative;
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      padding-top: 4px;
+    }
+    .s-evolution > h3::before {
+      content: '';
+      position: absolute;
+      left: -31px;
+      top: 8px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--bg);
+      border: 2px solid var(--teal);
+    }
+    .s-evolution > h3:last-of-type::before {
+      background: var(--teal);
+      box-shadow: 0 0 12px rgba(0, 201, 167, 0.4);
+    }
+    .s-evolution > p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+
+    /* ── Design Decisions section ── */
+    .s-decisions > ul {
+      list-style: none;
+      padding: 0;
+      margin: 20px 0;
+    }
+    .s-decisions > ul > li {
+      position: relative;
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .s-decisions > ul > li strong {
+      color: var(--text);
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    /* ── API Etiquette section ── */
+    .s-api > h3 {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px 10px 0 0;
+      padding: 20px 24px 8px;
+      margin-bottom: 0;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+    .s-api > h3 + p {
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      padding: 8px 24px;
+      margin-bottom: 0;
+      font-size: 0.9rem;
+    }
+    .s-api > h3 + p + p {
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      padding: 8px 24px;
+      margin-bottom: 0;
+      font-size: 0.9rem;
+    }
+    .s-api > h3 + p + p + p {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-top: none;
+      border-radius: 0 0 10px 10px;
+      padding: 8px 24px 20px;
+      margin-bottom: 20px;
+      font-size: 0.9rem;
+    }
+    /* Style Investigation/Decision/Result labels */
+    .s-api > p strong:first-child {
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: var(--teal);
+    }
+
+    /* ── Tidal Compliance section ── */
+    .s-compliance > h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .s-compliance > p {
+      font-size: 0.95rem;
+    }
+    .s-compliance > ul {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 22px 18px 38px;
+      margin-bottom: 16px;
+    }
+    .s-compliance > ul li {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 4px;
+    }
+    .s-compliance table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 20px 0;
+      font-size: 0.9rem;
+    }
+    .s-compliance table th {
+      background: var(--surface);
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 600;
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+    }
+    .s-compliance table td {
+      padding: 12px 16px;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+    }
+    .s-compliance table tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* ── Shared card pattern for feature sections ── */
+    .card-section > p strong:first-child {
+      color: var(--teal);
+    }
+
+    /* ── Section label ── */
+    .section-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 12px;
+    }
+  </style>
 </head>
 <body>
 
@@ -88,7 +447,8 @@
   <!-- Problem -->
   <section class="container fade-in">
     <div class="section-label">The Problem</div>
-    <h3>A gap no setting could fix</h3>
+    <div class="s-problem">
+      <h3>A gap no setting could fix</h3>
 <p>A parent with a family Tidal subscription wants to give their child a safe music streaming experience. Tidal has an explicit content toggle — but any user can re-enable it from within the app. iOS Screen Time's &quot;Clean&quot; restriction only applies to Apple Music, not third-party apps.</p>
 <p>The result: either the child has unrestricted access to explicit content, or the parent resorts to fragile workarounds like Guided Access and Screen Time layering that an older child could circumvent.</p>
 <blockquote>
@@ -102,6 +462,7 @@
 <li>Guided Access is brittle at best</li>
 </ul>
 <hr>
+    </div>
   </section>
 
   <div class="divider"></div>
@@ -109,13 +470,15 @@
   <!-- Solution -->
   <section class="container fade-in">
     <div class="section-label">The Solution</div>
-    <h3>Two layers, zero settings</h3>
+    <div class="s-solution">
+      <h3>Two layers, zero settings</h3>
 <p>TeenTidal is a native iOS/iPadOS app that wraps Tidal's official SDK with <strong>structural content filtering</strong> — not a toggle the child can find and disable, but an architectural guarantee enforced at two independent layers.</p>
 <p><strong>Layer 1 — Server-side filtering:</strong> Every API request includes <code>explicitFilter=EXCLUDE</code>, preventing explicit content from ever reaching the device. Applied across all endpoints: search, album detail, artist tracks, artist albums, playlist items, and artist detail.</p>
 <p><strong>Layer 2 — Client-side deny-by-default:</strong> Every API response passes through <code>FilteredCatalog</code>, which strips any item where <code>explicit != false</code>. The deny-by-default approach means missing or null explicit flags are treated as explicit — content must be explicitly marked clean to pass. A belt-and-braces playback guard adds a final check before any track ID reaches the Tidal Player SDK.</p>
 <p><strong>Video content excluded entirely</strong> — server-side via content type filtering and client-side by removing all video navigation paths. No video content is ever presented to the child.</p>
 <p>There is <strong>no settings screen</strong>. No toggle to disable. No deep link that bypasses the filter. The filtering is hardcoded into the architecture — it cannot be turned off without rebuilding the app.</p>
 <hr>
+    </div>
   </section>
 
   <div class="divider"></div>
@@ -123,7 +486,8 @@
   <!-- Parental Controls -->
   <section class="container fade-in">
     <div class="section-label">Parental Controls</div>
-    <h3>Boundary-based, not surveillance-based</h3>
+    <div class="s-parental">
+      <h3>Boundary-based, not surveillance-based</h3>
 <p>TeenTidal's parental controls shape the listening environment without logging individual behaviour. A parent sets boundaries; the child operates freely within them.</p>
 <p><strong>Listening Hours</strong> — configurable start and end time (15-minute increments). Outside the window, playback is refused with a gentle banner. Supports inverted overnight ranges.</p>
 <p><strong>Daily Listening Limit</strong> — 15-minute-step budget that accumulates real playback seconds against a calendar day. Auto-resets at midnight. When the budget is reached, playback pauses.</p>
@@ -133,6 +497,7 @@
 <p><strong>Pause on Output Change</strong> — when headphones are unplugged, playback pauses immediately. Prevents the speaker blasting when headphones come out.</p>
 <p>All time settings use 15-minute granularity, stored internally as minutes-from-midnight (0–1439) for precision.</p>
 <hr>
+    </div>
   </section>
 
   <div class="divider"></div>
@@ -140,12 +505,14 @@
   <!-- Parent Dashboard -->
   <section class="container fade-in">
     <div class="section-label">Parent Dashboard</div>
-    <h3>PIN-gated, on-device, aggregate-only</h3>
+    <div class="s-dashboard">
+      <h3>PIN-gated, on-device, aggregate-only</h3>
 <p>A hidden 2-second long-press opens the parent dashboard, gated by a 4-digit PIN stored in the iOS Keychain (survives app reinstall). Brute-force protected: 5 failed attempts trigger a 60-second lockout with exponential backoff (capped at 1 hour), using constant-time string comparison to resist timing attacks.</p>
 <p><strong>Usage tab</strong> — aggregate statistics only: total plays, skip rate, total listening time, total searches. Time-of-Day chart and Listening-Per-Day breakdown. No individual track or artist history — the privacy-infringing sections (Top Tracks, Top Artists, Recent Searches) were deliberately removed in v0.8.0. A parent should know <em>how much</em> and <em>when</em>, not <em>what</em>.</p>
 <p><strong>Controls tab</strong> — all parental boundary settings: volume caps, listening hours, daily limit, evening override, auto-sleep, pause on output change, loudness normalisation toggle.</p>
 <p><strong>Diagnostics tab</strong> — MetricKit payloads (crashes, hangs, disk writes, CPU/memory, launch time) with read-only JSON viewer. Zero third-party SDKs.</p>
 <hr>
+    </div>
   </section>
 
   <div class="divider"></div>
@@ -153,20 +520,23 @@
   <!-- Architecture -->
   <section class="container fade-in">
     <div class="section-label">Architecture</div>
-    <h3>SDK for review, reverse-engineered for playback</h3>
+    <div class="s-arch">
+      <h3>SDK for review, reverse-engineered for playback</h3>
 <p>Tidal requires all playback to use their official Player SDK, but the SDK's development mode returns <code>PENotAllowed</code> for streaming — making testing impossible without production credentials. TeenTidal solves this with compile-time backend separation:</p>
 <p><strong>SDK build</strong> (<code>TeenTidal-SDK</code>) — clean, Tidal-reviewable. Uses the official SDK for auth, playback, and events. This is the build submitted for Tidal developer programme review.</p>
 <p><strong>RE build</strong> (<code>TeenTidal-RE</code>) — reverse-engineered Tidal integration for development and testing. OAuth Device Code flow (RFC 8628) with QR code login. Stream URL acquisition via <code>playbackinfopostpaywall/v4</code>, BTS manifest parsing, AVPlayer playback with full queue management.</p>
 <p>Protocol abstractions (<code>AuthProvider</code>, <code>PlaybackProvider</code>, <code>TKCredentialsProvider</code>) decouple all views from specific backends. <code>#if TIDAL_SDK</code> / <code>#if TIDAL_RE</code> guards plus <code>EXCLUDED_SOURCE_FILE_NAMES</code> in xcconfig ensure zero cross-leakage. Binary inspection verified: SDK build contains zero RE symbols; RE build contains zero SDK symbols.</p>
 <hr>
+    </div>
   </section>
 
   <div class="divider"></div>
 
   <!-- Security -->
   <section class="container fade-in">
-    <div class="section-label">Security</div>
-    <h3>Five-phase hardening from alpha to release</h3>
+    <div class="section-label">Security Audit</div>
+    <div class="s-security">
+      <h3>Five-phase hardening from alpha to release</h3>
 <p>A comprehensive security review produced 17 findings across 5 phases, all resolved:</p>
 <p><strong>Phase 1 — Content Safety:</strong></p>
 <ul>
@@ -201,18 +571,21 @@
 <li>Image URL path traversal prevention (hex-digit allowlist on cover IDs)</li>
 </ul>
 <hr>
+    </div>
   </section>
 
   <div class="divider"></div>
 
   <!-- Audio -->
   <section class="container fade-in">
-    <div class="section-label">Audio</div>
-    <h3>Loudness normalisation and real-time visualisation</h3>
+    <div class="section-label">Audio Features</div>
+    <div class="s-audio">
+      <h3>Loudness normalisation and real-time visualisation</h3>
 <p><strong>ReplayGain normalisation</strong> — parses <code>trackReplayGain</code> and <code>trackPeakAmplitude</code> from Tidal's stream metadata. Applied as pure attenuation via <code>AVMutableAudioMix</code> — never amplifies above unity. Target: −14 LUFS, matching Tidal's reference level. Consistent volume across tracks without parent intervention.</p>
 <p><strong>Real-time audio visualiser</strong> — Plexamp-style animated spectrum in the full player. <code>MTAudioProcessingTap</code> feeds PCM samples into <code>vDSP_fft_zrip</code> (1024-point FFT, Hann window). 28 log-scaled bars spanning ~60 Hz to ~16 kHz with fast-attack/slow-decay smoothing. Rolling-peak auto-normaliser prevents saturation on loud tracks. FFT is skipped entirely when the visualiser isn't visible.</p>
 <p><strong>Audio output picker</strong> — <code>AVRoutePickerView</code> in the full player header for switching between Bluetooth headphones, speakers, and AirPlay without leaving the app.</p>
 <hr>
+    </div>
   </section>
 
   <div class="divider"></div>
@@ -268,7 +641,8 @@
   <!-- Evolution -->
   <section class="container fade-in">
     <div class="section-label">Evolution</div>
-    <h3>v0.1.0 — 2 April 2026 — Architecture &amp; Foundation</h3>
+    <div class="s-evolution">
+      <h3>v0.1.0 — 2 April 2026 — Architecture &amp; Foundation</h3>
 <p>Two-layer filtering architecture. OAuth 2.1 PKCE authentication. Tidal SDK integration. Three-tab layout with search, album detail, and basic playback. 15 unit tests covering FilteredCatalog and PlayerService.</p>
 <h3>v0.2.0-alpha — 3 April 2026 — Full-Featured Discovery</h3>
 <p>Home tab with curated discovery carousels. Full search across tracks, albums, and artists. Playlist CRUD with local persistence. Design system (dark theme, teal accent, rounded fonts). iPad NavigationSplitView layout. Comprehensive QA pass: zero context menus, zero nested NavigationStacks, strict Swift 6.0 compliance.</p>
@@ -291,6 +665,7 @@
 <h3>v0.8.0-release — 17 April 2026 — Privacy Hardening</h3>
 <p>Parent Usage report stripped of privacy-infringing sections (Top Tracks, Top Artists, Recent Searches). All time settings migrated to 15-minute granularity with minutes-from-midnight storage. Privacy-first: a parent knows <em>how much</em> and <em>when</em>, not <em>what</em>.</p>
 <hr>
+    </div>
   </section>
 
   <div class="divider"></div>
@@ -298,7 +673,8 @@
   <!-- Design Decisions -->
   <section class="container fade-in">
     <div class="section-label">Design Decisions</div>
-    <ul>
+    <div class="s-decisions">
+      <ul>
 <li><strong>No settings screen:</strong> The filter is hardcoded into the architecture. There is no toggle, no preferences pane, no deep link, and no URL scheme that could expose unfiltered content.</li>
 <li><strong>Deny-by-default explicit filtering:</strong> Missing or null explicit flags are treated as explicit. Content must be explicitly marked clean to pass through. Both server-side and client-side filtering on every endpoint.</li>
 <li><strong>Boundary controls over surveillance:</strong> Parental controls set limits (hours, volume, daily cap) rather than logging individual listening choices. The parent dashboard shows aggregate stats, not per-track history.</li>
@@ -310,6 +686,7 @@
 <li><strong>Compile-time backend separation:</strong> SDK build for Tidal review contains zero RE code. RE build for development contains zero SDK dependencies. Verified by binary inspection.</li>
 </ul>
 <hr>
+    </div>
   </section>
 
   <div class="divider"></div>
@@ -317,7 +694,9 @@
   <!-- API Etiquette -->
   <section class="container fade-in">
     <div class="section-label">API Etiquette &amp; Hygiene</div>
-    
+    <div class="s-api">
+      
+    </div>
   </section>
 
   <div class="divider"></div>
@@ -325,7 +704,8 @@
   <!-- Tidal Compliance -->
   <section class="container fade-in">
     <div class="section-label">Tidal Compliance</div>
-    <p>TeenTidal is built to comply with Tidal's <a href="https://developer.tidal.com/documentation/guidelines/guidelines-developer-guidelines">Developer Guidelines (v3.0)</a> and <a href="https://developer.tidal.com/documentation/guidelines/guidelines-developer-terms">Developer Terms of Service (v3.0)</a>. This section documents how each requirement is met.</p>
+    <div class="s-compliance">
+      <p>TeenTidal is built to comply with Tidal's <a href="https://developer.tidal.com/documentation/guidelines/guidelines-developer-guidelines">Developer Guidelines (v3.0)</a> and <a href="https://developer.tidal.com/documentation/guidelines/guidelines-developer-terms">Developer Terms of Service (v3.0)</a>. This section documents how each requirement is met.</p>
 <h3>Playback</h3>
 <p>Tidal requires that playback is <strong>only available through an official, unmodified version of the TIDAL Player SDK module</strong>. The SDK build uses the official <code>tidal-sdk-ios</code> Player module for all playback. The RE build exists for development only and is never distributed.</p>
 <h3>Authentication</h3>
@@ -350,6 +730,7 @@
 <h3>Production Mode</h3>
 <p>TeenTidal is currently in development mode. Moving to production requires formal review by Tidal including source code review. The application is parked pending this process.</p>
 <hr>
+    </div>
   </section>
 
   <div class="divider"></div>
@@ -357,12 +738,36 @@
   <!-- Status -->
   <section class="container fade-in">
     <div class="section-label">Current Status</div>
-    <p><strong>Status:</strong> v0.8.0-release — Feature-complete, security-audited, parked pending Tidal review
-<strong>Platform:</strong> iOS / iPadOS 17+
-<strong>Language:</strong> Swift 6.0
-<strong>Distribution:</strong> Proprietary
-<strong>Build:</strong> 24</p>
-<p>TeenTidal is parked pending access to the Tidal developer programme for production credentials. The app is feature-complete across discovery, library management, content filtering, parental controls, and security hardening. Playback requires production mode — development credentials return <code>PENotAllowed</code> for streaming operations.</p>
+    <div class="status-banner">
+      <div class="status-left">
+        <div class="status-label">Status</div>
+        <div class="status-value"><span class="dot"></span>Parked &mdash; Pending Tidal Review</div>
+      </div>
+      <div class="status-meta">
+        <div class="meta-item">
+          <div class="meta-label">Version</div>
+          <div class="meta-value">v0.8.0-release</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Platform</div>
+          <div class="meta-value">iOS / iPadOS 17+</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Language</div>
+          <div class="meta-value">Swift 6.0</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Build</div>
+          <div class="meta-value">24</div>
+        </div>
+      </div>
+    </div>
+    <p style="color: var(--text-muted); font-size: 1.05rem; margin-top: 16px;">
+      TeenTidal is parked pending access to the Tidal developer programme for production credentials.
+      The app is feature-complete across discovery, library management, content filtering, parental controls,
+      and security hardening. Playback requires production mode &mdash; development credentials return
+      <code>PENotAllowed</code> for streaming operations.
+    </p>
   </section>
 
   <div class="divider"></div>
