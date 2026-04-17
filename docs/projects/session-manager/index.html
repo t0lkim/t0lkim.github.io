@@ -310,7 +310,8 @@
   <section class="container fade-in">
     <div class="section-label">The Problem</div>
     <div class="s-problem">
-      <h3>LLM sessions are isolated</h3>
+      <h2 id="the-problem">The Problem</h2>
+<h3 id="llm-sessions-are-isolated">LLM sessions are isolated</h3>
 <p>Each LLM session starts with zero knowledge of other active sessions — what they're working on, what files they've touched, what decisions they've made. The operator is the only bridge, manually relaying context and resolving conflicts. This doesn't scale.</p>
 <p>This is LLM-agnostic. Sessions may be Claude Code, Codex, Gemini CLI, Aider, custom agents, or any future tool. The session manager sits outside all of them.</p>
 <p>Three problems compound:</p>
@@ -327,7 +328,8 @@
   <section class="container fade-in">
     <div class="section-label">The Solution</div>
     <div class="s-solution">
-      <h3>Maia as orchestrator, not broadcaster</h3>
+      <h2 id="the-solution">The Solution</h2>
+<h3 id="maia-as-orchestrator-not-broadcaster">Maia as orchestrator, not broadcaster</h3>
 <p>A single privileged process — the Maia orchestrator — owns fleet coordination, narration, and context routing. Sessions emit structured events; Maia decides what's relevant and injects context proportional to overlap.</p>
 <p><strong>Relevance, not broadcast.</strong> Sessions receive context only about other sessions whose entity tags overlap with their own. Zero overlap = zero injection = zero tokens spent.</p>
 <p><strong>Filesystem is the coordination layer.</strong> Sessions communicate via shared files. No IPC, no sockets, no network. The filesystem is the only mechanism all sessions can access, regardless of which LLM tool they run.</p>
@@ -342,7 +344,8 @@
   <section class="container fade-in">
     <div class="section-label">Design Principles</div>
     <div class="s-principles">
-      <p>Eight principles govern the architecture:</p>
+      <h2 id="design-principles">Design Principles</h2>
+<p>Eight principles govern the architecture:</p>
 <ul>
 <li><strong>LLM-agnostic.</strong> The session manager does not live inside any LLM runtime. No hooks, no plugins, no extensions. Any LLM CLI that runs in a terminal can participate without modification.</li>
 <li><strong>Maia is the sole voice.</strong> Only the orchestrator calls the voice endpoint. Sessions emit structured events; Maia narrates. No session speaks directly. Bearer-token enforced.</li>
@@ -363,12 +366,13 @@
   <section class="container fade-in">
     <div class="section-label">Architecture</div>
     <div class="s-arch">
-      <h3>Component overview</h3>
+      <h2 id="architecture">Architecture</h2>
+<h3 id="component-overview">Component overview</h3>
 <p>Three layers, cleanly separated:</p>
 <p><strong>Sessions</strong> — any LLM CLI wrapped by a thin shim that captures PID and writes heartbeats. The LLM never knows the shim exists.</p>
 <p><strong>Orchestrator core</strong> (Rust binary) — heartbeat monitoring, entity-tag overlap computation, conflict detection, registry consolidation, event queue consumption, and journal appends. Zero LLM tokens.</p>
 <p><strong>Narration engine</strong> (Haiku) — clusters events into voice-ready summaries, batched every 30-60 seconds. ~200-500 tokens per call, ~6,000 tokens/hour. Negligible cost.</p>
-<h3>Filesystem layout</h3>
+<h3 id="filesystem-layout">Filesystem layout</h3>
 <p>All session state lives in <code>runtimeOS/sessions/</code>:</p>
 <ul>
 <li><code>events.jsonl</code> — append-only event bus (all sessions write)</li>
@@ -386,9 +390,10 @@
 
   <!-- Entity Tags -->
   <section class="container fade-in">
-    <div class="section-label">Entity Tags</div>
+    <div class="section-label">Entity Tags and Overlap</div>
     <div class="s-entity">
-      <h3>Dynamic inference, zero operator input</h3>
+      <h2 id="entity-tags-and-overlap">Entity Tags and Overlap</h2>
+<h3 id="dynamic-inference-zero-operator-input">Dynamic inference, zero operator input</h3>
 <p>Tags emerge during the session's lifetime. The orchestrator observes the session's PID tree and infers tags from activity:</p>
 <ul>
 <li><strong>Files read/written</strong> — project inferred from path, language from extension</li>
@@ -397,9 +402,9 @@
 <li><strong>Process children</strong> — tools invoked (cargo → Rust, npm → TypeScript)</li>
 </ul>
 <p>A session starts with zero tags and accumulates them as it works. The orchestrator re-computes overlap every time a tag set changes.</p>
-<h3>Auto-learned entity graph</h3>
+<h3 id="auto-learned-entity-graph">Auto-learned entity graph</h3>
 <p><code>entities.toml</code> is built by the orchestrator from observed behaviour, not manually authored. Flat tags appear first from file paths and hostnames. Correlations emerge over time — if sessions touching <code>maia-relay</code> frequently SSH to DaisyNet hosts, the orchestrator infers the relationship after a confidence threshold.</p>
-<h3>Overlap-driven injection tiers</h3>
+<h3 id="overlap-driven-injection-tiers">Overlap-driven injection tiers</h3>
 <p>| Overlap depth | Injection | Token cost |
 |---|---|---|
 | 0 tags | Nothing | 0 |
@@ -414,9 +419,10 @@
 
   <!-- Conflict Detection -->
   <section class="container fade-in">
-    <div class="section-label">Conflicts</div>
+    <div class="section-label">Conflict Detection</div>
     <div class="s-conflict">
-      <h3>File-level awareness</h3>
+      <h2 id="conflict-detection">Conflict Detection</h2>
+<h3 id="file-level-awareness">File-level awareness</h3>
 <p>When the orchestrator consolidates heartbeats, it checks for overlapping <code>files_modified</code>. If two sessions list the same file, the relevant context files are annotated with a warning.</p>
 <p>The orchestrator detects conflicts but does not resolve them — that's the operator's decision: coordinate, merge, or promote one session as the authority.</p>
 <p><code>files_modified</code> tracks writes only — reads inform entity tags but don't trigger conflict detection.</p>
@@ -430,12 +436,13 @@
   <section class="container fade-in">
     <div class="section-label">Work Journal</div>
     <div class="s-journal">
-      <h3>Durable record across sessions</h3>
+      <h2 id="work-journal">Work Journal</h2>
+<h3 id="durable-record-across-sessions">Durable record across sessions</h3>
 <p>Beyond live session coordination, the session manager maintains a durable, queryable journal of everything each session has done, decided, and deferred. Today this data is scattered across git commits, PRD files, DAILYLOG entries, and CHANGELOGs.</p>
 <p>Six entry types: <strong>achievement</strong> (concrete work completed), <strong>decision</strong> (choice made with rationale), <strong>todo</strong> (actionable work identified), <strong>aspiration</strong> (future-looking idea), <strong>learning</strong> (non-obvious discovery), <strong>blocker</strong> (impediment needing resolution).</p>
 <p>Entries are project-scoped JSONL at <code>memoryOS/journal/{project}.jsonl</code> — append-only, one per line. Queryable via <code>jq</code> or a dedicated reader skill.</p>
 <p>Three creation modes: <strong>explicit</strong> (operator invokes <code>/journal</code>), <strong>inferred</strong> (orchestrator scans git commits, PRDs, DAILYLOG), <strong>hooked</strong> (session-end summary emitted automatically).</p>
-<h3>Context injection</h3>
+<h3 id="context-injection">Context injection</h3>
 <p>When a new session starts, the journal injects a project-scoped summary: recent achievements, open TODOs, active decisions, aspirations. ~300-500 tokens per project, only for projects the session is working in.</p>
 <hr>
     </div>
@@ -445,16 +452,17 @@
 
   <!-- Security -->
   <section class="container fade-in">
-    <div class="section-label">Security &amp; Durability</div>
+    <div class="section-label">Security and Durability</div>
     <div class="s-security">
-      <h3>Security model</h3>
+      <h2 id="security-and-durability">Security and Durability</h2>
+<h3 id="security-model">Security model</h3>
 <ul>
 <li>Session files are local to <code>runtimeOS/sessions/</code> — ephemeral, not synced or backed up</li>
 <li>No secrets in heartbeats — task descriptions and file paths, not contents or credentials</li>
 <li>Voice endpoint is bearer-token protected — only the Maia orchestrator holds the token</li>
 <li>Context injection is untrusted — sessions should verify claims rather than blindly trusting the registry</li>
 </ul>
-<h3>Durability</h3>
+<h3 id="durability">Durability</h3>
 <p><code>runtimeOS/</code> is ephemeral by design. The orchestrator self-heals on startup — missing directories are created, stale heartbeats are rebuilt. The only durable record is the journal in <code>memoryOS/</code>, backed up per the infrastructure spec.</p>
 <p><code>entities.toml</code> stays in <code>runtimeOS/</code> — it's auto-learned and rebuilds itself over time. Loss means temporary loss of relationships until re-observed.</p>
 <hr>
@@ -467,7 +475,8 @@
   <section class="container fade-in">
     <div class="section-label">Token Economics</div>
     <div class="s-tokens">
-      <h3>Model routing</h3>
+      <h2 id="token-economics">Token Economics</h2>
+<h3 id="model-routing">Model routing</h3>
 <p>| Task | Runs as | Tokens |
 |---|---|---|
 | Heartbeat monitoring | Rust binary | 0 |
