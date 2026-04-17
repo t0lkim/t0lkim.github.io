@@ -695,7 +695,27 @@
   <section class="container fade-in">
     <div class="section-label">API Etiquette &amp; Hygiene</div>
     <div class="s-api">
-      
+      <h3>Single-request resource inclusion</h3>
+<p><strong>Investigation:</strong> Early versions made 20+ individual track fetches per search query — one per result row to resolve artist names and album artwork.</p>
+<p><strong>Decision:</strong> Tidal's JSON:API <code>include</code> parameter lets you request related resources in a single response. Search now uses compound includes to get everything in one call.</p>
+<p><strong>Result:</strong> Search went from 20+ API calls to exactly 1.</p>
+<h3>Tiered caching with stale-while-revalidate</h3>
+<p><strong>Investigation:</strong> Browsing the app repeatedly hits the same endpoints. Without caching, every screen transition is an API call.</p>
+<p><strong>Decision:</strong> Two-tier cache: L1 (in-memory) for instant access, L2 (disk) to survive app restarts. TTLs tiered by volatility: catalogue 24 hours, search 30 minutes, discovery 6 hours. Stale-while-revalidate serves expired entries immediately while refreshing in the background. Offline resilience: expired entries served rather than discarded when the network drops.</p>
+<p><strong>Result:</strong> Repeat navigation is instant. API calls only fire when cache entries expire. L1 capped at 200 entries with batch eviction.</p>
+<h3>Rate limit compliance with exponential backoff</h3>
+<p><strong>Investigation:</strong> Concurrent batch fetches via <code>TaskGroup</code> triggered HTTP 429 responses.</p>
+<p><strong>Decision:</strong> Batch fetches converted to sequential execution. HTTP 429 handler with exponential backoff (1s → 2s → 4s, respecting <code>Retry-After</code>, capped at 60s).</p>
+<p><strong>Result:</strong> Zero 429 errors in testing.</p>
+<h3>Debounced search</h3>
+<p><strong>Investigation:</strong> Every keystroke in the search field would trigger an API call.</p>
+<p><strong>Decision:</strong> Search input debounced with 500ms delay. Previous search task cancelled when new input arrives.</p>
+<p><strong>Result:</strong> A typical search triggers 1 API call instead of 10+.</p>
+<h3>OAuth compliance — PKCE-only public client</h3>
+<p><strong>Investigation:</strong> The initial implementation included the client secret in the app binary.</p>
+<p><strong>Decision:</strong> Client secret removed entirely. TeenTidal operates as a PKCE-only public client. Tokens stored in iOS Keychain with <code>WhenUnlockedThisDeviceOnly</code> accessibility and iCloud sync disabled.</p>
+<p><strong>Result:</strong> No secrets in the binary. Tokens protected at rest.</p>
+<hr>
     </div>
   </section>
 
