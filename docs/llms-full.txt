@@ -4,7 +4,7 @@
 
 ## About Mike Lott
 
-Cybersecurity leader with 15+ years of experience in Security Architecture, Counter-Censorship Engineering, and Infrastructure Security at companies including ExpressVPN, Facebook/Meta, and GoDaddy. CISSP and GSLC certified.
+I build things.
 
 ---
 
