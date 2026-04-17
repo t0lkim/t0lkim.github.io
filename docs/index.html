@@ -145,6 +145,33 @@
     }
     .pinned-link:hover { text-decoration: underline; }
 
+    /* ── Project tabs ── */
+    .project-tabs {
+      display: flex;
+      gap: 0;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .project-tab {
+      background: none;
+      border: none;
+      padding: 10px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .project-tab:hover {
+      color: var(--text);
+    }
+    .project-tab.active {
+      color: var(--teal);
+      border-bottom-color: var(--teal);
+    }
+
     /* ── License badges ── */
     .pinned-card-header {
       display: flex;
@@ -212,7 +239,7 @@
         </div>
         <div class="sidebar-meta-item">
           <svg height="16" width="16" viewBox="0 0 16 16"><path d="M1.75 2h12.5c.966 0 1.75.784 1.75 1.75v8.5A1.75 1.75 0 0 1 14.25 14H1.75A1.75 1.75 0 0 1 0 12.25v-8.5C0 2.784.784 2 1.75 2ZM1.5 12.251c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V5.809L8.38 9.397a.75.75 0 0 1-.76 0L1.5 5.809v6.442Zm0-8.251v1.388l5.89 3.39a.248.248 0 0 0 .22.006l5.89-3.396V4a.25.25 0 0 0-.25-.25H1.75a.25.25 0 0 0-.25.25Z"/></svg>
-          <a href="mailto:me@t0lkim.dev">me@t0lkim.dev</a>
+          <a id="email-link" href="#"></a>
         </div>
       </div>
 
@@ -233,129 +260,139 @@
 
       <!-- Projects -->
       <div class="pinned-heading">Projects</div>
-      <div class="pinned-grid">
-        <div class="pinned-card">
-          <div class="pinned-card-header">
-            <div class="pinned-card-name">teen-tidal</div>
-            <span class="license-badge proprietary">Commercial</span>
+      <div class="project-tabs">
+        <button class="project-tab active" data-tab="commercial">Commercial</button>
+        <button class="project-tab" data-tab="oss">Open Source</button>
+      </div>
+      <div class="project-panel" id="panel-commercial">
+        <div class="pinned-grid">
+          <div class="pinned-card">
+            <div class="pinned-card-header">
+              <div class="pinned-card-name">teen-tidal</div>
+              <span class="license-badge proprietary">Commercial</span>
+            </div>
+            <div class="pinned-card-desc">Native iOS parental content filter for Tidal. Two-layer explicit content filtering with no bypassable settings.</div>
+            <div class="pinned-card-meta">
+              <span class="pinned-lang"><span class="lang-dot lang-swift"></span> Swift</span>
+            </div>
+            <div class="pinned-card-links">
+              <a href="./projects/teen-tidal/" class="pinned-link">Case Study</a>
+            </div>
           </div>
-          <div class="pinned-card-desc">Native iOS parental content filter for Tidal. Two-layer explicit content filtering with no bypassable settings.</div>
-          <div class="pinned-card-meta">
-            <span class="pinned-lang"><span class="lang-dot lang-swift"></span> Swift</span>
-          </div>
-          <div class="pinned-card-links">
-            <a href="./projects/teen-tidal/" class="pinned-link">Case Study</a>
-          </div>
-        </div>
-        <div class="pinned-card">
-          <div class="pinned-card-header">
-            <div class="pinned-card-name">pg-harden</div>
-            <span class="license-badge oss">Open Source</span>
-          </div>
-          <div class="pinned-card-desc">PostgreSQL security hardening scanner. SCRAM auth, SSL, and pg_hba checks.</div>
-          <div class="pinned-card-meta">
-            <span class="pinned-lang"><span class="lang-dot lang-rust"></span> Rust</span>
-          </div>
-          <div class="pinned-card-links">
-            <a href="./projects/pg-harden/" class="pinned-link">Case Study</a>
-            <a href="https://github.com/t0lkim/pg-harden" class="pinned-link">Source</a>
-          </div>
-        </div>
-        <div class="pinned-card">
-          <div class="pinned-card-header">
-            <div class="pinned-card-name">TidalPlaylistBuilder</div>
-            <span class="license-badge oss">Open Source</span>
-          </div>
-          <div class="pinned-card-desc">Build Tidal playlists from BBC programmes, CSV, and text files.</div>
-          <div class="pinned-card-meta">
-            <span class="pinned-lang"><span class="lang-dot lang-rust"></span> Rust</span>
-          </div>
-          <div class="pinned-card-links">
-            <a href="./projects/tidal-playlist-builder/" class="pinned-link">Case Study</a>
-            <a href="https://github.com/t0lkim/tidal-playlist-builder" class="pinned-link">Source</a>
+          <div class="pinned-card">
+            <div class="pinned-card-header">
+              <div class="pinned-card-name">FretNote</div>
+              <span class="license-badge proprietary">Commercial</span>
+            </div>
+            <div class="pinned-card-desc">Guitar note-learning app. Real-time YIN pitch detection, gamified drilling, post-session analytics.</div>
+            <div class="pinned-card-meta">
+              <span class="pinned-lang"><span class="lang-dot lang-swift"></span> Swift</span>
+            </div>
+            <div class="pinned-card-links">
+              <a href="./projects/fretnote/" class="pinned-link">Case Study</a>
+            </div>
           </div>
         </div>
-        <div class="pinned-card">
-          <div class="pinned-card-header">
-            <div class="pinned-card-name">TheStreamDeck</div>
-            <span class="license-badge oss">Open Source</span>
+      </div>
+      <div class="project-panel" id="panel-oss" style="display:none;">
+        <div class="pinned-grid">
+          <div class="pinned-card">
+            <div class="pinned-card-header">
+              <div class="pinned-card-name">pg-harden</div>
+              <span class="license-badge oss">Open Source</span>
+            </div>
+            <div class="pinned-card-desc">PostgreSQL security hardening scanner. SCRAM auth, SSL, and pg_hba checks.</div>
+            <div class="pinned-card-meta">
+              <span class="pinned-lang"><span class="lang-dot lang-rust"></span> Rust</span>
+            </div>
+            <div class="pinned-card-links">
+              <a href="./projects/pg-harden/" class="pinned-link">Case Study</a>
+              <a href="https://github.com/t0lkim/pg-harden" class="pinned-link">Source</a>
+            </div>
           </div>
-          <div class="pinned-card-desc">Raspberry Pi streaming audio appliance. Touchscreen, VU meters, instant 4-source switching.</div>
-          <div class="pinned-card-meta">
-            <span class="pinned-lang"><span class="lang-dot lang-python"></span> Python</span>
+          <div class="pinned-card">
+            <div class="pinned-card-header">
+              <div class="pinned-card-name">TidalPlaylistBuilder</div>
+              <span class="license-badge oss">Open Source</span>
+            </div>
+            <div class="pinned-card-desc">Build Tidal playlists from BBC programmes, CSV, and text files.</div>
+            <div class="pinned-card-meta">
+              <span class="pinned-lang"><span class="lang-dot lang-rust"></span> Rust</span>
+            </div>
+            <div class="pinned-card-links">
+              <a href="./projects/tidal-playlist-builder/" class="pinned-link">Case Study</a>
+              <a href="https://github.com/t0lkim/tidal-playlist-builder" class="pinned-link">Source</a>
+            </div>
           </div>
-          <div class="pinned-card-links">
-            <a href="./projects/the-stream-deck/" class="pinned-link">Case Study</a>
-            <a href="https://github.com/t0lkim/the-stream-deck" class="pinned-link">Source</a>
+          <div class="pinned-card">
+            <div class="pinned-card-header">
+              <div class="pinned-card-name">TheStreamDeck</div>
+              <span class="license-badge oss">Open Source</span>
+            </div>
+            <div class="pinned-card-desc">Raspberry Pi streaming audio appliance. Touchscreen, VU meters, instant 4-source switching.</div>
+            <div class="pinned-card-meta">
+              <span class="pinned-lang"><span class="lang-dot lang-python"></span> Python</span>
+            </div>
+            <div class="pinned-card-links">
+              <a href="./projects/the-stream-deck/" class="pinned-link">Case Study</a>
+              <a href="https://github.com/t0lkim/the-stream-deck" class="pinned-link">Source</a>
+            </div>
           </div>
-        </div>
-        <div class="pinned-card">
-          <div class="pinned-card-header">
-            <div class="pinned-card-name">PatronVault</div>
-            <span class="license-badge oss">Open Source</span>
+          <div class="pinned-card">
+            <div class="pinned-card-header">
+              <div class="pinned-card-name">PatronVault</div>
+              <span class="license-badge oss">Open Source</span>
+            </div>
+            <div class="pinned-card-desc">Patreon media archival tool. Cookie-based auth against Patreon's internal JSON:API.</div>
+            <div class="pinned-card-meta">
+              <span class="pinned-lang"><span class="lang-dot lang-rust"></span> Rust</span>
+            </div>
+            <div class="pinned-card-links">
+              <a href="./projects/patron-vault/" class="pinned-link">Case Study</a>
+              <a href="https://github.com/t0lkim/patron-vault" class="pinned-link">Source</a>
+            </div>
           </div>
-          <div class="pinned-card-desc">Patreon media archival tool. Cookie-based auth against Patreon's internal JSON:API.</div>
-          <div class="pinned-card-meta">
-            <span class="pinned-lang"><span class="lang-dot lang-rust"></span> Rust</span>
+          <div class="pinned-card">
+            <div class="pinned-card-header">
+              <div class="pinned-card-name">CourseVault</div>
+              <span class="license-badge oss">Open Source</span>
+            </div>
+            <div class="pinned-card-desc">Teachable course archival tool. Browser cookie extraction, curriculum enumeration, video download.</div>
+            <div class="pinned-card-meta">
+              <span class="pinned-lang"><span class="lang-dot lang-go"></span> Go</span>
+            </div>
+            <div class="pinned-card-links">
+              <a href="./projects/course-vault/" class="pinned-link">Case Study</a>
+              <a href="https://github.com/t0lkim/course-vault" class="pinned-link">Source</a>
+            </div>
           </div>
-          <div class="pinned-card-links">
-            <a href="./projects/patron-vault/" class="pinned-link">Case Study</a>
-            <a href="https://github.com/t0lkim/patron-vault" class="pinned-link">Source</a>
+          <div class="pinned-card">
+            <div class="pinned-card-header">
+              <div class="pinned-card-name">image-video-organiser</div>
+              <span class="license-badge oss">Open Source</span>
+            </div>
+            <div class="pinned-card-desc">EXIF-based media organiser with deduplication and date-based directory structure.</div>
+            <div class="pinned-card-meta">
+              <span class="pinned-lang"><span class="lang-dot lang-rust"></span> Rust</span>
+            </div>
+            <div class="pinned-card-links">
+              <a href="./projects/mmm/" class="pinned-link">Case Study</a>
+              <a href="https://github.com/t0lkim/mmm" class="pinned-link">Source</a>
+            </div>
           </div>
-        </div>
-        <div class="pinned-card">
-          <div class="pinned-card-header">
-            <div class="pinned-card-name">CourseVault</div>
-            <span class="license-badge oss">Open Source</span>
-          </div>
-          <div class="pinned-card-desc">Teachable course archival tool. Browser cookie extraction, curriculum enumeration, video download.</div>
-          <div class="pinned-card-meta">
-            <span class="pinned-lang"><span class="lang-dot lang-go"></span> Go</span>
-          </div>
-          <div class="pinned-card-links">
-            <a href="./projects/course-vault/" class="pinned-link">Case Study</a>
-            <a href="https://github.com/t0lkim/course-vault" class="pinned-link">Source</a>
-          </div>
-        </div>
-        <div class="pinned-card">
-          <div class="pinned-card-header">
-            <div class="pinned-card-name">image-video-organiser</div>
-            <span class="license-badge oss">Open Source</span>
-          </div>
-          <div class="pinned-card-desc">EXIF-based media organiser with deduplication and date-based directory structure.</div>
-          <div class="pinned-card-meta">
-            <span class="pinned-lang"><span class="lang-dot lang-rust"></span> Rust</span>
-          </div>
-          <div class="pinned-card-links">
-            <a href="./projects/mmm/" class="pinned-link">Case Study</a>
-            <a href="https://github.com/t0lkim/mmm" class="pinned-link">Source</a>
-          </div>
-        </div>
-        <div class="pinned-card">
-          <div class="pinned-card-header">
-            <div class="pinned-card-name">session-manager</div>
-            <span class="license-badge oss">Open Source</span>
-          </div>
-          <div class="pinned-card-desc">LLM-agnostic session orchestrator. Entity-tag overlap, conflict detection, relevance-filtered context injection.</div>
-          <div class="pinned-card-meta">
-            <span class="pinned-lang"><span class="lang-dot lang-rust"></span> Rust</span>
-          </div>
-          <div class="pinned-card-links">
-            <a href="./projects/session-manager/" class="pinned-link">Case Study</a>
-            <a href="https://github.com/t0lkim/session-manager" class="pinned-link">Source</a>
-          </div>
-        </div>
-        <div class="pinned-card">
-          <div class="pinned-card-header">
-            <div class="pinned-card-name">FretNote</div>
-            <span class="license-badge proprietary">Commercial</span>
-          </div>
-          <div class="pinned-card-desc">Guitar note-learning app. Real-time YIN pitch detection, gamified drilling, post-session analytics.</div>
-          <div class="pinned-card-meta">
-            <span class="pinned-lang"><span class="lang-dot lang-swift"></span> Swift</span>
-          </div>
-          <div class="pinned-card-links">
-            <a href="./projects/fretnote/" class="pinned-link">Case Study</a>
+          <div class="pinned-card">
+            <div class="pinned-card-header">
+              <div class="pinned-card-name">session-manager</div>
+              <span class="license-badge oss">Open Source</span>
+            </div>
+            <div class="pinned-card-desc">LLM-agnostic session orchestrator. Entity-tag overlap, conflict detection, relevance-filtered context injection.</div>
+            <div class="pinned-card-meta">
+              <span class="pinned-lang"><span class="lang-dot lang-rust"></span> Rust</span>
+            </div>
+            <div class="pinned-card-links">
+              <a href="./projects/session-manager/" class="pinned-link">Case Study</a>
+              <a href="https://github.com/t0lkim/session-manager" class="pinned-link">Source</a>
+            </div>
           </div>
         </div>
       </div>
@@ -434,6 +471,24 @@
     }, { threshold: 0.1 });
 
     document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // Project tab switching
+    document.querySelectorAll('.project-tab').forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        document.querySelectorAll('.project-tab').forEach(function(t) { t.classList.remove('active'); });
+        document.querySelectorAll('.project-panel').forEach(function(p) { p.style.display = 'none'; });
+        tab.classList.add('active');
+        document.getElementById('panel-' + tab.dataset.tab).style.display = 'block';
+      });
+    });
+
+    // Email obfuscation — decoded by JS, invisible to scrapers
+    (function() {
+      var p = ['dev', 't0lkim', 'dev'];
+      var e = p[0] + '@' + p[1] + '.' + p[2];
+      var a = document.getElementById('email-link');
+      if (a) { a.href = 'mailto:' + e; a.textContent = e; }
+    })();
   </script>
 </body>
 </html>
