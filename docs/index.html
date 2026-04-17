@@ -137,6 +137,36 @@
     }
     .pinned-link:hover { text-decoration: underline; }
 
+    /* ── License badges ── */
+    .pinned-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .pinned-card-header .pinned-card-name {
+      margin-bottom: 0;
+    }
+    .license-badge {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+    .license-badge.oss {
+      color: var(--green);
+      border: 1px solid rgba(63, 185, 80, 0.3);
+      background: rgba(63, 185, 80, 0.1);
+    }
+    .license-badge.proprietary {
+      color: var(--yellow);
+      border: 1px solid rgba(210, 153, 34, 0.3);
+      background: rgba(210, 153, 34, 0.1);
+    }
+
     /* ── Sidebar badges ── */
     .sidebar-badges {
       display: flex;
@@ -231,18 +261,23 @@
       <div class="pinned-heading">Projects</div>
       <div class="pinned-grid">
         <div class="pinned-card">
-          <div class="pinned-card-name">teen-tidal</div>
+          <div class="pinned-card-header">
+            <div class="pinned-card-name">teen-tidal</div>
+            <span class="license-badge proprietary">Proprietary</span>
+          </div>
           <div class="pinned-card-desc">Native iOS parental content filter for Tidal. Two-layer explicit content filtering with no bypassable settings.</div>
           <div class="pinned-card-meta">
             <span class="pinned-lang"><span class="lang-dot lang-swift"></span> Swift</span>
           </div>
           <div class="pinned-card-links">
             <a href="./projects/teen-tidal/" class="pinned-link">Case Study</a>
-            <a href="https://github.com/t0lkim/teen-tidal" class="pinned-link">Source</a>
           </div>
         </div>
         <div class="pinned-card">
-          <div class="pinned-card-name">pg-harden</div>
+          <div class="pinned-card-header">
+            <div class="pinned-card-name">pg-harden</div>
+            <span class="license-badge oss">Open Source</span>
+          </div>
           <div class="pinned-card-desc">PostgreSQL security hardening scanner. SCRAM auth, SSL, and pg_hba checks.</div>
           <div class="pinned-card-meta">
             <span class="pinned-lang"><span class="lang-dot lang-rust"></span> Rust</span>
@@ -253,7 +288,10 @@
           </div>
         </div>
         <div class="pinned-card">
-          <div class="pinned-card-name">TidalPlaylistBuilder</div>
+          <div class="pinned-card-header">
+            <div class="pinned-card-name">TidalPlaylistBuilder</div>
+            <span class="license-badge oss">Open Source</span>
+          </div>
           <div class="pinned-card-desc">Build Tidal playlists from BBC programmes, CSV, and text files.</div>
           <div class="pinned-card-meta">
             <span class="pinned-lang"><span class="lang-dot lang-rust"></span> Rust</span>
@@ -264,7 +302,10 @@
           </div>
         </div>
         <div class="pinned-card">
-          <div class="pinned-card-name">TheStreamDeck</div>
+          <div class="pinned-card-header">
+            <div class="pinned-card-name">TheStreamDeck</div>
+            <span class="license-badge oss">Open Source</span>
+          </div>
           <div class="pinned-card-desc">Raspberry Pi streaming audio appliance. Touchscreen, VU meters, instant 4-source switching.</div>
           <div class="pinned-card-meta">
             <span class="pinned-lang"><span class="lang-dot lang-python"></span> Python</span>
@@ -275,7 +316,10 @@
           </div>
         </div>
         <div class="pinned-card">
-          <div class="pinned-card-name">PatronVault</div>
+          <div class="pinned-card-header">
+            <div class="pinned-card-name">PatronVault</div>
+            <span class="license-badge oss">Open Source</span>
+          </div>
           <div class="pinned-card-desc">Patreon media archival tool. Cookie-based auth against Patreon's internal JSON:API.</div>
           <div class="pinned-card-meta">
             <span class="pinned-lang"><span class="lang-dot lang-rust"></span> Rust</span>
@@ -286,7 +330,10 @@
           </div>
         </div>
         <div class="pinned-card">
-          <div class="pinned-card-name">CourseVault</div>
+          <div class="pinned-card-header">
+            <div class="pinned-card-name">CourseVault</div>
+            <span class="license-badge oss">Open Source</span>
+          </div>
           <div class="pinned-card-desc">Teachable course archival tool. Browser cookie extraction, curriculum enumeration, video download.</div>
           <div class="pinned-card-meta">
             <span class="pinned-lang"><span class="lang-dot lang-go"></span> Go</span>
@@ -297,7 +344,10 @@
           </div>
         </div>
         <div class="pinned-card">
-          <div class="pinned-card-name">image-video-organiser</div>
+          <div class="pinned-card-header">
+            <div class="pinned-card-name">image-video-organiser</div>
+            <span class="license-badge oss">Open Source</span>
+          </div>
           <div class="pinned-card-desc">EXIF-based media organiser with deduplication and date-based directory structure.</div>
           <div class="pinned-card-meta">
             <span class="pinned-lang"><span class="lang-dot lang-rust"></span> Rust</span>
@@ -308,7 +358,10 @@
           </div>
         </div>
         <div class="pinned-card">
-          <div class="pinned-card-name">session-manager</div>
+          <div class="pinned-card-header">
+            <div class="pinned-card-name">session-manager</div>
+            <span class="license-badge oss">Open Source</span>
+          </div>
           <div class="pinned-card-desc">LLM-agnostic session orchestrator. Entity-tag overlap, conflict detection, relevance-filtered context injection.</div>
           <div class="pinned-card-meta">
             <span class="pinned-lang"><span class="lang-dot lang-rust"></span> Rust</span>
