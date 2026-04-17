@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Session Manager — Case Study</title>
+  <meta name="description" content="An LLM-agnostic session orchestrator that coordinates concurrent AI sessions with entity-tag overlap, conflict detection, and relevance-filtered context injection.">
+  <meta name="keywords" content="session manager, LLM orchestrator, AI sessions, entity tags, conflict detection, context injection, Rust, maiaOS">
+  <meta name="author" content="Mike Lott">
+  <link rel="canonical" href="https://t0lkim.dev/projects/session-manager/">
+  <!-- Open Graph -->
+  <meta property="og:title" content="Session Manager — Case Study">
+  <meta property="og:description" content="An LLM-agnostic session orchestrator that coordinates concurrent AI sessions with entity-tag overlap, conflict detection, and relevance-filtered context injection.">
+  <meta property="og:url" content="https://t0lkim.dev/projects/session-manager/">
+  <meta property="og:site_name" content="t0lkim.dev">
+  <meta property="og:type" content="article">
+  <meta property="og:locale" content="en_SG">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Session Manager — Case Study">
+  <meta name="twitter:description" content="An LLM-agnostic session orchestrator that coordinates concurrent AI sessions with entity-tag overlap, conflict detection, and relevance-filtered context injection.">
+  <!-- JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "SoftwareSourceCode",
+        "name": "session-manager",
+        "description": "Session Manager is an LLM-agnostic orchestrator that coordinates concurrent AI sessions using entity-tag overlap, conflict detection, and relevance-filtered context injection. It runs as a Rust binary outside any LLM runtime.",
+        "programmingLanguage": "Rust",
+        "author": { "@type": "Person", "name": "Mike Lott", "url": "https://t0lkim.dev" },
+        "url": "https://t0lkim.dev/projects/session-manager/",
+        "applicationCategory": "Developer Tools"
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is Session Manager?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Session Manager is an LLM-agnostic orchestrator that coordinates concurrent AI sessions using entity-tag overlap, conflict detection, and relevance-filtered context injection. It runs as a Rust binary outside any LLM runtime."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How does Session Manager coordinate AI sessions?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Sessions emit structured events to a shared filesystem. The orchestrator infers entity tags from session behaviour, computes overlap between sessions, and injects relevant context proportional to overlap. Zero overlap means zero tokens spent."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does Session Manager work with any LLM?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes — it is LLM-agnostic. Sessions can be Claude Code, Codex, Gemini CLI, Aider, or any future tool. The session manager wraps sessions from the outside via a thin shim, requiring no modifications to the LLM tool."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+  <link rel="stylesheet" href="../../assets/css/base.css">
+  <link rel="stylesheet" href="../../assets/css/teentidal.css">
+  <style>
+    /* ── Section-specific styling for Session Manager ── */
+
+    /* ── Problem section ── */
+    .s-problem > p strong {
+      color: var(--text);
+      display: block;
+      margin-bottom: 2px;
+    }
+    .s-problem > p {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 22px;
+      margin-bottom: 12px;
+      font-size: 0.95rem;
+    }
+
+    /* ── Solution section ── */
+    .s-solution > h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .s-solution > p {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 12px;
+      position: relative;
+      overflow: hidden;
+      font-size: 0.95rem;
+    }
+    .s-solution > p::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--teal), transparent);
+    }
+    .s-solution > p strong {
+      color: var(--teal);
+    }
+
+    /* ── Design Principles section ── */
+    .s-principles > ul {
+      list-style: none;
+      padding: 0;
+      margin: 20px 0;
+    }
+    .s-principles > ul > li {
+      position: relative;
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .s-principles > ul > li strong {
+      color: var(--teal);
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    /* ── Architecture section ── */
+    .s-arch > h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .s-arch > p {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 22px;
+      margin-bottom: 12px;
+      font-size: 0.95rem;
+    }
+    .s-arch > p strong {
+      color: var(--teal);
+    }
+    .s-arch > ul {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 22px 18px 38px;
+      margin-bottom: 12px;
+    }
+    .s-arch > ul li {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 4px;
+    }
+
+    /* ── Entity Tags section ── */
+    .s-entity > h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .s-entity > p {
+      font-size: 0.95rem;
+    }
+    .s-entity > ul {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 22px 18px 38px;
+      margin-bottom: 16px;
+    }
+    .s-entity > ul li {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 4px;
+    }
+    .s-entity > ul li strong {
+      color: var(--text);
+    }
+    .s-entity table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 16px 0;
+      font-size: 0.9rem;
+    }
+    .s-entity th {
+      background: var(--surface);
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 600;
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+    }
+    .s-entity td {
+      padding: 10px 16px;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+    }
+    .s-entity tr:last-child td { border-bottom: none; }
+
+    /* ── Conflict Detection section ── */
+    .s-conflict > h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .s-conflict > p {
+      font-size: 0.95rem;
+    }
+
+    /* ��─ Work Journal section ── */
+    .s-journal > h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .s-journal > p {
+      font-size: 0.95rem;
+    }
+    .s-journal > p strong {
+      color: var(--teal);
+    }
+
+    /* ── Security section ── */
+    .s-security > h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .s-security > ul {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 22px 18px 38px;
+      margin-bottom: 16px;
+    }
+    .s-security > ul li {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 4px;
+    }
+
+    /* ���─ Token Economics section ── */
+    .s-tokens > h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .s-tokens table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 16px 0;
+      font-size: 0.9rem;
+    }
+    .s-tokens th {
+      background: var(--surface);
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 600;
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+    }
+    .s-tokens td {
+      padding: 10px 16px;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+    }
+    .s-tokens tr:last-child td { border-bottom: none; }
+  </style>
+</head>
+<body>
+
+  <a href="/" class="home-btn" title="Home"><svg width="18" height="18" viewBox="0 0 16 16"><path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6.5 6.5A.5.5 0 0 0 1.5 8.5v5a.5.5 0 0 0 .5.5h3.5a.5.5 0 0 0 .5-.5V11h4v2.5a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-5a.5.5 0 0 0-.146-.354L8.354 1.146ZM2.5 13V8.707l5.5-5.5 5.5 5.5V13H11v-2.5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0-.5.5V13H2.5Z"/></svg></a>
+
+  <!-- Hero -->
+  <header class="hero">
+    <div class="container">
+      <div class="hero-badge">Case Study</div>
+      <h1>"Session<span class=\"accent\">Manager</span>"</h1>
+      <p class="hero-sub">"An LLM-agnostic orchestrator for concurrent AI sessions — entity-tag overlap, conflict detection, relevance-filtered context, and a durable work journal. Zero operator input at launch."</p>
+    </div>
+  </header>
+
+  <div class="divider"></div>
+
+  <!-- Problem -->
+  <section class="container fade-in">
+    <div class="section-label">The Problem</div>
+    <div class="s-problem">
+      <h3>LLM sessions are isolated</h3>
+<p>Each LLM session starts with zero knowledge of other active sessions — what they're working on, what files they've touched, what decisions they've made. The operator is the only bridge, manually relaying context and resolving conflicts. This doesn't scale.</p>
+<p>This is LLM-agnostic. Sessions may be Claude Code, Codex, Gemini CLI, Aider, custom agents, or any future tool. The session manager sits outside all of them.</p>
+<p>Three problems compound:</p>
+<p><strong>Context loss.</strong> Starting a new session requires re-explaining what other sessions have done. With 2-3 concurrent sessions, this becomes significant overhead.</p>
+<p><strong>Blind conflicts.</strong> Two sessions can edit the same file without either knowing. Git catches this after the fact, but the sessions can't coordinate in advance.</p>
+<p><strong>No fleet visibility.</strong> The operator has no way to see, at a glance, how many sessions are active, what each is doing, or which files are under contention.</p>
+<hr>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Solution -->
+  <section class="container fade-in">
+    <div class="section-label">The Solution</div>
+    <div class="s-solution">
+      <h3>Maia as orchestrator, not broadcaster</h3>
+<p>A single privileged process — the Maia orchestrator — owns fleet coordination, narration, and context routing. Sessions emit structured events; Maia decides what's relevant and injects context proportional to overlap.</p>
+<p><strong>Relevance, not broadcast.</strong> Sessions receive context only about other sessions whose entity tags overlap with their own. Zero overlap = zero injection = zero tokens spent.</p>
+<p><strong>Filesystem is the coordination layer.</strong> Sessions communicate via shared files. No IPC, no sockets, no network. The filesystem is the only mechanism all sessions can access, regardless of which LLM tool they run.</p>
+<p><strong>Token cost awareness.</strong> Orchestration mechanics (heartbeat checking, overlap computation, conflict detection) run as compiled Rust — zero LLM tokens. Only narration synthesis uses an LLM, routed to the cheapest capable model (Haiku). Frontier models stay in the sessions doing actual work.</p>
+<hr>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Design Principles -->
+  <section class="container fade-in">
+    <div class="section-label">Design Principles</div>
+    <div class="s-principles">
+      <p>Eight principles govern the architecture:</p>
+<ul>
+<li><strong>LLM-agnostic.</strong> The session manager does not live inside any LLM runtime. No hooks, no plugins, no extensions. Any LLM CLI that runs in a terminal can participate without modification.</li>
+<li><strong>Maia is the sole voice.</strong> Only the orchestrator calls the voice endpoint. Sessions emit structured events; Maia narrates. No session speaks directly. Bearer-token enforced.</li>
+<li><strong>Relevance, not broadcast.</strong> Zero overlap between sessions means zero context injected and zero tokens spent.</li>
+<li><strong>Filesystem coordination.</strong> All session communication via <code>runtimeOS/sessions/</code>. No IPC, no sockets.</li>
+<li><strong>Read-heavy, write-light.</strong> Sessions read the registry; only the orchestrator writes the consolidated registry.</li>
+<li><strong>Graceful degradation.</strong> If the orchestrator isn't running, everything works as it does today — isolated sessions. Orchestration is additive, not required.</li>
+<li><strong>Token cost awareness.</strong> ~70% of orchestration is deterministic compiled code. Only narration needs an LLM.</li>
+<li><strong>High-precision timestamps.</strong> Every event records ISO-8601 with nanosecond precision for deterministic ordering.</li>
+</ul>
+<hr>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Architecture -->
+  <section class="container fade-in">
+    <div class="section-label">Architecture</div>
+    <div class="s-arch">
+      <h3>Component overview</h3>
+<p>Three layers, cleanly separated:</p>
+<p><strong>Sessions</strong> — any LLM CLI wrapped by a thin shim that captures PID and writes heartbeats. The LLM never knows the shim exists.</p>
+<p><strong>Orchestrator core</strong> (Rust binary) — heartbeat monitoring, entity-tag overlap computation, conflict detection, registry consolidation, event queue consumption, and journal appends. Zero LLM tokens.</p>
+<p><strong>Narration engine</strong> (Haiku) — clusters events into voice-ready summaries, batched every 30-60 seconds. ~200-500 tokens per call, ~6,000 tokens/hour. Negligible cost.</p>
+<h3>Filesystem layout</h3>
+<p>All session state lives in <code>runtimeOS/sessions/</code>:</p>
+<ul>
+<li><code>events.jsonl</code> — append-only event bus (all sessions write)</li>
+<li><code>registry.json</code> — consolidated registry (orchestrator writes)</li>
+<li><code>entities.toml</code> — auto-learned entity graph</li>
+<li><code>heartbeats/{session-id}.json</code> — per-session heartbeat (shim writes)</li>
+<li><code>context/{session-id}.json</code> — per-session context injection (orchestrator writes, session reads)</li>
+</ul>
+<p>No lock file. Maia is the sole orchestrator — no election, no contention.</p>
+<hr>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Entity Tags -->
+  <section class="container fade-in">
+    <div class="section-label">Entity Tags</div>
+    <div class="s-entity">
+      <h3>Dynamic inference, zero operator input</h3>
+<p>Tags emerge during the session's lifetime. The orchestrator observes the session's PID tree and infers tags from activity:</p>
+<ul>
+<li><strong>Files read/written</strong> — project inferred from path, language from extension</li>
+<li><strong>SSH connections</strong> — host entity inferred from hostname (e.g. pod00 → DaisyNet)</li>
+<li><strong>Git activity</strong> — repo/project name from <code>.git/logs/HEAD</code> mtime</li>
+<li><strong>Process children</strong> — tools invoked (cargo → Rust, npm → TypeScript)</li>
+</ul>
+<p>A session starts with zero tags and accumulates them as it works. The orchestrator re-computes overlap every time a tag set changes.</p>
+<h3>Auto-learned entity graph</h3>
+<p><code>entities.toml</code> is built by the orchestrator from observed behaviour, not manually authored. Flat tags appear first from file paths and hostnames. Correlations emerge over time — if sessions touching <code>maia-relay</code> frequently SSH to DaisyNet hosts, the orchestrator infers the relationship after a confidence threshold.</p>
+<h3>Overlap-driven injection tiers</h3>
+<p>| Overlap depth | Injection | Token cost |
+|---|---|---|
+| 0 tags | Nothing | 0 |
+| 1 tag (indirect) | One-liner summary | ~30 |
+| 2+ tags (direct) | Task + recent action | ~100 |
+| Same file modified | Conflict alert | ~150 |</p>
+<hr>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Conflict Detection -->
+  <section class="container fade-in">
+    <div class="section-label">Conflicts</div>
+    <div class="s-conflict">
+      <h3>File-level awareness</h3>
+<p>When the orchestrator consolidates heartbeats, it checks for overlapping <code>files_modified</code>. If two sessions list the same file, the relevant context files are annotated with a warning.</p>
+<p>The orchestrator detects conflicts but does not resolve them — that's the operator's decision: coordinate, merge, or promote one session as the authority.</p>
+<p><code>files_modified</code> tracks writes only — reads inform entity tags but don't trigger conflict detection.</p>
+<hr>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Work Journal -->
+  <section class="container fade-in">
+    <div class="section-label">Work Journal</div>
+    <div class="s-journal">
+      <h3>Durable record across sessions</h3>
+<p>Beyond live session coordination, the session manager maintains a durable, queryable journal of everything each session has done, decided, and deferred. Today this data is scattered across git commits, PRD files, DAILYLOG entries, and CHANGELOGs.</p>
+<p>Six entry types: <strong>achievement</strong> (concrete work completed), <strong>decision</strong> (choice made with rationale), <strong>todo</strong> (actionable work identified), <strong>aspiration</strong> (future-looking idea), <strong>learning</strong> (non-obvious discovery), <strong>blocker</strong> (impediment needing resolution).</p>
+<p>Entries are project-scoped JSONL at <code>memoryOS/journal/{project}.jsonl</code> — append-only, one per line. Queryable via <code>jq</code> or a dedicated reader skill.</p>
+<p>Three creation modes: <strong>explicit</strong> (operator invokes <code>/journal</code>), <strong>inferred</strong> (orchestrator scans git commits, PRDs, DAILYLOG), <strong>hooked</strong> (session-end summary emitted automatically).</p>
+<h3>Context injection</h3>
+<p>When a new session starts, the journal injects a project-scoped summary: recent achievements, open TODOs, active decisions, aspirations. ~300-500 tokens per project, only for projects the session is working in.</p>
+<hr>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Security -->
+  <section class="container fade-in">
+    <div class="section-label">Security &amp; Durability</div>
+    <div class="s-security">
+      <h3>Security model</h3>
+<ul>
+<li>Session files are local to <code>runtimeOS/sessions/</code> — ephemeral, not synced or backed up</li>
+<li>No secrets in heartbeats — task descriptions and file paths, not contents or credentials</li>
+<li>Voice endpoint is bearer-token protected — only the Maia orchestrator holds the token</li>
+<li>Context injection is untrusted — sessions should verify claims rather than blindly trusting the registry</li>
+</ul>
+<h3>Durability</h3>
+<p><code>runtimeOS/</code> is ephemeral by design. The orchestrator self-heals on startup — missing directories are created, stale heartbeats are rebuilt. The only durable record is the journal in <code>memoryOS/</code>, backed up per the infrastructure spec.</p>
+<p><code>entities.toml</code> stays in <code>runtimeOS/</code> — it's auto-learned and rebuilds itself over time. Loss means temporary loss of relationships until re-observed.</p>
+<hr>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Token Economics -->
+  <section class="container fade-in">
+    <div class="section-label">Token Economics</div>
+    <div class="s-tokens">
+      <h3>Model routing</h3>
+<p>| Task | Runs as | Tokens |
+|---|---|---|
+| Heartbeat monitoring | Rust binary | 0 |
+| Entity-tag overlap | Rust binary | 0 |
+| Conflict detection | Rust binary | 0 |
+| Registry consolidation | Rust binary | 0 |
+| Narration synthesis | Haiku API | ~200-500/call |
+| Session work | Session's own model | Session's budget |</p>
+<p>~10-20 narration calls per hour, ~6,000 tokens/hour, ~48,000 tokens/day. At Haiku pricing: negligible. Complex multi-session narrations fall back to Sonnet. Frontier models stay in sessions.</p>
+<hr>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Status -->
+  <section class="container fade-in">
+    <div class="section-label">Current Status</div>
+
+    <div class="status-banner">
+      <div class="status-left">
+        <div class="status-label">Project Status</div>
+        <div class="status-value"><span class="dot"></span>Draft Spec &mdash; Design Complete</div>
+      </div>
+      <div class="status-meta">
+        <div class="meta-item">
+          <div class="meta-label">Language</div>
+          <div class="meta-value">Rust</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Architecture</div>
+          <div class="meta-value">LLM-agnostic</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Part of</div>
+          <div class="meta-value">maiaOS</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">License</div>
+          <div class="meta-value">TBD (open source)</div>
+        </div>
+      </div>
+    </div>
+
+    <p>The session manager is fully specified with architecture, entity-tag model, overlap computation, conflict detection, work journal, and implementation priorities defined. Implementation pending &mdash; the spec is the deliverable for this phase.</p>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Footer -->
+  <footer class="footer container">
+    <p class="footer-copy">&copy; 2026 t0lkim</p>
+  </footer>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>

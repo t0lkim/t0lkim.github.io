@@ -52,3 +52,14 @@ Cybersecurity leader with 15+ years of experience in Security Architecture, Coun
 **Platform:** Raspberry Pi | **Sources:** Tidal HiFi Plus, Plexamp, BBC 6 Music, internet radio
 ---
 
+## Project: session-manager
+
+**What is Session Manager?** Session Manager is an LLM-agnostic orchestrator that coordinates concurrent AI sessions. It detects entity-tag overlap between sessions, provides conflict warnings when two sessions modify the same files, and injects relevance-filtered context so each session knows what related sessions are doing — without broadcasting everything to everyone.
+
+**What problem does Session Manager solve?** LLM sessions are isolated. Each starts with zero knowledge of other active sessions. The operator manually relays context and resolves conflicts. With multiple concurrent sessions, context loss, blind file conflicts, and lack of fleet visibility become significant problems.
+
+**How does Session Manager work?** Sessions are launched via a thin shim that captures PID and writes heartbeats. The orchestrator (a Rust binary) monitors heartbeats, infers entity tags from session behaviour (file I/O, SSH connections, git activity), computes overlap, and writes per-session context files with only relevant information. ~70% of orchestration is deterministic compiled code with zero LLM tokens. Only narration synthesis uses an LLM (Haiku), at ~6,000 tokens/hour.
+
+**Language:** Rust | **Category:** Developer Tools | **Part of:** maiaOS
+---
+

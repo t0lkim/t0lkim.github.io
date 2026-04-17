@@ -12,6 +12,7 @@ Cybersecurity leader with 15+ years of experience in Security Architecture, Coun
 - [pg-harden](https://t0lkim.dev/projects/pg-harden/): PostgreSQL security hardening scanner checking SCRAM auth, SSL, and pg_hba. Built in Rust.
 - [TidalPlaylistBuilder](https://t0lkim.dev/projects/tidal-playlist-builder/): Build Tidal playlists from BBC programmes, CSV, and text files. Built in Rust.
 - [TheStreamDeck](https://t0lkim.dev/projects/the-stream-deck/): Raspberry Pi streaming audio appliance with touchscreen, VU meters, and 4-source switching.
+- [session-manager](https://t0lkim.dev/projects/session-manager/): LLM-agnostic session orchestrator with entity-tag overlap, conflict detection, and relevance-filtered context injection. Built in Rust.
 
 ## Links
 
