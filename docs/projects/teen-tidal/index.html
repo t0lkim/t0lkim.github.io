@@ -413,6 +413,50 @@
       border-bottom: none;
     }
 
+    /* ── Accessibility section ── */
+    .s-access > h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .s-access > p {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 22px;
+      margin-bottom: 12px;
+      font-size: 0.95rem;
+    }
+    .s-access > p strong {
+      color: var(--teal);
+      display: block;
+      margin-bottom: 4px;
+    }
+    .s-access table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 16px 0;
+      font-size: 0.9rem;
+    }
+    .s-access th {
+      background: var(--surface);
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 600;
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+    }
+    .s-access td {
+      padding: 10px 16px;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+    }
+    .s-access tr:last-child td { border-bottom: none; }
+
     /* ── Shared card pattern for feature sections ── */
     .card-section > p strong:first-child {
       color: var(--teal);
@@ -755,13 +799,39 @@
 
   <div class="divider"></div>
 
+  <!-- Accessibility Roadmap -->
+  <section class="container fade-in">
+    <div class="section-label">Accessibility</div>
+    <div class="s-access">
+      <h3>Three modes, not retrofitted</h3>
+<p>TeenTidal's accessibility strategy delivers three purpose-built interaction modes — not retrofitted compliance, but first-class experiences. The framing is preference, never disability.</p>
+<p><strong>Feel It</strong> (haptic-first) — beat-synced haptics via <code>CHHapticEngine</code>, driven by the existing AudioAnalyzer FFT infrastructure. Bass energy extraction from low-frequency buckets (60–200 Hz) fires transient haptic events on beat onset. Intensity mapped to bass magnitude, sharpness mapped to frequency centroid. Distinct haptic signatures for every control action: single tap for play, double-tap for pause, rising sweep for skip forward, falling sweep for skip backward, three sharp taps for parental block. A visual beat pulse syncs with the haptics on the album artwork. No music app on iOS does beat-synced haptics for hearing-impaired users.</p>
+<p><strong>See It</strong> (visual accessibility) — WCAG 2.2 AA compliance across all screens. Dynamic Type scaling to <code>.accessibilityXXXL</code> without truncation. Full VoiceOver navigation with accessibility labels, values, hints, custom actions, and rotor support. High contrast mode, colour-blind safe volume zones (patterns alongside colours), Reduce Motion fallback, Bold Text support. Minimum 44×44pt tap targets on all interactive elements.</p>
+<p><strong>Hear It</strong> (audio-first) — enhanced VoiceOver announcements for track changes, queue position, and playback state. Audio navigation cues with distinct earcons for success, error, navigation, and selection. Spoken track metadata via <code>AVSpeechSynthesizer</code>. Simplified navigation layout with larger touch targets and prominent controls. Siri Shortcuts for hands-free control via App Intents.</p>
+<p>All three modes compose freely — a user can enable Feel It + See It simultaneously. Apple's accessibility services layer on top as refinements, not replacements. Mode preference stored locally in UserDefaults (the child's preference, not a parental control). Zero telemetry on mode usage.</p>
+<h3>Implementation sequence</h3>
+<p>Phase 1 (Feel It) and Phase 2 (See It) can run in parallel. Phase 3 (Hear It) depends on Phase 2's VoiceOver work.</p>
+<p>| Version | Phase | Content |
+|---|---|---|
+| v0.8.1-alpha | Foundation | InteractionMode model, ModeSelectionView |
+| v0.9.0-alpha | Feel It | HapticBeatEngine, control signatures, visual beat indicator |
+| v0.10.0-alpha | See It | Dynamic Type, VoiceOver, high contrast, Reduce Motion |
+| v0.11.0-alpha | Hear It | Announcements, audio cues, simplified navigation |
+| v0.12.0-beta | Hardening | Security review, accessibility audit with real users |
+| v1.0.0-release | Ship | App Store submission |</p>
+<hr>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
   <!-- Status -->
   <section class="container fade-in">
     <div class="section-label">Current Status</div>
     <div class="status-banner">
       <div class="status-left">
         <div class="status-label">Status</div>
-        <div class="status-value"><span class="dot"></span>Parked &mdash; Pending Tidal Review</div>
+        <div class="status-value"><span class="dot"></span>Parked &mdash; Accessibility Roadmap Defined</div>
       </div>
       <div class="status-meta">
         <div class="meta-item">
