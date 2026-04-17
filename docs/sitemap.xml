@@ -37,6 +37,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://t0lkim.dev/projects/fretnote/</loc>
+    <lastmod>2026-04-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://t0lkim.dev/projects/teen-tidal/privacy-policy.html</loc>
     <lastmod>2026-04-05</lastmod>
     <changefreq>yearly</changefreq>

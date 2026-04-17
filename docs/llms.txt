@@ -13,6 +13,7 @@ I build things.
 - [TidalPlaylistBuilder](https://t0lkim.dev/projects/tidal-playlist-builder/): Build Tidal playlists from BBC programmes, CSV, and text files. Built in Rust.
 - [TheStreamDeck](https://t0lkim.dev/projects/the-stream-deck/): Raspberry Pi streaming audio appliance with touchscreen, VU meters, and 4-source switching.
 - [session-manager](https://t0lkim.dev/projects/session-manager/): LLM-agnostic session orchestrator with entity-tag overlap, conflict detection, and relevance-filtered context injection. Built in Rust.
+- [FretNote](https://t0lkim.dev/projects/fretnote/): Guitar note-learning app with real-time YIN pitch detection, gamified drilling, and post-session analytics. Built in Swift for iPadOS/iOS.
 
 ## Links
 
