@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CourseVault — Case Study</title>
+  <meta name="description" content="A Go CLI for downloading and archiving course content from Teachable platforms.">
+  <meta name="keywords" content="CourseVault, Teachable, course download, Go CLI, video archival, online learning, cookie authentication">
+  <meta name="author" content="Mike Lott">
+  <link rel="canonical" href="https://t0lkim.dev/projects/course-vault/">
+  <!-- Open Graph -->
+  <meta property="og:title" content="CourseVault — Case Study">
+  <meta property="og:description" content="A Go CLI for downloading and archiving course content from Teachable platforms.">
+  <meta property="og:url" content="https://t0lkim.dev/projects/course-vault/">
+  <meta property="og:site_name" content="t0lkim.dev">
+  <meta property="og:type" content="article">
+  <meta property="og:locale" content="en_SG">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="CourseVault — Case Study">
+  <meta name="twitter:description" content="A Go CLI for downloading and archiving course content from Teachable platforms.">
+  <!-- JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "SoftwareSourceCode",
+        "name": "CourseVault",
+        "description": "CourseVault is a Go CLI for downloading and archiving course content from Teachable platforms.",
+        "programmingLanguage": "Go",
+        "author": { "@type": "Person", "name": "Mike Lott", "url": "https://t0lkim.dev" },
+        "url": "https://t0lkim.dev/projects/course-vault/",
+        "applicationCategory": "Media Archival"
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is CourseVault?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "CourseVault is a Go CLI for downloading and archiving course content from Teachable platforms."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Why build a Teachable downloader?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Online courses on Teachable have no built-in download or export feature. If your subscription lapses or the course is removed, you lose access to material you paid for."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+  <link rel="stylesheet" href="../../assets/css/base.css">
+  <link rel="stylesheet" href="../../assets/css/teentidal.css">
+  <style>
+    /* ── Section-specific styling for Course Vault ── */
+
+    /* ── Section label ── */
+    .section-label {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 16px;
+    }
+
+    /* ── Problem section ── */
+    .s-problem blockquote {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+      margin: 28px 0;
+      font-style: italic;
+      border-left: 3px solid var(--red);
+      position: relative;
+    }
+    .s-problem blockquote::before {
+      content: 'PROBLEM STATEMENT';
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 12px;
+      font-style: normal;
+    }
+    .s-problem blockquote p {
+      font-size: 1.1rem;
+      color: var(--text);
+      line-height: 1.7;
+    }
+    .s-problem > ul,
+    .s-problem > p + ul {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 24px 0;
+    }
+    .s-problem > ul li,
+    .s-problem > p + ul li {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: var(--red-dim);
+      border: 1px solid rgba(248, 81, 73, 0.25);
+      border-radius: 8px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .s-problem > ul li::before,
+    .s-problem > p + ul li::before {
+      content: '\00d7';
+      color: var(--red);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    /* ── Solution section ── */
+    .s-solution > h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+    .s-solution > p {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 12px;
+      position: relative;
+      overflow: hidden;
+      font-size: 0.95rem;
+    }
+    .s-solution > p::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--teal), transparent);
+    }
+    .s-solution > p strong {
+      color: var(--teal);
+    }
+
+    /* ── How It Works section ── */
+    .s-arch > h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .s-arch > p {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 22px;
+      margin-bottom: 12px;
+      font-size: 0.95rem;
+    }
+    .s-arch > p strong {
+      color: var(--teal);
+    }
+    .s-arch > ul {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 22px 18px 38px;
+      margin-bottom: 12px;
+    }
+    .s-arch > ul li {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 4px;
+    }
+    .s-arch pre {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 22px;
+      margin-bottom: 16px;
+      overflow-x: auto;
+      font-size: 0.85rem;
+      line-height: 1.6;
+    }
+    .s-arch code {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.85rem;
+    }
+
+    /* ── Design Decisions section ── */
+    .s-decisions > ul {
+      list-style: none;
+      padding: 0;
+      margin: 20px 0;
+    }
+    .s-decisions > ul > li {
+      position: relative;
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .s-decisions > ul > li strong {
+      color: var(--text);
+      display: block;
+      margin-bottom: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <a href="/" class="home-btn" title="Home"><svg width="18" height="18" viewBox="0 0 16 16"><path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6.5 6.5A.5.5 0 0 0 1.5 8.5v5a.5.5 0 0 0 .5.5h3.5a.5.5 0 0 0 .5-.5V11h4v2.5a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-5a.5.5 0 0 0-.146-.354L8.354 1.146ZM2.5 13V8.707l5.5-5.5 5.5 5.5V13H11v-2.5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0-.5.5V13H2.5Z"/></svg></a>
+
+  <!-- Hero -->
+  <header class="hero">
+    <div class="container">
+      <div class="hero-badge">Case Study</div>
+      <h1>Course<span class="accent">Vault</span></h1>
+      <p class="hero-sub">A Go CLI that authenticates via browser cookies, enumerates curriculum, and downloads course videos with full metadata.</p>
+    </div>
+  </header>
+
+  <div class="divider"></div>
+
+  <!-- Problem -->
+  <section class="container fade-in">
+    <div class="section-label">The Problem</div>
+    <div class="s-problem">
+      <h3 id="paid-courses-disappear">Paid courses disappear</h3>
+<p>Online courses hosted on Teachable have no built-in download or export feature. You pay for the content, but you never own it. If your subscription lapses, the instructor removes the course, or the platform changes its terms, you lose access to material you paid for.</p>
+<p>There is no offline viewing, no archival option, and no API-level export. The only way to keep a copy is to manually screen-record each lecture one at a time.</p>
+<blockquote>
+<p>No tool existed to authenticate against Teachable, enumerate a full course curriculum, download every video at original quality, and preserve the course structure with metadata — all from a single command.</p>
+</blockquote>
+<ul>
+<li>No download button on Teachable</li>
+<li>Subscriptions lapse, content disappears</li>
+<li>Platform changes break access without notice</li>
+<li>Manual screen recording loses quality and structure</li>
+<li>No machine-readable manifest of course contents</li>
+</ul>
+<hr>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Solution -->
+  <section class="container fade-in">
+    <div class="section-label">The Solution</div>
+    <div class="s-solution">
+      <h3 id="one-command-full-course-archive">One command, full course archive</h3>
+<p>CourseVault is a Go CLI that authenticates using cookies extracted directly from the Arc browser, walks the Teachable JSON API to enumerate every section and lecture, downloads videos at full CDN quality via yt-dlp, embeds MP4 metadata via ffmpeg, and writes a structured manifest file.</p>
+<p>The output is a directory tree that mirrors the course structure, with numbered sections and lectures, tagged video files, and a <code>course-info.json</code> manifest containing the full course metadata and attachment inventory.</p>
+<pre><code>$ coursevault https://school.teachable.com/courses/enrolled/12345 ~/Videos/MyCourse
+
+🎓 Teachable Downloader
+   School: school.teachable.com
+   Output: ~/Videos/MyCourse
+
+🔑 Extracting cookies from Arc browser...
+   Found 12 cookies for school.teachable.com
+
+📋 Fetching course curriculum...
+   Found 8 sections, 47 lectures
+
+📹 [1/47] Introduction to the Course
+   ✅ Saved
+📹 [2/47] Setting Up Your Environment
+   ⏭️  Already exists, skipping
+...
+📄 Wrote ~/Videos/MyCourse/course-info.json
+
+🎉 Done! Downloaded 47/47 lectures to ~/Videos/MyCourse
+</code></pre>
+<hr>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- How It Works -->
+  <section class="container fade-in">
+    <div class="section-label">How It Works</div>
+    <div class="s-arch">
+      <h3 id="five-stage-pipeline">Five-stage pipeline</h3>
+<p><strong>1. Cookie Extraction</strong></p>
+<p>CourseVault reads the Arc browser's SQLite cookie database from disk. Arc (Chromium-based) encrypts cookie values using AES-128-CBC with a key derived from the macOS Keychain. The tool retrieves the encryption key via the <code>security</code> CLI, derives the AES key using PBKDF2 with Chromium's standard parameters (1003 iterations, SHA-1, <code>saltysalt</code>), and decrypts each cookie's v10-format ciphertext: 3-byte prefix, 16-byte nonce, 16-byte IV, then CBC-encrypted payload with PKCS#7 padding.</p>
+<p>The cookie database is copied to a temp file before reading to avoid SQLite lock conflicts with the running browser.</p>
+<p><strong>2. API Enumeration</strong></p>
+<p>Using the extracted session cookies, CourseVault calls Teachable's JSON API to retrieve the course structure:</p>
+<ul>
+<li><code>/api/v1/courses/{id}/lecture_sections</code> for section names and ordering</li>
+<li><code>/api/v1/courses/{id}/lectures</code> for lecture titles, positions, and section assignments</li>
+<li><code>/api/v1/courses/{id}</code> for course-level metadata (title, description, author, image)</li>
+</ul>
+<p>Sections and lectures are sorted by position. Unpublished lectures are skipped. Empty sections are pruned from the output.</p>
+<p><strong>3. Video Download</strong></p>
+<p>For each lecture, CourseVault fetches <code>/api/v1/courses/{id}/lectures/{id}/attachments</code> to find video attachments. The CDN URL (or fallback URL) is passed to yt-dlp with the session cookies written as a Netscape-format cookie file. yt-dlp handles HLS streams, Wistia embeds, and direct MP4 downloads, merging to MP4 output format.</p>
+<p><strong>4. Metadata Embedding</strong></p>
+<p>After each video downloads, ffmpeg writes MP4 metadata tags into the container: <code>title</code> (lecture name), <code>artist</code> (course author), <code>album</code> (course title), and <code>track</code> (lecture number within its section). The original file is replaced atomically via a temp file rename.</p>
+<p><strong>5. Manifest Generation</strong></p>
+<p>After all lectures are processed, CourseVault writes <code>course-info.json</code> to the output directory. This manifest contains the full course structure — title, description, author, image URL, course URL, course ID — with nested sections, lectures, and per-lecture attachment metadata (name, kind, content type, URL, CDN URL, file size).</p>
+<hr>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Design Decisions -->
+  <section class="container fade-in">
+    <div class="section-label">Design Decisions</div>
+    <div class="s-decisions">
+      <h3 id="why-it-works-this-way">Why it works this way</h3>
+<ul>
+<li>
+<p><strong>Go over Rust for rapid prototyping</strong> — This started as a weekend tool to solve a personal problem. Go's <code>database/sql</code> with the <code>go-sqlite3</code> CGo binding gave immediate SQLite access for cookie extraction. The compile-deploy cycle was fast enough that the entire tool was functional in a single session.</p>
+</li>
+<li>
+<p><strong>Arc cookie extraction over manual login</strong> — Teachable uses standard session cookies for authentication. Extracting them from the browser avoids implementing OAuth flows, CSRF token handling, or credential storage. You log into Teachable once in Arc, then CourseVault reuses that session. The decryption handles Chromium's v10 format with the 16-byte nonce prepended before the IV — a detail not documented in most Chromium cookie extraction guides.</p>
+</li>
+<li>
+<p><strong>yt-dlp for video download over raw HTTP</strong> — Teachable courses may host videos on Wistia, Vimeo, or their own CDN, using HLS, DASH, or direct MP4 URLs. yt-dlp handles all of these transparently. Writing a custom downloader for each hosting provider would be fragile and unnecessary when yt-dlp already does it correctly.</p>
+</li>
+<li>
+<p><strong>ffmpeg for metadata over custom MP4 parsing</strong> — MP4 metadata (atoms/boxes) is a non-trivial binary format. ffmpeg's <code>-metadata</code> flag writes standard tags with a single command, using stream copy (<code>-c copy</code>) so no transcoding occurs. The operation adds milliseconds per file.</p>
+</li>
+<li>
+<p><strong>JSON manifest for resume and inventory</strong> — The <code>course-info.json</code> file serves two purposes: it enables resume support (CourseVault checks for existing files on disk before downloading), and it provides a machine-readable inventory of the entire course including non-video attachments like PDFs and slides that could be downloaded in a future version.</p>
+</li>
+<li>
+<p><strong>Netscape cookie file for yt-dlp</strong> — yt-dlp expects cookies in the legacy Netscape format. CourseVault writes a temp file with the decrypted cookies in this format and passes it via <code>--cookies</code>, then cleans up the file after the download completes.</p>
+</li>
+</ul>
+<hr>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Status -->
+  <section class="container fade-in">
+    <div class="section-label">Current Status</div>
+
+    <div class="status-banner">
+      <div class="status-left">
+        <div class="status-label">Project Status</div>
+        <div class="status-value"><span class="dot"></span>Complete v1.0.0</div>
+      </div>
+      <div class="status-meta">
+        <div class="meta-item">
+          <div class="meta-label">Language</div>
+          <div class="meta-value">Go</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">License</div>
+          <div class="meta-value">MIT</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Footer -->
+  <footer class="footer container">
+    <div class="footer-links">
+      <a href="https://github.com/t0lkim/course-vault">Source on GitHub</a>
+    </div>
+    <p class="footer-copy">&copy; 2026 t0lkim</p>
+  </footer>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>

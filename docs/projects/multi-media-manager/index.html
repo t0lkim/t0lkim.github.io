@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MMM (MyMediaManager) — Case Study</title>
+  <meta name="description" content="A Rust CLI for organising images and videos with deduplication, EXIF-based renaming, and date-based directory structure.">
+  <meta name="keywords" content="MMM, MyMediaManager, media organiser, Rust CLI, EXIF, deduplication, photo management">
+  <meta name="author" content="Mike Lott">
+  <link rel="canonical" href="https://t0lkim.dev/projects/multi-media-manager/">
+  <!-- Open Graph -->
+  <meta property="og:title" content="MMM (MyMediaManager) — Case Study">
+  <meta property="og:description" content="A Rust CLI for organising images and videos with deduplication, EXIF-based renaming, and date-based directory structure.">
+  <meta property="og:url" content="https://t0lkim.dev/projects/multi-media-manager/">
+  <meta property="og:site_name" content="t0lkim.dev">
+  <meta property="og:type" content="article">
+  <meta property="og:locale" content="en_SG">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="MMM (MyMediaManager) — Case Study">
+  <meta name="twitter:description" content="A Rust CLI for organising images and videos with deduplication, EXIF-based renaming, and date-based directory structure.">
+  <!-- JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "SoftwareSourceCode",
+        "name": "MultiMediaManager",
+        "description": "MMM (MyMediaManager) is a Rust CLI for organising images and videos with deduplication, EXIF-based renaming, and date-based directory structure.",
+        "programmingLanguage": "Rust",
+        "author": { "@type": "Person", "name": "Mike Lott", "url": "https://t0lkim.dev" },
+        "url": "https://t0lkim.dev/projects/multi-media-manager/",
+        "applicationCategory": "Media Organisation"
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is MMM?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "MMM (MyMediaManager) is a Rust CLI for organising images and videos with deduplication, EXIF-based renaming, and date-based directory structure."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How does MMM organise media?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "MMM reads EXIF metadata from media files, renames them with date-based conventions, deduplicates by content hash, and organises into a clean date-based directory structure."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+  <link rel="stylesheet" href="../../assets/css/base.css">
+  <link rel="stylesheet" href="../../assets/css/teentidal.css">
+  <style>
+    /* ── Section-specific styling for MultiMediaManager ── */
+
+    /* ── Section label ── */
+    .section-label {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 16px;
+    }
+
+    /* ── Problem section ── */
+    .s-problem blockquote {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+      margin: 28px 0;
+      font-style: italic;
+      border-left: 3px solid var(--red);
+      position: relative;
+    }
+    .s-problem blockquote::before {
+      content: 'PROBLEM STATEMENT';
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 12px;
+      font-style: normal;
+    }
+    .s-problem blockquote p {
+      font-size: 1.1rem;
+      color: var(--text);
+      line-height: 1.7;
+    }
+    .s-problem > ul,
+    .s-problem > p + ul {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 24px 0;
+    }
+    .s-problem > ul li,
+    .s-problem > p + ul li {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: var(--red-dim);
+      border: 1px solid rgba(248, 81, 73, 0.25);
+      border-radius: 8px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .s-problem > ul li::before,
+    .s-problem > p + ul li::before {
+      content: '\00d7';
+      color: var(--red);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    /* ── Solution section ── */
+    .s-solution > h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+    .s-solution > p {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 12px;
+      position: relative;
+      overflow: hidden;
+      font-size: 0.95rem;
+    }
+    .s-solution > p::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--teal), transparent);
+    }
+    .s-solution > p strong {
+      color: var(--teal);
+    }
+
+    /* ── How It Works section ── */
+    .s-arch > h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .s-arch > p {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 22px;
+      margin-bottom: 12px;
+      font-size: 0.95rem;
+    }
+    .s-arch > p strong {
+      color: var(--teal);
+    }
+    .s-arch > ul {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 22px 18px 38px;
+      margin-bottom: 12px;
+    }
+    .s-arch > ul li {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 4px;
+    }
+    .s-arch pre {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 22px;
+      margin-bottom: 16px;
+      overflow-x: auto;
+      font-size: 0.85rem;
+      line-height: 1.6;
+    }
+    .s-arch code {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.85rem;
+    }
+
+    /* ── Design Decisions section ── */
+    .s-decisions > ul {
+      list-style: none;
+      padding: 0;
+      margin: 20px 0;
+    }
+    .s-decisions > ul > li {
+      position: relative;
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .s-decisions > ul > li strong {
+      color: var(--text);
+      display: block;
+      margin-bottom: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <a href="/" class="home-btn" title="Home"><svg width="18" height="18" viewBox="0 0 16 16"><path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6.5 6.5A.5.5 0 0 0 1.5 8.5v5a.5.5 0 0 0 .5.5h3.5a.5.5 0 0 0 .5-.5V11h4v2.5a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-5a.5.5 0 0 0-.146-.354L8.354 1.146ZM2.5 13V8.707l5.5-5.5 5.5 5.5V13H11v-2.5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0-.5.5V13H2.5Z"/></svg></a>
+
+  <!-- Hero -->
+  <header class="hero">
+    <div class="container">
+      <div class="hero-badge">Case Study</div>
+      <h1><span class="accent">MMM</span></h1>
+      <p class="hero-sub">A Rust CLI for organising images and videos with deduplication, EXIF-based renaming, and date-based directory structure.</p>
+    </div>
+  </header>
+
+  <div class="divider"></div>
+
+  <!-- Problem -->
+  <section class="container fade-in">
+    <div class="section-label">The Problem</div>
+    <div class="s-problem">
+      <h3 id="years-of-media-zero-organisation">Years of media, zero organisation</h3>
+<p>Photos and videos accumulate across phones, cameras, SD cards, cloud downloads, and desktop folders. The same image exists in three places under three different names. Files are named <code>IMG_0042.jpg</code> or <code>DSC_1893.CR2</code> with no indication of when or where they were taken. Manual sorting is tedious for hundreds of files and completely impractical at thousands.</p>
+<p>The core issues compound over time:</p>
+<ul>
+<li>Duplicate files waste storage and create confusion about which copy is the &quot;real&quot; one</li>
+<li>Camera-assigned filenames carry no meaningful information</li>
+<li>No consistent directory structure makes finding a specific photo a needle-in-a-haystack exercise</li>
+<li>File modification dates are unreliable — copying, syncing, and cloud downloads all reset them</li>
+<li>Photos with GPS data carry useful location context that never makes it into the filename or folder structure</li>
+</ul>
+<blockquote>
+<p>No single tool scans multiple directories, deduplicates by content, renames from EXIF metadata, sorts into a date hierarchy, and reverse-geocodes GPS coordinates — all offline, with a dry-run mode and chunked processing for safety.</p>
+</blockquote>
+<hr>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Solution -->
+  <section class="container fade-in">
+    <div class="section-label">The Solution</div>
+    <div class="s-solution">
+      <h3 id="scan-deduplicate-rename-organise">Scan, deduplicate, rename, organise</h3>
+<p><code>media-organiser</code> is a Rust CLI that takes one or more input directories, finds every image and video, eliminates duplicates by content hash, extracts the original capture date from EXIF metadata, and sorts files into a <code>YYYY/MM/DD</code> directory structure with date-and-location-based filenames.</p>
+<p>A companion binary, <code>dedup-verifier</code>, independently verifies that flagged duplicates are genuine before you delete them — using a deliberately different hashing approach for safety.</p>
+<pre><code># Preview what would happen (nothing is modified)
+media-organiser ~/Photos --dry-run
+</code></pre>
+<pre><code># Organise files from multiple sources into a single directory
+media-organiser ~/Photos ~/Camera/DCIM -o ~/Organised
+</code></pre>
+<pre><code># Verify duplicates independently, then clean up
+dedup-verifier ~/Organised/duplicates/
+</code></pre>
+<p><strong>Output structure:</strong></p>
+<pre><code>~/Organised/
+├── 2024/
+│   ├── 01/
+│   │   └── 15/
+│   │       ├── 2024-01-15-143022-London-GB.jpg
+│   │       └── 2024-01-15-143025-London-GB.jpg
+│   └── 03/
+│       └── 20/
+│           └── 2024-03-20-091500.mp4
+├── unsorted/
+│   └── unknown.bmp
+└── duplicates/
+    ├── 000/
+    │   ├── manifest.txt
+    │   └── IMG_0042.jpg
+    └── 001/
+        ├── manifest.txt
+        └── clip.mov
+</code></pre>
+<hr>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- How It Works -->
+  <section class="container fade-in">
+    <div class="section-label">How It Works</div>
+    <div class="s-arch">
+      <h3 id="two-phase-pipeline">Two-phase pipeline</h3>
+<p>The system uses a two-pass architecture. Phase A is entirely read-only — it scans, hashes, deduplicates, extracts metadata, and plans every file operation. In dry-run mode, execution stops here. Phase B executes the plan: moving duplicates, then renaming and sorting unique files in chunks with user confirmation between batches.</p>
+<p><strong>Phase A: Scan</strong></p>
+<ol>
+<li><strong>Scan</strong> — Recursively walk all input directories, filtering for 33 supported image and video extensions (JPEG, PNG, HEIC, RAW variants, MOV, MP4, MKV, and more).</li>
+<li><strong>Hash</strong> — Three-phase dedup cascade: group by file size (free — metadata only), then partial BLAKE3 hash (first 64KB + last 64KB), then full BLAKE3 hash only for files that survived both filters. Typically less than 1% of files reach the full-hash phase.</li>
+<li><strong>Deduplicate</strong> — Files with matching full hashes are grouped. The first file in each group is kept as the original; the rest are flagged as duplicates.</li>
+<li><strong>Extract metadata</strong> — Read EXIF data (images) or container atoms (video) for creation date and GPS coordinates. Fall back to filesystem creation date when metadata is absent. Files with no date go to <code>unsorted/</code>.</li>
+<li><strong>Reverse geocode</strong> — When GPS coordinates are present, look up the nearest city and country using an offline GeoNames dataset (bundled k-d tree, no network requests). The location is sanitised and appended to the filename.</li>
+<li><strong>Plan</strong> — Compute the target path for every unique file: <code>YYYY/MM/DD/YYYY-MM-DD-HHMMSS[-location].ext</code>. Resolve filename collisions with numeric suffixes.</li>
+</ol>
+<p><strong>Phase B: Process</strong></p>
+<ol start="7">
+<li><strong>Move duplicates</strong> — Each duplicate group is moved to a numbered subdirectory under <code>duplicates/</code> with a <code>manifest.txt</code> recording the BLAKE3 hash and original file path.</li>
+<li><strong>Organise</strong> — Unique files are renamed and moved into the date hierarchy in configurable chunks (default 100), pausing for confirmation between batches.</li>
+<li><strong>Report</strong> — Print a summary of files scanned, organised, duplicated, and any errors.</li>
+</ol>
+<hr>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Design Decisions -->
+  <section class="container fade-in">
+    <div class="section-label">Design Decisions</div>
+    <div class="s-decisions">
+      <h3 id="why-it-works-this-way">Why it works this way</h3>
+<ul>
+<li>
+<p><strong>Rust for performance and safety</strong> — Media libraries can contain tens of thousands of large files. Rust's zero-cost abstractions, efficient I/O, and memory safety make it practical to hash and move files at scale without garbage collection pauses or runtime overhead. The release binary is LTO-optimised and stripped.</p>
+</li>
+<li>
+<p><strong>Content hashing over filename comparison</strong> — Two files named <code>IMG_0042.jpg</code> might be different photos from different cameras, and two files with completely different names might be byte-identical copies. BLAKE3 content hashing is the only reliable way to determine whether two files are actually the same. The three-phase cascade (size, partial hash, full hash) minimises I/O by proving uniqueness as cheaply as possible.</p>
+</li>
+<li>
+<p><strong>EXIF date over file modification date</strong> — File modification timestamps are fragile. Copying to a USB drive, syncing via cloud, or extracting from a ZIP archive all reset the modification date. EXIF DateTimeOriginal records the moment the shutter fired, which is the date that actually matters for organisation. Filesystem dates are only used as a fallback when EXIF is absent.</p>
+</li>
+<li>
+<p><strong>Chunked processing with confirmation</strong> — Moving thousands of files in one uninterruptible operation is risky. Chunked processing (default: 100 files per batch) with user confirmation between batches provides a natural checkpoint. If something looks wrong, you can stop immediately — files already moved stay moved, nothing else is touched.</p>
+</li>
+<li>
+<p><strong>Dry-run by default philosophy</strong> — The tool is designed so the recommended first step is always <code>--dry-run</code>. The dry-run report shows every planned operation with metadata source tags (<code>[EXIF]</code>, <code>[FS]</code>, <code>[NO DATE]</code>) so you can review before committing. No files are created, moved, or deleted during a dry run.</p>
+</li>
+<li>
+<p><strong>Independent verification binary</strong> — The <code>dedup-verifier</code> uses BLAKE3 keyed mode (a different algorithm from the main binary's unkeyed mode) and always hashes the full file (no partial-hash shortcut). A bug in one binary cannot produce a false positive in both — the same independent-channel principle used in safety-critical systems.</p>
+</li>
+<li>
+<p><strong>Offline reverse geocoding</strong> — GPS-to-location lookups use the <code>reverse_geocoder</code> crate with a bundled GeoNames dataset loaded into a k-d tree. No network requests, no API keys, no rate limits. Location data is sanitised for filename safety before being appended.</p>
+</li>
+</ul>
+<hr>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Status -->
+  <section class="container fade-in">
+    <div class="section-label">Current Status</div>
+
+    <div class="status-banner">
+      <div class="status-left">
+        <div class="status-label">Project Status</div>
+        <div class="status-value"><span class="dot"></span>Active v0.1.0</div>
+      </div>
+      <div class="status-meta">
+        <div class="meta-item">
+          <div class="meta-label">Language</div>
+          <div class="meta-value">Rust</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">License</div>
+          <div class="meta-value">MIT</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Footer -->
+  <footer class="footer container">
+    <div class="footer-links">
+      <a href="https://github.com/t0lkim/multi-media-manager">Source on GitHub</a>
+    </div>
+    <p class="footer-copy">&copy; 2026 t0lkim</p>
+  </footer>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>

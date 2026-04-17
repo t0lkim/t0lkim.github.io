@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PatronVault — Case Study</title>
+  <meta name="description" content="A Rust CLI for downloading and archiving media content from Patreon creators you subscribe to.">
+  <meta name="keywords" content="PatronVault, Patreon, media archival, Rust CLI, download, cookie authentication, JSON API">
+  <meta name="author" content="Mike Lott">
+  <link rel="canonical" href="https://t0lkim.dev/projects/patron-vault/">
+  <!-- Open Graph -->
+  <meta property="og:title" content="PatronVault — Case Study">
+  <meta property="og:description" content="A Rust CLI for downloading and archiving media content from Patreon creators you subscribe to.">
+  <meta property="og:url" content="https://t0lkim.dev/projects/patron-vault/">
+  <meta property="og:site_name" content="t0lkim.dev">
+  <meta property="og:type" content="article">
+  <meta property="og:locale" content="en_SG">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="PatronVault — Case Study">
+  <meta name="twitter:description" content="A Rust CLI for downloading and archiving media content from Patreon creators you subscribe to.">
+  <!-- JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "SoftwareSourceCode",
+        "name": "PatronVault",
+        "description": "PatronVault is a Rust CLI for downloading and archiving media content from Patreon creators you subscribe to.",
+        "programmingLanguage": "Rust",
+        "author": { "@type": "Person", "name": "Mike Lott", "url": "https://t0lkim.dev" },
+        "url": "https://t0lkim.dev/projects/patron-vault/",
+        "applicationCategory": "Media Archival"
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is PatronVault?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "PatronVault is a Rust CLI for downloading and archiving media content from Patreon creators you subscribe to."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Why can't you download Patreon content?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Patreon has no export feature for patrons. If a creator deletes a post, changes tiers, or leaves the platform, paid content is lost. The official API is creator-focused with no subscriber-facing download endpoints."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+  <link rel="stylesheet" href="../../assets/css/base.css">
+  <link rel="stylesheet" href="../../assets/css/teentidal.css">
+  <style>
+    /* ── Section-specific styling for Patron Vault ── */
+
+    /* ── Section label ── */
+    .section-label {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 16px;
+    }
+
+    /* ── Problem section ── */
+    .s-problem blockquote {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+      margin: 28px 0;
+      font-style: italic;
+      border-left: 3px solid var(--red);
+      position: relative;
+    }
+    .s-problem blockquote::before {
+      content: 'PROBLEM STATEMENT';
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 12px;
+      font-style: normal;
+    }
+    .s-problem blockquote p {
+      font-size: 1.1rem;
+      color: var(--text);
+      line-height: 1.7;
+    }
+    .s-problem > ul,
+    .s-problem > p + ul {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 24px 0;
+    }
+    .s-problem > ul li,
+    .s-problem > p + ul li {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: var(--red-dim);
+      border: 1px solid rgba(248, 81, 73, 0.25);
+      border-radius: 8px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .s-problem > ul li::before,
+    .s-problem > p + ul li::before {
+      content: '\00d7';
+      color: var(--red);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    /* ── Solution section ── */
+    .s-solution > h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+    .s-solution > p {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 12px;
+      position: relative;
+      overflow: hidden;
+      font-size: 0.95rem;
+    }
+    .s-solution > p::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--teal), transparent);
+    }
+    .s-solution > p strong {
+      color: var(--teal);
+    }
+
+    /* ── Architecture section ── */
+    .s-arch > h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .s-arch > p {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 22px;
+      margin-bottom: 12px;
+      font-size: 0.95rem;
+    }
+    .s-arch > p strong {
+      color: var(--teal);
+    }
+    .s-arch > ul {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 22px 18px 38px;
+      margin-bottom: 12px;
+    }
+    .s-arch > ul li {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 4px;
+    }
+    .s-arch pre {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 22px;
+      margin-bottom: 16px;
+      overflow-x: auto;
+      font-size: 0.85rem;
+      line-height: 1.6;
+    }
+    .s-arch code {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.85rem;
+    }
+
+    /* ── Design Decisions section ── */
+    .s-decisions > ul {
+      list-style: none;
+      padding: 0;
+      margin: 20px 0;
+    }
+    .s-decisions > ul > li {
+      position: relative;
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .s-decisions > ul > li strong {
+      color: var(--text);
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    /* ── API Integration section ── */
+    .s-api > h3 {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px 10px 0 0;
+      padding: 20px 24px 8px;
+      margin-bottom: 0;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+    .s-api > h3 + p {
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      padding: 8px 24px;
+      margin-bottom: 0;
+      font-size: 0.9rem;
+    }
+    .s-api > h3 + p + p {
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      padding: 8px 24px;
+      margin-bottom: 0;
+      font-size: 0.9rem;
+    }
+    .s-api > h3 + p + p + p {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-top: none;
+      border-radius: 0 0 10px 10px;
+      padding: 8px 24px 20px;
+      margin-bottom: 20px;
+      font-size: 0.9rem;
+    }
+    .s-api > p strong:first-child {
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: var(--teal);
+    }
+    .s-api > p {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 22px;
+      margin-bottom: 12px;
+      font-size: 0.95rem;
+    }
+    .s-api > ul {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 22px 18px 38px;
+      margin-bottom: 12px;
+    }
+    .s-api > ul li {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <a href="/" class="home-btn" title="Home"><svg width="18" height="18" viewBox="0 0 16 16"><path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6.5 6.5A.5.5 0 0 0 1.5 8.5v5a.5.5 0 0 0 .5.5h3.5a.5.5 0 0 0 .5-.5V11h4v2.5a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-5a.5.5 0 0 0-.146-.354L8.354 1.146ZM2.5 13V8.707l5.5-5.5 5.5 5.5V13H11v-2.5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0-.5.5V13H2.5Z"/></svg></a>
+
+  <!-- Hero -->
+  <header class="hero">
+    <div class="container">
+      <div class="hero-badge">Case Study</div>
+      <h1>Patron<span class="accent">Vault</span></h1>
+      <p class="hero-sub">A Rust CLI that archives Patreon media you've paid for — because the platform won't let you.</p>
+    </div>
+  </header>
+
+  <div class="divider"></div>
+
+  <!-- Problem -->
+  <section class="container fade-in">
+    <div class="section-label">The Problem</div>
+    <div class="s-problem">
+      <h3 id="patreon-has-no-export-feature-for-patrons">Patreon has no export feature for patrons</h3>
+<p>You pay creators monthly for access to exclusive content — images, videos, audio, archives. But Patreon provides no way to download or export that content in bulk. There is no &quot;Download All&quot; button. There is no archive feature. If a creator deletes a post, changes tiers, or leaves the platform, the content you paid for is gone.</p>
+<p>The official Patreon API v2 does not help. It is creator-focused — managing campaigns, members, and post metadata — and provides no subscriber-facing endpoints for downloading patron-only media. This is a known limitation that has persisted for years.</p>
+<blockquote>
+<p>You pay for content but cannot archive it. The official API cannot access media. If the creator or platform disappears, so does everything you paid for.</p>
+</blockquote>
+<ul>
+<li>No bulk download or export feature exists</li>
+<li>Official API v2 has no media access endpoints</li>
+<li>Content disappears when creators delete posts or leave</li>
+<li>Tier changes can revoke access to already-paid content</li>
+<li>No first-party archival solution</li>
+</ul>
+<hr>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Solution -->
+  <section class="container fade-in">
+    <div class="section-label">The Solution</div>
+    <div class="s-solution">
+      <h3 id="cookie-authenticated-cli-with-manifest-based-resume">Cookie-authenticated CLI with manifest-based resume</h3>
+<p>PatronVault is a Rust CLI that uses Patreon's internal JSON:API v1 — the same API the web application calls when you browse posts in your browser. Authentication is a single <code>session_id</code> cookie extracted from a logged-in browser session.</p>
+<p>The pipeline is straightforward: resolve the creator's campaign ID, paginate through all accessible posts, extract media URLs from JSON:API compound documents, download everything to an organised directory tree, and write a manifest for future resume runs.</p>
+<pre><code>$ patron-vault https://www.patreon.com/CreatorName --cookie &quot;session_id=abc123&quot;
+
+Resolved campaign: CreatorName (ID: 67890)
+Fetching posts... 150 posts across 8 pages
+Downloading media...
+  [1/312] 2026-03-01_New-Track/audio.mp3 (4.2 MB)
+  [2/312] 2026-03-01_New-Track/cover.jpg (1.1 MB)
+  ...
+  [312/312] 2025-01-15_First-Post/image.png (856 KB)
+
+Complete: 312 files, 2.8 GB total
+Manifest saved to output/CreatorName/manifest.json
+</code></pre>
+<hr>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Architecture -->
+  <section class="container fade-in">
+    <div class="section-label">Architecture</div>
+    <div class="s-arch">
+      <h3 id="data-flow">Data flow</h3>
+<pre><code>1. User provides creator URL + session_id cookie
+                    |
+2. resolve_campaign()
+   +-- Fetch creator page HTML
+   +-- Extract campaign_id from embedded JSON
+   +-- Fallback: query /api/campaigns?filter[vanity]=NAME
+                    |
+3. all_posts(campaign_id)
+   +-- GET /api/posts?filter[campaign_id]=ID&amp;include=attachments,images,media,audio
+   +-- Parse JSON:API response (data[] + included[])
+   +-- Resolve relationships: post -&gt; media items via included array
+   +-- Filter: skip posts where current_user_can_view = false
+   +-- Paginate via cursor until no more pages
+   +-- Return Vec&lt;(PostAttributes, Vec&lt;MediaInfo&gt;)&gt;
+                    |
+4. download_all()
+   +-- Create output/CreatorName/ directory
+   +-- For each post: create YYYY-MM-DD_Post-Title/ subdirectory
+   +-- For each media item: HTTP GET download_url -&gt; write to file
+   +-- Track progress, skip existing files if --skip-existing
+   +-- Build manifest data
+                    |
+5. save_manifest()
+   +-- Write manifest.json to output/CreatorName/
+</code></pre>
+<h3 id="source-structure">Source structure</h3>
+<pre><code>patron-vault
++-- src/
+|   +-- main.rs          CLI entry point (clap argument parsing, orchestration)
+|   +-- api.rs           Patreon internal API client (auth, pagination, media extraction)
+|   +-- models.rs        Serde types for JSON:API v1 responses
+|   +-- download.rs      File download, directory organisation, manifest management
++-- Cargo.toml
+</code></pre>
+<h3 id="output-structure">Output structure</h3>
+<pre><code>output/
++-- CreatorName/
+    +-- 2026-03-01_Post-Title/
+    |   +-- image1.jpg
+    |   +-- image2.png
+    |   +-- video.mp4
+    +-- 2026-02-28_Another-Post/
+    |   +-- audio.mp3
+    +-- manifest.json
+</code></pre>
+<hr>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Design Decisions -->
+  <section class="container fade-in">
+    <div class="section-label">Design Decisions</div>
+    <div class="s-decisions">
+      <h3 id="why-it-works-this-way">Why it works this way</h3>
+<ul>
+<li>
+<p><strong>Internal API over official API v2</strong> — The official Patreon API v2 does not support media or attachment access. This is not a workaround for convenience — it is the only viable path. Every community tool that downloads Patreon media (gallery-dl, patreon-dl-node, PatreonDownloader) uses the internal API for the same reason.</p>
+</li>
+<li>
+<p><strong>Cookie authentication over OAuth</strong> — The internal API authenticates via the <code>session_id</code> cookie from a browser session. No API keys, no OAuth flow, no app registration. The user logs into Patreon in their browser, extracts the cookie, and passes it to the CLI. This avoids the official API's scope limitations entirely.</p>
+</li>
+<li>
+<p><strong>Synchronous ureq over async</strong> — Downloads are intentionally sequential with deliberate delays between requests (500ms between API calls, 200ms between file downloads). An async runtime adds complexity for no benefit when you are rate-limiting yourself by design. ureq provides a clean synchronous HTTP client with no runtime overhead.</p>
+</li>
+<li>
+<p><strong>Manifest-based resume</strong> — Every run writes a <code>manifest.json</code> tracking each post and file with its download status. Combined with <code>--skip-existing</code>, this enables resumable downloads across sessions. If a run is interrupted, the next run skips already-downloaded files and picks up where it left off.</p>
+</li>
+<li>
+<p><strong>Conservative rate limiting</strong> — Patreon's internal API has no documented rate limits, but aggressive requests risk triggering Cloudflare protection or account flags. The tool imposes its own delays: 500ms between paginated API requests and 200ms between file downloads. Slow and steady over fast and banned.</p>
+</li>
+<li>
+<p><strong>Campaign resolution with fallback</strong> — Creator pages embed the campaign ID in their HTML as JSON. The primary method parses this from the page source, checking two known patterns. If both fail, the tool falls back to querying the campaigns API endpoint by vanity name. Two methods means resilience against Patreon changing their page structure.</p>
+</li>
+<li>
+<p><strong>Date-prefixed directories</strong> — Posts are stored in <code>YYYY-MM-DD_Post-Title/</code> subdirectories. This sorts chronologically in any file manager without needing metadata, makes the archive browsable without any tooling, and avoids filename collisions across posts.</p>
+</li>
+</ul>
+<hr>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- API Integration -->
+  <section class="container fade-in">
+    <div class="section-label">API Integration</div>
+    <div class="s-api">
+      <h3 id="jsonapi-v1-compound-documents">JSON:API v1 compound documents</h3>
+<p>Patreon's internal API returns JSON:API v1 compound documents — a format where related resources are not nested inside parent objects but placed in a separate top-level <code>included</code> array and linked via <code>relationships</code>.</p>
+<p>A post listing request includes multiple resource types:</p>
+<pre><code>GET https://www.patreon.com/api/posts
+  ?include=campaign,attachments,audio,images,media,native_video_insights,user
+  &amp;filter[campaign_id]={campaign_id}
+  &amp;filter[is_draft]=false
+  &amp;sort=-published_at
+  &amp;json-api-version=1.0
+  &amp;page[count]=20
+  &amp;page[cursor]={cursor}
+</code></pre>
+<p>The response separates posts from their media:</p>
+<ul>
+<li><code>data[]</code> contains post resources with relationship references</li>
+<li><code>included[]</code> contains the actual media objects, attachments, and other related resources</li>
+<li><code>meta.pagination</code> provides cursor-based pagination</li>
+</ul>
+<h3 id="media-resolution-from-the-included-array">Media resolution from the included array</h3>
+<p>Media objects are resolved through a three-step lookup:</p>
+<ol>
+<li>A post's <code>relationships.images.data</code> contains references like <code>[{&quot;id&quot;: &quot;111&quot;, &quot;type&quot;: &quot;media&quot;}]</code></li>
+<li>The matching resource is found in <code>included</code> where <code>id == &quot;111&quot;</code> and <code>type == &quot;media&quot;</code></li>
+<li>The <code>download_url</code> or <code>image_urls.original</code> is extracted from that resource's attributes</li>
+</ol>
+<p>This is standard JSON:API compound document resolution — the same pattern regardless of whether the media is an image, video, audio file, or attachment.</p>
+<h3 id="cdn-download-urls">CDN download URLs</h3>
+<p>Media download URLs point directly to Patreon's CDN. They contain an embedded authentication token in the URL itself, are valid for approximately 24 hours, do not require the session cookie for the actual download, and support standard HTTP range requests.</p>
+<h3 id="pagination">Pagination</h3>
+<p>Cursor-based pagination via <code>meta.pagination.cursors.next</code>. The cursor is an opaque string passed as <code>page[cursor]</code> on subsequent requests. When the cursor is <code>null</code> or absent, all pages have been fetched.</p>
+<hr>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Status -->
+  <section class="container fade-in">
+    <div class="section-label">Current Status</div>
+
+    <div class="status-banner">
+      <div class="status-left">
+        <div class="status-label">Project Status</div>
+        <div class="status-value"><span class="dot"></span>v0.1.0</div>
+      </div>
+      <div class="status-meta">
+        <div class="meta-item">
+          <div class="meta-label">Language</div>
+          <div class="meta-value">Rust</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">License</div>
+          <div class="meta-value">MIT</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Footer -->
+  <footer class="footer container">
+    <div class="footer-links">
+      <a href="https://github.com/t0lkim/patron-vault">Source on GitHub</a>
+    </div>
+    <p class="footer-copy">&copy; 2026 t0lkim</p>
+  </footer>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
