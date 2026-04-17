@@ -7,11 +7,11 @@
   <meta name="description" content="How a parenting gap in Tidal's content filtering led to building a native iOS app with two-layer explicit content protection.">
   <meta name="keywords" content="TeenTidal, parental controls, Tidal, iOS app, content filtering, explicit content, Swift, music streaming, child safety">
   <meta name="author" content="Mike Lott">
-  <link rel="canonical" href="https://t0lkim.dev/teen-tidal/">
+  <link rel="canonical" href="https://t0lkim.dev/projects/teen-tidal/">
   <!-- Open Graph -->
   <meta property="og:title" content="TeenTidal — Case Study">
   <meta property="og:description" content="How a parenting gap in Tidal's content filtering led to building a native iOS app with two-layer explicit content protection.">
-  <meta property="og:url" content="https://t0lkim.dev/teen-tidal/">
+  <meta property="og:url" content="https://t0lkim.dev/projects/teen-tidal/">
   <meta property="og:site_name" content="t0lkim.dev">
   <meta property="og:type" content="article">
   <meta property="og:locale" content="en_SG">
@@ -30,7 +30,7 @@
         "description": "TeenTidal is a native iOS app that wraps Tidal's SDK with two-layer explicit content filtering, providing structural parental controls with no user-bypassable settings.",
         "programmingLanguage": "Swift",
         "author": { "@type": "Person", "name": "Mike Lott", "url": "https://t0lkim.dev" },
-        "url": "https://t0lkim.dev/teen-tidal/",
+        "url": "https://t0lkim.dev/projects/teen-tidal/",
         "applicationCategory": "Parental Controls",
         "operatingSystem": "iOS"
       },
@@ -66,8 +66,8 @@
     ]
   }
   </script>
-  <link rel="stylesheet" href="../assets/css/base.css">
-  <link rel="stylesheet" href="../assets/css/teentidal.css">
+  <link rel="stylesheet" href="../../assets/css/base.css">
+  <link rel="stylesheet" href="../../assets/css/teentidal.css">
   <style>/* page-specific overrides only */</style>
 </head>
 <body>
@@ -79,30 +79,29 @@
     <div class="container">
       <div class="hero-badge">Case Study</div>
       <h1>Teen<span class="accent">Tidal</span></h1>
-      <p class="hero-sub">How a gap in Tidal's parental controls led to building a native iOS app with two-layer explicit content filtering.</p>
+      <p class="hero-sub">A native iOS app with structural parental controls for Tidal — two-layer explicit content filtering, boundary-based listening controls, and a privacy-first parent dashboard.</p>
     </div>
   </header>
 
   <div class="divider"></div>
 
-  <!-- Problem Identification -->
+  <!-- Problem -->
   <section class="container fade-in">
     <div class="section-label">The Problem</div>
-    <h2>A gap no setting could fix</h2>
-    <p>A parent with a family Tidal subscription wants to give their child a safe music streaming experience. Tidal has an explicit content toggle &mdash; but any user can re-enable it from within the app. iOS Screen Time's "Clean" restriction only applies to Apple Music, not third-party apps.</p>
-    <p>The result: either the child has unrestricted access to explicit content, or the parent resorts to fragile workarounds like Guided Access and Screen Time layering that an older child could circumvent.</p>
-
-    <div class="problem-card">
-      <div class="label">Problem Statement</div>
-      <blockquote>No structural mechanism exists to permanently filter explicit content in Tidal when a child uses their own iOS device unsupervised. This is a platform gap &mdash; not a configuration issue.</blockquote>
-    </div>
-
-    <div class="constraints">
-      <div class="constraint"><span class="icon">&times;</span> Tidal's toggle is user-bypassable</div>
-      <div class="constraint"><span class="icon">&times;</span> Screen Time ignores third-party apps</div>
-      <div class="constraint"><span class="icon">&times;</span> No server-side parental control API</div>
-      <div class="constraint"><span class="icon">&times;</span> Guided Access is brittle at best</div>
-    </div>
+    <h3>A gap no setting could fix</h3>
+<p>A parent with a family Tidal subscription wants to give their child a safe music streaming experience. Tidal has an explicit content toggle — but any user can re-enable it from within the app. iOS Screen Time's &quot;Clean&quot; restriction only applies to Apple Music, not third-party apps.</p>
+<p>The result: either the child has unrestricted access to explicit content, or the parent resorts to fragile workarounds like Guided Access and Screen Time layering that an older child could circumvent.</p>
+<blockquote>
+<p><strong>Problem Statement:</strong> No structural mechanism exists to permanently filter explicit content in Tidal when a child uses their own iOS device unsupervised. This is a platform gap — not a configuration issue.</p>
+</blockquote>
+<p><strong>Constraints:</strong></p>
+<ul>
+<li>Tidal's toggle is user-bypassable</li>
+<li>Screen Time ignores third-party apps</li>
+<li>No server-side parental control API</li>
+<li>Guided Access is brittle at best</li>
+</ul>
+<hr>
   </section>
 
   <div class="divider"></div>
@@ -110,23 +109,110 @@
   <!-- Solution -->
   <section class="container fade-in">
     <div class="section-label">The Solution</div>
-    <h2>Two layers, zero settings</h2>
-    <p>TeenTidal is a native iOS/iPadOS app that wraps Tidal's official SDK with <strong>structural content filtering</strong> &mdash; not a toggle the child can find and disable, but an architectural guarantee enforced at two independent layers.</p>
+    <h3>Two layers, zero settings</h3>
+<p>TeenTidal is a native iOS/iPadOS app that wraps Tidal's official SDK with <strong>structural content filtering</strong> — not a toggle the child can find and disable, but an architectural guarantee enforced at two independent layers.</p>
+<p><strong>Layer 1 — Server-side filtering:</strong> Every API request includes <code>explicitFilter=EXCLUDE</code>, preventing explicit content from ever reaching the device. Applied across all endpoints: search, album detail, artist tracks, artist albums, playlist items, and artist detail.</p>
+<p><strong>Layer 2 — Client-side deny-by-default:</strong> Every API response passes through <code>FilteredCatalog</code>, which strips any item where <code>explicit != false</code>. The deny-by-default approach means missing or null explicit flags are treated as explicit — content must be explicitly marked clean to pass. A belt-and-braces playback guard adds a final check before any track ID reaches the Tidal Player SDK.</p>
+<p><strong>Video content excluded entirely</strong> — server-side via content type filtering and client-side by removing all video navigation paths. No video content is ever presented to the child.</p>
+<p>There is <strong>no settings screen</strong>. No toggle to disable. No deep link that bypasses the filter. The filtering is hardcoded into the architecture — it cannot be turned off without rebuilding the app.</p>
+<hr>
+  </section>
 
-    <div class="layers">
-      <div class="layer">
-        <div class="layer-num">1</div>
-        <h3>FilteredCatalog Gate</h3>
-        <p>Every API response passes through a single gateway service that strips any item where <code>explicit&nbsp;==&nbsp;true</code> before it reaches the UI. The child never sees explicit content in search, browse, or discovery.</p>
-      </div>
-      <div class="layer">
-        <div class="layer-num">2</div>
-        <h3>PlayerService Guard</h3>
-        <p>A belt-and-braces check at the playback layer. Before any track or video ID reaches the Tidal Player SDK, the guard verifies it against the explicit flag. If Layer 1 somehow misses something, Layer 2 catches it.</p>
-      </div>
-    </div>
+  <div class="divider"></div>
 
-    <p>There is <strong>no settings screen</strong>. No toggle to disable. No deep link that bypasses the filter. The filtering is hardcoded into the architecture &mdash; it cannot be turned off without rebuilding the app.</p>
+  <!-- Parental Controls -->
+  <section class="container fade-in">
+    <div class="section-label">Parental Controls</div>
+    <h3>Boundary-based, not surveillance-based</h3>
+<p>TeenTidal's parental controls shape the listening environment without logging individual behaviour. A parent sets boundaries; the child operates freely within them.</p>
+<p><strong>Listening Hours</strong> — configurable start and end time (15-minute increments). Outside the window, playback is refused with a gentle banner. Supports inverted overnight ranges.</p>
+<p><strong>Daily Listening Limit</strong> — 15-minute-step budget that accumulates real playback seconds against a calendar day. Auto-resets at midnight. When the budget is reached, playback pauses.</p>
+<p><strong>Route-aware Volume Caps</strong> — separate caps for headphones (default 60%, aligned with AAP's &quot;60/60 rule&quot;) and speakers (default 70%). Caps auto-switch when the audio route changes — unplugging headphones instantly applies the speaker cap. WHO/AAP-aligned colour zones (Safe/Caution/Loud/Very Loud) on each slider.</p>
+<p><strong>Evening Volume Override</strong> — optional second pair of volume caps that activate from a configurable start time until 4 AM. Default: 40% headphones, 50% speakers.</p>
+<p><strong>Auto-Sleep</strong> — after a configurable start time, continuous playback fades out over 3 seconds and pauses after a set duration (5–120 minutes).</p>
+<p><strong>Pause on Output Change</strong> — when headphones are unplugged, playback pauses immediately. Prevents the speaker blasting when headphones come out.</p>
+<p>All time settings use 15-minute granularity, stored internally as minutes-from-midnight (0–1439) for precision.</p>
+<hr>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Parent Dashboard -->
+  <section class="container fade-in">
+    <div class="section-label">Parent Dashboard</div>
+    <h3>PIN-gated, on-device, aggregate-only</h3>
+<p>A hidden 2-second long-press opens the parent dashboard, gated by a 4-digit PIN stored in the iOS Keychain (survives app reinstall). Brute-force protected: 5 failed attempts trigger a 60-second lockout with exponential backoff (capped at 1 hour), using constant-time string comparison to resist timing attacks.</p>
+<p><strong>Usage tab</strong> — aggregate statistics only: total plays, skip rate, total listening time, total searches. Time-of-Day chart and Listening-Per-Day breakdown. No individual track or artist history — the privacy-infringing sections (Top Tracks, Top Artists, Recent Searches) were deliberately removed in v0.8.0. A parent should know <em>how much</em> and <em>when</em>, not <em>what</em>.</p>
+<p><strong>Controls tab</strong> — all parental boundary settings: volume caps, listening hours, daily limit, evening override, auto-sleep, pause on output change, loudness normalisation toggle.</p>
+<p><strong>Diagnostics tab</strong> — MetricKit payloads (crashes, hangs, disk writes, CPU/memory, launch time) with read-only JSON viewer. Zero third-party SDKs.</p>
+<hr>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Architecture -->
+  <section class="container fade-in">
+    <div class="section-label">Architecture</div>
+    <h3>SDK for review, reverse-engineered for playback</h3>
+<p>Tidal requires all playback to use their official Player SDK, but the SDK's development mode returns <code>PENotAllowed</code> for streaming — making testing impossible without production credentials. TeenTidal solves this with compile-time backend separation:</p>
+<p><strong>SDK build</strong> (<code>TeenTidal-SDK</code>) — clean, Tidal-reviewable. Uses the official SDK for auth, playback, and events. This is the build submitted for Tidal developer programme review.</p>
+<p><strong>RE build</strong> (<code>TeenTidal-RE</code>) — reverse-engineered Tidal integration for development and testing. OAuth Device Code flow (RFC 8628) with QR code login. Stream URL acquisition via <code>playbackinfopostpaywall/v4</code>, BTS manifest parsing, AVPlayer playback with full queue management.</p>
+<p>Protocol abstractions (<code>AuthProvider</code>, <code>PlaybackProvider</code>, <code>TKCredentialsProvider</code>) decouple all views from specific backends. <code>#if TIDAL_SDK</code> / <code>#if TIDAL_RE</code> guards plus <code>EXCLUDED_SOURCE_FILE_NAMES</code> in xcconfig ensure zero cross-leakage. Binary inspection verified: SDK build contains zero RE symbols; RE build contains zero SDK symbols.</p>
+<hr>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Security -->
+  <section class="container fade-in">
+    <div class="section-label">Security</div>
+    <h3>Five-phase hardening from alpha to release</h3>
+<p>A comprehensive security review produced 17 findings across 5 phases, all resolved:</p>
+<p><strong>Phase 1 — Content Safety:</strong></p>
+<ul>
+<li>Deny-by-default for all explicit flags (null/missing = explicit)</li>
+<li><code>explicitFilter=EXCLUDE</code> added to every API endpoint</li>
+<li>Pages API explicit checks flipped to deny-by-default</li>
+</ul>
+<p><strong>Phase 2 — Parental Control Hardening:</strong></p>
+<ul>
+<li>PIN brute-force protection with exponential lockout (Keychain-persisted, survives reinstall)</li>
+<li>All 16 parental settings migrated from UserDefaults to Keychain</li>
+<li>Download storage moved from Files-accessible Documents/ to protected Application Support/</li>
+<li>File protection: <code>NSFileProtectionComplete</code>, excluded from iCloud backup, extension whitelist</li>
+</ul>
+<p><strong>Phase 3 — Credential Hardening:</strong></p>
+<ul>
+<li>Empty refresh token guard preventing silent auth failures</li>
+<li>Keychain accessibility upgraded to <code>WhenUnlockedThisDeviceOnly</code></li>
+<li>Logout revocation ordering fixed (sequential: revoke → clear → cache)</li>
+<li>iCloud sync disabled on credential Keychain items</li>
+</ul>
+<p><strong>Phase 4 — Network Hardening:</strong></p>
+<ul>
+<li>URL injection prevention on artist bio endpoint (alphanumeric allowlist)</li>
+<li>HTTP 429 handling with exponential backoff (1s → 2s → 4s, capped at 60s)</li>
+<li>All force-unwraps replaced with safe unwraps and fallbacks</li>
+<li>NSLog replaced with os.Logger with privacy annotations</li>
+</ul>
+<p><strong>Phase 5 — Defence in Depth:</strong></p>
+<ul>
+<li>Observer and remote command cleanup for architectural correctness</li>
+<li>Image URL path traversal prevention (hex-digit allowlist on cover IDs)</li>
+</ul>
+<hr>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Audio -->
+  <section class="container fade-in">
+    <div class="section-label">Audio</div>
+    <h3>Loudness normalisation and real-time visualisation</h3>
+<p><strong>ReplayGain normalisation</strong> — parses <code>trackReplayGain</code> and <code>trackPeakAmplitude</code> from Tidal's stream metadata. Applied as pure attenuation via <code>AVMutableAudioMix</code> — never amplifies above unity. Target: −14 LUFS, matching Tidal's reference level. Consistent volume across tracks without parent intervention.</p>
+<p><strong>Real-time audio visualiser</strong> — Plexamp-style animated spectrum in the full player. <code>MTAudioProcessingTap</code> feeds PCM samples into <code>vDSP_fft_zrip</code> (1024-point FFT, Hann window). 28 log-scaled bars spanning ~60 Hz to ~16 kHz with fast-attack/slow-decay smoothing. Rolling-peak auto-normaliser prevents saturation on loud tracks. FFT is skipped entirely when the visualiser isn't visible.</p>
+<p><strong>Audio output picker</strong> — <code>AVRoutePickerView</code> in the full player header for switching between Bluetooth headphones, speakers, and AirPlay without leaving the app.</p>
+<hr>
   </section>
 
   <div class="divider"></div>
@@ -143,7 +229,7 @@
         <div class="gallery-caption">Home</div>
       </div>
       <div class="gallery-item">
-        <img src="assets/search.png" alt="Search results for Taylor Swift" loading="lazy">
+        <img src="assets/search.png" alt="Search results" loading="lazy">
         <div class="gallery-caption">Search</div>
       </div>
       <div class="gallery-item">
@@ -159,7 +245,7 @@
 
   <div class="divider"></div>
 
-  <!-- Video Walkthrough -->
+  <!-- Walkthrough -->
   <section class="container fade-in">
     <div class="section-label">Walkthrough</div>
     <h2>In motion</h2>
@@ -182,162 +268,29 @@
   <!-- Evolution -->
   <section class="container fade-in">
     <div class="section-label">Evolution</div>
-    <h2>How the app took shape</h2>
-    <p>Three versions in three days. Each built on the last &mdash; from bare architecture to a full-featured music discovery app with five tabs, artist profiles, and persistent caching.</p>
-
-    <!-- v0.1.0 -->
-    <div class="evo-version">
-      <div class="evo-header">
-        <span class="evo-badge">v0.1.0</span>
-        <span class="evo-date">2 April 2026</span>
-        <div class="evo-title">Architecture &amp; Scaffolding</div>
-      </div>
-
-      <div class="evo-grid">
-        <div class="evo-card">
-          <div class="evo-card-label arch">Architecture</div>
-          <p>Two-layer filtering architecture designed and implemented. <strong>FilteredCatalog</strong> wraps all API responses, stripping items where <code>explicit == true</code>. <strong>PlayerService</strong> guard adds a belt-and-braces check before any track reaches the Tidal Player SDK.</p>
-        </div>
-        <div class="evo-card">
-          <div class="evo-card-label added">Added</div>
-          <p>OAuth 2.1 PKCE authentication via <code>ASWebAuthenticationSession</code>. Tidal SDK integration for Auth, Player, and EventProducer. Token storage in iOS Keychain. Three-tab layout: Home, Search, Library.</p>
-        </div>
-        <div class="evo-card">
-          <div class="evo-card-label added">Added</div>
-          <p>Basic views: SearchView with debounced queries (500ms), AlbumDetailView with filtered track lists, ArtistDetailView with top tracks, MiniPlayerView and FullPlayerView with lock screen controls.</p>
-        </div>
-        <div class="evo-card">
-          <div class="evo-card-label arch">Testing</div>
-          <p>15 unit tests: 10 for FilteredCatalog (explicit tracks/albums/videos filtered, edge cases) and 5 for PlayerService (playback guard, queue re-filtering). Strict Swift 6.0 concurrency compliance.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="evo-divider"></div>
-
-    <!-- v0.2.0-alpha -->
-    <div class="evo-version">
-      <div class="evo-header">
-        <span class="evo-badge">v0.2.0-alpha</span>
-        <span class="evo-date">3 April 2026</span>
-        <div class="evo-title">Full-Featured Discovery &amp; QA Pass</div>
-      </div>
-
-      <div class="evo-grid">
-        <div class="evo-card">
-          <div class="evo-card-label added">Added</div>
-          <p>Home tab with 4 curated discovery categories (Pop Hits, Acoustic, Soundtrack, Chill) rendered as horizontal album carousels with resolved cover art. Full search across tracks, albums, and artists with inline playback and swipe actions.</p>
-        </div>
-        <div class="evo-card">
-          <div class="evo-card-label added">Added</div>
-          <p>Playlist CRUD &mdash; create playlists, add tracks via sheet, delete with confirmation. Local persistence via <code>LocalPlaylistStore</code> using UserDefaults. Full track objects stored, surviving app restarts.</p>
-        </div>
-        <div class="evo-card">
-          <div class="evo-card-label added">Added</div>
-          <p>Design system established: <code>TeenTidalColors</code> (dark theme, teal #00C9A7 accent), <code>TeenTidalTypography</code> (rounded fonts), <code>TeenTidalSpacing</code> tokens. iPad <code>NavigationSplitView</code> sidebar layout. Favourites tab (4th tab) with category counts.</p>
-        </div>
-        <div class="evo-card">
-          <div class="evo-card-label fixed">QA Pass</div>
-          <p>Comprehensive audit: zero <code>.contextMenu</code> usage (all swipe actions), zero nested NavigationStacks, all navigation destinations registered via value-based enums. Environment propagation verified at app root. No force unwraps in app code. Strict Swift 6.0 Sendable compliance.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="evo-divider"></div>
-
-    <!-- v0.3.0-alpha -->
-    <div class="evo-version">
-      <div class="evo-header">
-        <span class="evo-badge">v0.3.0-alpha</span>
-        <span class="evo-date">4 April 2026</span>
-        <div class="evo-title">Artist Profiles, Favourites &amp; Downloads</div>
-      </div>
-
-      <div class="evo-grid">
-        <div class="evo-card">
-          <div class="evo-card-label added">Added</div>
-          <p>Artist profiles with split content carousels (Albums, EPs, Singles filtered by <code>albumType</code>). Similar Artists horizontal carousel with circular images. Artist Radio linking to radio playlist. Artist favourite toggle on header and swipe rows.</p>
-        </div>
-        <div class="evo-card">
-          <div class="evo-card-label added">Added</div>
-          <p>Dedicated Favourites tab (moved from Library) with directory structure: Tracks, Artists, Albums, EPs, Singles &mdash; each folder only shown when non-empty. Downloads tab with offline queue, status badges (pending/complete/failed), and swipe-to-delete.</p>
-        </div>
-        <div class="evo-card">
-          <div class="evo-card-label changed">Changed</div>
-          <p>Tab bar expanded from 4 to 5 tabs. Library stripped to playlists only. All context menus replaced with consistent swipe left/right actions. API compliance hardened &mdash; PKCE-only public client, client secret removed from binary.</p>
-        </div>
-        <div class="evo-card">
-          <div class="evo-card-label added">Added</div>
-          <p>Two-tier persistent disk cache (L1 memory + L2 disk) with tiered TTLs: discover 30min, detail 10min, search 5min. Survives app restarts, clears on logout. Navigation reworked to value-based <code>FavouritesDestination</code> enum eliminating closure-based loops.</p>
-        </div>
-      </div>
-
-      <div class="evo-screenshots">
-        <img src="assets/home.png" alt="Home tab — v0.3.0" loading="lazy">
-        <img src="assets/search.png" alt="Search results — v0.3.0" loading="lazy">
-        <img src="assets/album-detail.png" alt="Album detail — v0.3.0" loading="lazy">
-        <img src="assets/swipe-action.png" alt="Swipe actions — v0.3.0" loading="lazy">
-      </div>
-    </div>
-
-  </section>
-
-  <div class="divider"></div>
-
-  <!-- Journey -->
-  <section class="container fade-in">
-    <div class="section-label">The Journey</div>
-    <h2>From first principles to alpha</h2>
-
-    <div class="timeline">
-      <div class="timeline-entry">
-        <div class="timeline-dot"></div>
-        <div class="timeline-version">v0.1.0</div>
-        <div class="timeline-date">2 April 2026</div>
-        <div class="timeline-title">Architecture &amp; Foundation</div>
-        <div class="timeline-body">
-          Problem statement validated from first principles. Two-layer filtering architecture designed and implemented. OAuth 2.1 PKCE authentication, Tidal SDK integration, and the core UI scaffolding &mdash; Home, Search, Library tabs with album, artist, and playlist detail views. 15 unit tests covering the filtering and playback guard.
-        </div>
-        <div class="timeline-tags">
-          <span class="tag">FilteredCatalog</span>
-          <span class="tag">PlayerService guard</span>
-          <span class="tag">OAuth PKCE</span>
-          <span class="tag">15 tests</span>
-        </div>
-      </div>
-
-      <div class="timeline-entry">
-        <div class="timeline-dot"></div>
-        <div class="timeline-version">v0.2.0-alpha</div>
-        <div class="timeline-date">3 April 2026</div>
-        <div class="timeline-title">Full-Featured Discovery &amp; QA</div>
-        <div class="timeline-body">
-          Home tab with curated discovery categories. Full search with debounced queries across tracks, albums, and artists. Playlist CRUD with local persistence. Mini player and full-screen player with lock screen controls. iPad NavigationSplitView layout. Design system with dark theme and teal accent. Comprehensive QA pass &mdash; zero context menus, zero nested NavigationStacks, strict Swift 6.0 concurrency compliance.
-        </div>
-        <div class="timeline-tags">
-          <span class="tag">14 views</span>
-          <span class="tag">iPad layout</span>
-          <span class="tag">Design system</span>
-          <span class="tag">QA pass</span>
-        </div>
-      </div>
-
-      <div class="timeline-entry">
-        <div class="timeline-dot current"></div>
-        <div class="timeline-version">v0.3.0-alpha</div>
-        <div class="timeline-date">4 April 2026</div>
-        <div class="timeline-title">Artist Profiles, Favourites &amp; Downloads</div>
-        <div class="timeline-body">
-          Artist profiles with split content sections (Albums, EPs, Singles), similar artists, and artist radio. Dedicated Favourites tab with directory structure. Downloads tab for offline queuing. Two-tier persistent disk cache (L1 memory + L2 disk). API compliance hardened &mdash; PKCE-only public client, no client secret in binary. All context menus replaced with consistent swipe actions. Navigation architecture reworked to eliminate closure-based loops.
-        </div>
-        <div class="timeline-tags">
-          <span class="tag">5 tabs</span>
-          <span class="tag">Persistent cache</span>
-          <span class="tag">API compliance</span>
-          <span class="tag">Swipe actions</span>
-        </div>
-      </div>
-    </div>
+    <h3>v0.1.0 — 2 April 2026 — Architecture &amp; Foundation</h3>
+<p>Two-layer filtering architecture. OAuth 2.1 PKCE authentication. Tidal SDK integration. Three-tab layout with search, album detail, and basic playback. 15 unit tests covering FilteredCatalog and PlayerService.</p>
+<h3>v0.2.0-alpha — 3 April 2026 — Full-Featured Discovery</h3>
+<p>Home tab with curated discovery carousels. Full search across tracks, albums, and artists. Playlist CRUD with local persistence. Design system (dark theme, teal accent, rounded fonts). iPad NavigationSplitView layout. Comprehensive QA pass: zero context menus, zero nested NavigationStacks, strict Swift 6.0 compliance.</p>
+<h3>v0.3.0-alpha — 4 April 2026 — Artist Profiles, Favourites &amp; Downloads</h3>
+<p>Artist profiles with split content carousels. Similar Artists. Dedicated Favourites tab with directory structure. Downloads tab with offline queue. Two-tier persistent disk cache (L1 memory + L2 disk). All context menus replaced with swipe actions. PKCE-only public client (client secret removed from binary).</p>
+<h3>v0.4.0-alpha — 13 April 2026 — Dual-Backend Architecture</h3>
+<p>Protocol abstraction layer decoupling views from auth/playback implementations. SDK backend for Tidal review. RE backend with OAuth Device Code flow and reverse-engineered stream playback. Compile-time separation via <code>#if</code> guards + xcconfig exclusion. Binary verification: zero cross-leakage.</p>
+<h3>v0.5.0-beta — 13 April 2026 — Alpha → Beta Transition</h3>
+<p>Personalised home page (For You, Custom Mixes, Radio Stations). Recently Played and Recent Searches. Offline downloads via CDN stream resolution. Full player enhancements (favourite, playlist, album navigation, stream quality badge). Artist bio v1 fallback. Release year display. Auto-enrich on play. 7 security hardening items including token refresh race elimination and URL path injection prevention.</p>
+<h3>v0.6.0-beta — 14 April 2026 — Local Telemetry &amp; Parent Dashboard</h3>
+<p>PIN-gated parent dashboard with usage and diagnostics tabs. Local usage telemetry (play/skip/complete/search events, 90-day retention). MetricKit-based crash and performance diagnostics. Hidden admin access via long-press gesture.</p>
+<h3>v0.6.1–v0.6.7 — 14 April 2026 — Audio &amp; Parental Controls</h3>
+<p>ReplayGain loudness normalisation. Route-aware volume caps with WHO/AAP colour zones. Time-of-Day usage chart. Audio output picker. Real-time FFT visualiser with rolling-peak normalisation. Landscape split layout for full player.</p>
+<h3>v0.7.0-beta — 16 April 2026 — Boundary Controls</h3>
+<p>Listening Hours, Daily Listening Limit, Evening Volume Override, Auto-Sleep, Pause on Output Change. All boundary-style — shape the environment without surveillance.</p>
+<h3>v0.7.1–v0.7.4 — 16 April 2026 — UI Polish</h3>
+<p>Tabbed search results with counts. Stronger client-side caching (24h catalog TTL, stale-while-revalidate, offline resilience). Belt-and-braces server+client explicit filtering on all endpoints. Video exclusion. View All grids for artist catalogues.</p>
+<h3>v0.7.5–v0.7.9 — 16 April 2026 — Five-Phase Security Audit</h3>
+<p>17 findings resolved across content safety, parental control hardening, credential hardening, network hardening, and defence in depth. Deny-by-default explicit filtering. PIN brute-force protection. Settings migrated to Keychain. Download storage secured. URL injection prevention. os.Logger with privacy annotations.</p>
+<h3>v0.8.0-release — 17 April 2026 — Privacy Hardening</h3>
+<p>Parent Usage report stripped of privacy-infringing sections (Top Tracks, Top Artists, Recent Searches). All time settings migrated to 15-minute granularity with minutes-from-midnight storage. Privacy-first: a parent knows <em>how much</em> and <em>when</em>, not <em>what</em>.</p>
+<hr>
   </section>
 
   <div class="divider"></div>
@@ -345,126 +298,58 @@
   <!-- Design Decisions -->
   <section class="container fade-in">
     <div class="section-label">Design Decisions</div>
-    <h2>Why it works this way</h2>
-
-    <ul class="decision-list">
-      <li>
-        <strong>No settings screen</strong>
-        <span>The filter is hardcoded into the architecture. There is no toggle, no preferences pane, no deep link, and no URL scheme that could expose unfiltered content. A child cannot disable the filter without rebuilding the app from source. This was the single most important design decision &mdash; every other parental control app fails because the off-switch is accessible.</span>
-      </li>
-      <li>
-        <strong>Custom API client instead of SDK decoders</strong>
-        <span>Tidal's official SDK has non-optional <code>key</code> and <code>keyScale</code> enum fields in its <code>TracksAttributes</code> model, but the API returns null for these on virtually every track. This causes <code>JSONDecoder</code> to fail on every response containing track data. Rather than fork the SDK, a custom <code>TidalAPIClient</code> was built using raw <code>URLSession</code> with lenient Codable models where null-prone fields are optional. Auth and Player still use the SDK &mdash; only catalog and search go through the custom client.</span>
-      </li>
-      <li>
-        <strong>Swipe actions over context menus</strong>
-        <span>Context menus were initially used for track/album actions (favourite, add to playlist, navigate to artist). They were replaced entirely with swipe left/right actions in v0.3.0. Swipe actions are more discoverable for younger users, feel more native on iOS, and are consistent with the app's parental constraint of not exposing hidden functionality. Zero context menus remain in the codebase.</span>
-      </li>
-      <li>
-        <strong>Value-based navigation over closure-based</strong>
-        <span>Early versions used closure-based <code>NavigationLink</code> which caused navigation loops in the artist profile &mdash; tapping Similar Artists would push nested NavigationStacks. Reworked to value-based navigation via a <code>FavouritesDestination</code> enum, with each tab owning exactly one <code>NavigationStack</code>. Zero nested stacks remain.</span>
-      </li>
-      <li>
-        <strong>Dark theme with child-friendly typography</strong>
-        <span>The design system uses a dark background (#0D1117) with teal accent (#00C9A7) and rounded system fonts (<code>TeenTidalTypography</code>). Dark theme reduces visual fatigue for screen-heavy use. Rounded fonts feel approachable without looking infantile &mdash; important for an app a teenager won't reject as "for babies."</span>
-      </li>
-      <li>
-        <strong>Local-first persistence</strong>
-        <span>Favourites, playlists, and download queues are stored in <code>UserDefaults</code> on the device. No backend, no cloud sync, no analytics. This was a deliberate privacy decision &mdash; the app collects nothing, stores nothing remotely, and deleting it removes all data permanently. The privacy policy reflects this: it is one page long because there is nothing to disclose.</span>
-      </li>
-      <li>
-        <strong>iPad NavigationSplitView layout</strong>
-        <span>Instead of scaling the iPhone tab bar to iPad, the app uses <code>NavigationSplitView</code> with a sidebar listing all tabs and a detail pane. This gives iPad users a proper two-column experience rather than a stretched phone layout.</span>
-      </li>
-      <li>
-        <strong>Hidden admin logout</strong>
-        <span>Logout is triggered by a hidden 5-tap gesture on the Home screen "Listen" header. There is no visible logout button, no account screen, and no settings path. This prevents a child from logging out (which would expose the Tidal login screen and potentially an unfiltered Tidal session in the browser).</span>
-      </li>
-    </ul>
+    <ul>
+<li><strong>No settings screen:</strong> The filter is hardcoded into the architecture. There is no toggle, no preferences pane, no deep link, and no URL scheme that could expose unfiltered content.</li>
+<li><strong>Deny-by-default explicit filtering:</strong> Missing or null explicit flags are treated as explicit. Content must be explicitly marked clean to pass through. Both server-side and client-side filtering on every endpoint.</li>
+<li><strong>Boundary controls over surveillance:</strong> Parental controls set limits (hours, volume, daily cap) rather than logging individual listening choices. The parent dashboard shows aggregate stats, not per-track history.</li>
+<li><strong>Custom API client instead of SDK decoders:</strong> Tidal's SDK has non-optional fields that the API returns as null, causing JSONDecoder failures. A custom <code>TidalAPIClient</code> with lenient Codable models avoids forking the SDK.</li>
+<li><strong>Swipe actions over context menus:</strong> More discoverable for younger users, more native on iOS, and consistent with the constraint of not exposing hidden functionality.</li>
+<li><strong>Dark theme with child-friendly typography:</strong> Dark background (#0D1117) with teal accent (#00C9A7) and rounded system fonts. Approachable without looking infantile.</li>
+<li><strong>Local-first persistence:</strong> Favourites, playlists, and download queues on-device. No backend, no cloud sync, no analytics. The privacy policy is one page long because there is nothing to disclose.</li>
+<li><strong>Hidden admin access:</strong> Parent dashboard triggered by hidden long-press gesture. No visible logout button, no account screen, no settings path.</li>
+<li><strong>Compile-time backend separation:</strong> SDK build for Tidal review contains zero RE code. RE build for development contains zero SDK dependencies. Verified by binary inspection.</li>
+</ul>
+<hr>
   </section>
 
   <div class="divider"></div>
 
-  <!-- API Etiquette & Hygiene -->
+  <!-- API Etiquette -->
   <section class="container fade-in">
     <div class="section-label">API Etiquette &amp; Hygiene</div>
-    <h2>Being a good API citizen</h2>
-    <p>Tidal's v2 API uses the JSON:API specification with relationship-based resource inclusion. Getting this right was one of the most time-intensive parts of the project &mdash; not because the API is poorly designed, but because doing it efficiently and respectfully requires understanding the inclusion model deeply.</p>
+    
+  </section>
 
-    <div class="api-block">
-      <h3>Single-request resource inclusion</h3>
-      <div class="subtitle">Investigation</div>
-      <p>Early versions made 20+ individual track fetches per search query &mdash; one per result row to resolve artist names and album artwork. This was both slow and wasteful of API quota.</p>
-      <div class="subtitle">Decision</div>
-      <p>Tidal's JSON:API <code>include</code> parameter lets you request related resources in a single response. Search now uses <code>include=tracks,tracks.albums,tracks.albums.coverArt,tracks.artists,albums,artists,albums.coverArt,albums.artists,artists.profileArt</code> to get everything in one call. Artist names, album art, and track metadata are all resolved from the <code>included</code> array without any follow-up requests.</p>
-      <div class="subtitle">Result</div>
-      <p>Search went from 20+ API calls to exactly 1. Album detail, artist detail, and playlist detail all follow the same pattern &mdash; fetch with includes first, fall back to individual fetches only if the included array is empty.</p>
-    </div>
+  <div class="divider"></div>
 
-    <div class="api-block">
-      <h3>Tiered caching with staleness awareness</h3>
-      <div class="subtitle">Investigation</div>
-      <p>Browsing the app repeatedly hits the same endpoints &mdash; Home tab discovery content, album details when navigating back and forth, search results for similar queries. Without caching, every screen transition is an API call.</p>
-      <div class="subtitle">Decision</div>
-      <p>A two-tier cache was implemented in <code>TidalAPIClient</code>: L1 (in-memory dictionary) for instant access, L2 (disk cache under <code>Caches/TidalAPICache/</code>) to survive app restarts. TTLs are tiered by content type:</p>
-      <ul>
-        <li><strong>Discovery content</strong> &mdash; 30 minutes (editorial content is stable)</li>
-        <li><strong>Detail pages</strong> &mdash; 10 minutes (album/artist data changes rarely)</li>
-        <li><strong>Search results</strong> &mdash; 5 minutes (more volatile, user expects freshness)</li>
-      </ul>
-      <div class="subtitle">Result</div>
-      <p>Repeat navigation is instant. API calls are only made when cache entries expire. The cache clears on logout via <code>clearCache()</code> which wipes both L1 and L2.</p>
-    </div>
-
-    <div class="api-block">
-      <h3>Sequential fetching for rate limit compliance</h3>
-      <div class="subtitle">Investigation</div>
-      <p>When fetching individual tracks/albums as a fallback (e.g. when <code>included</code> is empty), early versions fired all requests concurrently using <code>TaskGroup</code>. This triggered HTTP 429 (Too Many Requests) responses from Tidal's API.</p>
-      <div class="subtitle">Decision</div>
-      <p>All batch fallback fetches (albums, artists, videos) were converted to sequential execution &mdash; each request waits for the previous to complete before firing. Video fetches were removed from search entirely since videos aren't displayed in the search UI.</p>
-      <div class="subtitle">Result</div>
-      <p>Zero 429 errors in testing. Slightly slower fallback paths, but the primary include-based paths avoid fallbacks entirely.</p>
-    </div>
-
-    <div class="api-block">
-      <h3>Debounced search</h3>
-      <div class="subtitle">Investigation</div>
-      <p>Every keystroke in the search field would trigger an API call, flooding the endpoint with partial queries like "T", "Ta", "Tay", "Tayl" before the user finishes typing "Taylor Swift".</p>
-      <div class="subtitle">Decision</div>
-      <p>Search input is debounced with a 500ms delay via <code>Task.sleep(for: .milliseconds(500))</code>. The previous search task is cancelled when new input arrives, so only the final query fires.</p>
-      <div class="subtitle">Result</div>
-      <p>A typical search triggers 1 API call instead of 10+. The 500ms delay is imperceptible to the user but dramatically reduces API load.</p>
-    </div>
-
-    <div class="api-block">
-      <h3>OAuth compliance &mdash; PKCE-only public client</h3>
-      <div class="subtitle">Investigation</div>
-      <p>The initial implementation included the client secret in the app binary, following the SDK's example configuration. This is a security anti-pattern for mobile apps &mdash; the binary can be decompiled and the secret extracted.</p>
-      <div class="subtitle">Decision</div>
-      <p>The client secret was removed from the app binary entirely. TeenTidal operates as a PKCE-only public client, using <code>ASWebAuthenticationSession</code> for the OAuth 2.1 flow. Tokens are stored in the iOS Keychain via the Tidal SDK. The correct <code>Accept: application/vnd.api+json</code> header is set on all v2 API requests.</p>
-      <div class="subtitle">Result</div>
-      <p>No secrets in the binary. Authentication uses the standard PKCE code challenge flow. Token refresh is handled automatically by the SDK's credentials provider.</p>
-    </div>
-
-    <div class="api-block">
-      <h3>Server-side explicit filtering</h3>
-      <div class="subtitle">Investigation</div>
-      <p>The client-side <code>FilteredCatalog</code> strips explicit content after it arrives, but this means explicit data still crosses the network and is briefly held in memory.</p>
-      <div class="subtitle">Decision</div>
-      <p>Search requests include <code>explicitFilter=EXCLUDE</code> as a query parameter, asking the Tidal API to exclude explicit content server-side before the response is even sent. The client-side filter remains as a belt-and-braces second layer &mdash; if the server-side filter misses something (e.g. mislabelled content arriving via a different endpoint), the client catches it.</p>
-      <div class="subtitle">Result</div>
-      <p>Two independent filtering layers. The server-side filter reduces response sizes and avoids explicit content ever reaching the device for search queries. The client-side filter covers all other endpoints (album detail, artist tracks, playlists) where <code>explicitFilter</code> isn't available as a parameter.</p>
-    </div>
-
-    <div class="api-block">
-      <h3>Artwork resolution strategy</h3>
-      <div class="subtitle">Investigation</div>
-      <p>Tidal's JSON:API uses a multi-hop relationship chain for artwork: Album &rarr; coverArt relationship &rarr; artworks resource &rarr; files array &rarr; individual image URLs at various resolutions. Early versions showed placeholder images because the relationship chain wasn't being walked correctly.</p>
-      <div class="subtitle">Decision</div>
-      <p>Three lookup tables are built from each API response's <code>included</code> array: <code>buildArtistLookup</code> (artist ID &rarr; name), <code>buildArtworkLookup</code> (artwork ID &rarr; 750x750 image URL), and <code>buildAlbumImageLookup</code> (album ID &rarr; image URL, resolved via coverArt relationship). The 750x750 size was chosen as the best balance of quality and bandwidth.</p>
-      <div class="subtitle">Result</div>
-      <p>Album art, artist profile images, and track thumbnails all resolve correctly from the included resources. No additional API calls are needed for image URLs.</p>
-    </div>
+  <!-- Tidal Compliance -->
+  <section class="container fade-in">
+    <div class="section-label">Tidal Compliance</div>
+    <p>TeenTidal is built to comply with Tidal's <a href="https://developer.tidal.com/documentation/guidelines/guidelines-developer-guidelines">Developer Guidelines (v3.0)</a> and <a href="https://developer.tidal.com/documentation/guidelines/guidelines-developer-terms">Developer Terms of Service (v3.0)</a>. This section documents how each requirement is met.</p>
+<h3>Playback</h3>
+<p>Tidal requires that playback is <strong>only available through an official, unmodified version of the TIDAL Player SDK module</strong>. The SDK build uses the official <code>tidal-sdk-ios</code> Player module for all playback. The RE build exists for development only and is never distributed.</p>
+<h3>Authentication</h3>
+<p>Tidal mandates OAuth 2.1 with PKCE for user authentication. The SDK build implements Authorization Code Flow with PKCE via <code>ASWebAuthenticationSession</code>. The RE build uses Device Code Flow (RFC 8628) for development convenience. Both store tokens in the iOS Keychain.</p>
+<h3>Content Access</h3>
+<ul>
+<li><strong>No content modification:</strong> The explicit content filter operates on metadata — it controls which content is <em>presented</em>, not the content itself.</li>
+<li><strong>No content storage:</strong> No Tidal audio or video content is stored locally beyond temporary playback buffers.</li>
+<li><strong>Temporary caching only:</strong> API response metadata cached with tiered TTLs and cleared on logout.</li>
+<li><strong>No stream ripping:</strong> Playback is entirely within the Tidal Player SDK's controlled pipeline.</li>
+</ul>
+<h3>Prohibited Uses — Compliance</h3>
+<p>| Tidal Restriction | TeenTidal Compliance |
+|---|---|
+| No AI/ML use of content | No AI or machine learning features. Metadata used only for display and filtering. |
+| No visual synchronisation | No video sync or visual media output from audio content. Visualiser is FFT-only. |
+| No content mixing/remixing | Audio played unmodified through the official Player SDK. |
+| No data scraping | API used only for catalogue browsing and search. No bulk extraction. |
+| No competing service | TeenTidal is a parental filter layer, not a competing music service. |
+| No commercial use | Personal/family tool. Proprietary source code, not distributed. |
+| Branding compliance | Tidal branding and attribution included per Design Guidelines before public release. |</p>
+<h3>Production Mode</h3>
+<p>TeenTidal is currently in development mode. Moving to production requires formal review by Tidal including source code review. The application is parked pending this process.</p>
+<hr>
   </section>
 
   <div class="divider"></div>
@@ -472,29 +357,12 @@
   <!-- Status -->
   <section class="container fade-in">
     <div class="section-label">Current Status</div>
-
-    <div class="status-banner">
-      <div class="status-left">
-        <div class="status-label">Project Status</div>
-        <div class="status-value"><span class="dot"></span>Parked &mdash; Alpha Complete</div>
-      </div>
-      <div class="status-meta">
-        <div class="meta-item">
-          <div class="meta-label">Platform</div>
-          <div class="meta-value">iOS / iPadOS 17+</div>
-        </div>
-        <div class="meta-item">
-          <div class="meta-label">Language</div>
-          <div class="meta-value">Swift 6.0</div>
-        </div>
-        <div class="meta-item">
-          <div class="meta-label">Distribution</div>
-          <div class="meta-value">Proprietary</div>
-        </div>
-      </div>
-    </div>
-
-    <p>TeenTidal is currently parked pending access to the Tidal developer programme for production credentials. The alpha is feature-complete for discovery, library management, and content filtering. Playback requires production mode &mdash; development credentials return <code>PENotAllowed</code> for streaming operations.</p>
+    <p><strong>Status:</strong> v0.8.0-release — Feature-complete, security-audited, parked pending Tidal review
+<strong>Platform:</strong> iOS / iPadOS 17+
+<strong>Language:</strong> Swift 6.0
+<strong>Distribution:</strong> Proprietary
+<strong>Build:</strong> 24</p>
+<p>TeenTidal is parked pending access to the Tidal developer programme for production credentials. The app is feature-complete across discovery, library management, content filtering, parental controls, and security hardening. Playback requires production mode — development credentials return <code>PENotAllowed</code> for streaming operations.</p>
   </section>
 
   <div class="divider"></div>
@@ -502,7 +370,7 @@
   <!-- Footer -->
   <footer class="footer container">
     <div class="footer-links">
-      <a href="./privacy-policy">Privacy Policy</a>
+      <a href="./privacy-policy.html">Privacy Policy</a>
     </div>
     <p class="footer-copy">&copy; 2026 t0lkim</p>
   </footer>
