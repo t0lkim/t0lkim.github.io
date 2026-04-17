@@ -321,7 +321,6 @@
 <li>Tier changes can revoke access to already-paid content</li>
 <li>No first-party archival solution</li>
 </ul>
-<hr>
     </div>
   </section>
 
@@ -347,7 +346,6 @@ Downloading media...
 Complete: 312 files, 2.8 GB total
 Manifest saved to output/CreatorName/manifest.json
 </code></pre>
-<hr>
     </div>
   </section>
 
@@ -403,7 +401,6 @@ Manifest saved to output/CreatorName/manifest.json
     |   +-- audio.mp3
     +-- manifest.json
 </code></pre>
-<hr>
     </div>
   </section>
 
@@ -437,7 +434,6 @@ Manifest saved to output/CreatorName/manifest.json
 <p><strong>Date-prefixed directories</strong> — Posts are stored in <code>YYYY-MM-DD_Post-Title/</code> subdirectories. This sorts chronologically in any file manager without needing metadata, makes the archive browsable without any tooling, and avoids filename collisions across posts.</p>
 </li>
 </ul>
-<hr>
     </div>
   </section>
 
@@ -477,7 +473,6 @@ Manifest saved to output/CreatorName/manifest.json
 <p>Media download URLs point directly to Patreon's CDN. They contain an embedded authentication token in the URL itself, are valid for approximately 24 hours, do not require the session cookie for the actual download, and support standard HTTP range requests.</p>
 <h3 id="pagination">Pagination</h3>
 <p>Cursor-based pagination via <code>meta.pagination.cursors.next</code>. The cursor is an opaque string passed as <code>page[cursor]</code> on subsequent requests. When the cursor is <code>null</code> or absent, all pages have been fetched.</p>
-<hr>
     </div>
   </section>
 

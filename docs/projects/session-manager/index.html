@@ -327,7 +327,6 @@
 <p><strong>Context loss.</strong> Starting a new session requires re-explaining what other sessions have done. With 2-3 concurrent sessions, this becomes significant overhead.</p>
 <p><strong>Blind conflicts.</strong> Two sessions can edit the same file without either knowing. Git catches this after the fact, but the sessions can't coordinate in advance.</p>
 <p><strong>No fleet visibility.</strong> The operator has no way to see, at a glance, how many sessions are active, what each is doing, or which files are under contention.</p>
-<hr>
     </div>
   </section>
 
@@ -342,7 +341,6 @@
 <p><strong>Relevance, not broadcast.</strong> Sessions receive context only about other sessions whose entity tags overlap with their own. Zero overlap = zero injection = zero tokens spent.</p>
 <p><strong>Filesystem is the coordination layer.</strong> Sessions communicate via shared files. No IPC, no sockets, no network. The filesystem is the only mechanism all sessions can access, regardless of which LLM tool they run.</p>
 <p><strong>Token cost awareness.</strong> Orchestration mechanics (heartbeat checking, overlap computation, conflict detection) run as compiled Rust — zero LLM tokens. Only narration synthesis uses an LLM, routed to the cheapest capable model (Haiku). Frontier models stay in the sessions doing actual work.</p>
-<hr>
     </div>
   </section>
 
@@ -363,7 +361,6 @@
 <li><strong>Token cost awareness.</strong> ~70% of orchestration is deterministic compiled code. Only narration needs an LLM.</li>
 <li><strong>High-precision timestamps.</strong> Every event records ISO-8601 with nanosecond precision for deterministic ordering.</li>
 </ul>
-<hr>
     </div>
   </section>
 
@@ -388,7 +385,6 @@
 <li><code>context/{session-id}.json</code> — per-session context injection (orchestrator writes, session reads)</li>
 </ul>
 <p>No lock file. Maia is the sole orchestrator — no election, no contention.</p>
-<hr>
     </div>
   </section>
 
@@ -416,7 +412,6 @@
 | 1 tag (indirect) | One-liner summary | ~30 |
 | 2+ tags (direct) | Task + recent action | ~100 |
 | Same file modified | Conflict alert | ~150 |</p>
-<hr>
     </div>
   </section>
 
@@ -430,7 +425,6 @@
 <p>When the orchestrator consolidates heartbeats, it checks for overlapping <code>files_modified</code>. If two sessions list the same file, the relevant context files are annotated with a warning.</p>
 <p>The orchestrator detects conflicts but does not resolve them — that's the operator's decision: coordinate, merge, or promote one session as the authority.</p>
 <p><code>files_modified</code> tracks writes only — reads inform entity tags but don't trigger conflict detection.</p>
-<hr>
     </div>
   </section>
 
@@ -447,7 +441,6 @@
 <p>Three creation modes: <strong>explicit</strong> (operator invokes <code>/journal</code>), <strong>inferred</strong> (orchestrator scans git commits, PRDs, DAILYLOG), <strong>hooked</strong> (session-end summary emitted automatically).</p>
 <h3 id="context-injection">Context injection</h3>
 <p>When a new session starts, the journal injects a project-scoped summary: recent achievements, open TODOs, active decisions, aspirations. ~300-500 tokens per project, only for projects the session is working in.</p>
-<hr>
     </div>
   </section>
 
@@ -467,7 +460,6 @@
 <h3 id="durability">Durability</h3>
 <p><code>runtimeOS/</code> is ephemeral by design. The orchestrator self-heals on startup — missing directories are created, stale heartbeats are rebuilt. The only durable record is the journal in <code>memoryOS/</code>, backed up per the infrastructure spec.</p>
 <p><code>entities.toml</code> stays in <code>runtimeOS/</code> — it's auto-learned and rebuilds itself over time. Loss means temporary loss of relationships until re-observed.</p>
-<hr>
     </div>
   </section>
 
@@ -487,7 +479,6 @@
 | Narration synthesis | Haiku API | ~200-500/call |
 | Session work | Session's own model | Session's budget |</p>
 <p>~10-20 narration calls per hour, ~6,000 tokens/hour, ~48,000 tokens/day. At Haiku pricing: negligible. Complex multi-session narrations fall back to Sonnet. Frontier models stay in sessions.</p>
-<hr>
     </div>
   </section>
 

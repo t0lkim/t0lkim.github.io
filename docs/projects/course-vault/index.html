@@ -257,7 +257,6 @@
 <li>Manual screen recording loses quality and structure</li>
 <li>No machine-readable manifest of course contents</li>
 </ul>
-<hr>
     </div>
   </section>
 
@@ -291,7 +290,6 @@
 
 🎉 Done! Downloaded 47/47 lectures to ~/Videos/MyCourse
 </code></pre>
-<hr>
     </div>
   </section>
 
@@ -319,7 +317,6 @@
 <p>After each video downloads, ffmpeg writes MP4 metadata tags into the container: <code>title</code> (lecture name), <code>artist</code> (course author), <code>album</code> (course title), and <code>track</code> (lecture number within its section). The original file is replaced atomically via a temp file rename.</p>
 <p><strong>5. Manifest Generation</strong></p>
 <p>After all lectures are processed, CourseVault writes <code>course-info.json</code> to the output directory. This manifest contains the full course structure — title, description, author, image URL, course URL, course ID — with nested sections, lectures, and per-lecture attachment metadata (name, kind, content type, URL, CDN URL, file size).</p>
-<hr>
     </div>
   </section>
 
@@ -350,7 +347,6 @@
 <p><strong>Netscape cookie file for yt-dlp</strong> — yt-dlp expects cookies in the legacy Netscape format. CourseVault writes a temp file with the decrypted cookies in this format and passes it via <code>--cookies</code>, then cleans up the file after the download completes.</p>
 </li>
 </ul>
-<hr>
     </div>
   </section>
 

@@ -505,7 +505,6 @@
 <li>No server-side parental control API</li>
 <li>Guided Access is brittle at best</li>
 </ul>
-<hr>
     </div>
   </section>
 
@@ -521,7 +520,6 @@
 <p><strong>Layer 2 — Client-side deny-by-default:</strong> Every API response passes through <code>FilteredCatalog</code>, which strips any item where <code>explicit != false</code>. The deny-by-default approach means missing or null explicit flags are treated as explicit — content must be explicitly marked clean to pass. A belt-and-braces playback guard adds a final check before any track ID reaches the Tidal Player SDK.</p>
 <p><strong>Video content excluded entirely</strong> — server-side via content type filtering and client-side by removing all video navigation paths. No video content is ever presented to the child.</p>
 <p>There is <strong>no settings screen</strong>. No toggle to disable. No deep link that bypasses the filter. The filtering is hardcoded into the architecture — it cannot be turned off without rebuilding the app.</p>
-<hr>
     </div>
   </section>
 
@@ -540,7 +538,6 @@
 <p><strong>Auto-Sleep</strong> — after a configurable start time, continuous playback fades out over 3 seconds and pauses after a set duration (5–120 minutes).</p>
 <p><strong>Pause on Output Change</strong> — when headphones are unplugged, playback pauses immediately. Prevents the speaker blasting when headphones come out.</p>
 <p>All time settings use 15-minute granularity, stored internally as minutes-from-midnight (0–1439) for precision.</p>
-<hr>
     </div>
   </section>
 
@@ -555,7 +552,6 @@
 <p><strong>Usage tab</strong> — aggregate statistics only: total plays, skip rate, total listening time, total searches. Time-of-Day chart and Listening-Per-Day breakdown. No individual track or artist history — the privacy-infringing sections (Top Tracks, Top Artists, Recent Searches) were deliberately removed in v0.8.0. A parent should know <em>how much</em> and <em>when</em>, not <em>what</em>.</p>
 <p><strong>Controls tab</strong> — all parental boundary settings: volume caps, listening hours, daily limit, evening override, auto-sleep, pause on output change, loudness normalisation toggle.</p>
 <p><strong>Diagnostics tab</strong> — MetricKit payloads (crashes, hangs, disk writes, CPU/memory, launch time) with read-only JSON viewer. Zero third-party SDKs.</p>
-<hr>
     </div>
   </section>
 
@@ -570,7 +566,6 @@
 <p><strong>SDK build</strong> (<code>TeenTidal-SDK</code>) — clean, Tidal-reviewable. Uses the official SDK for auth, playback, and events. This is the build submitted for Tidal developer programme review.</p>
 <p><strong>RE build</strong> (<code>TeenTidal-RE</code>) — reverse-engineered Tidal integration for development and testing. OAuth Device Code flow (RFC 8628) with QR code login. Stream URL acquisition via <code>playbackinfopostpaywall/v4</code>, BTS manifest parsing, AVPlayer playback with full queue management.</p>
 <p>Protocol abstractions (<code>AuthProvider</code>, <code>PlaybackProvider</code>, <code>TKCredentialsProvider</code>) decouple all views from specific backends. <code>#if TIDAL_SDK</code> / <code>#if TIDAL_RE</code> guards plus <code>EXCLUDED_SOURCE_FILE_NAMES</code> in xcconfig ensure zero cross-leakage. Binary inspection verified: SDK build contains zero RE symbols; RE build contains zero SDK symbols.</p>
-<hr>
     </div>
   </section>
 
@@ -614,7 +609,6 @@
 <li>Observer and remote command cleanup for architectural correctness</li>
 <li>Image URL path traversal prevention (hex-digit allowlist on cover IDs)</li>
 </ul>
-<hr>
     </div>
   </section>
 
@@ -628,7 +622,6 @@
 <p><strong>ReplayGain normalisation</strong> — parses <code>trackReplayGain</code> and <code>trackPeakAmplitude</code> from Tidal's stream metadata. Applied as pure attenuation via <code>AVMutableAudioMix</code> — never amplifies above unity. Target: −14 LUFS, matching Tidal's reference level. Consistent volume across tracks without parent intervention.</p>
 <p><strong>Real-time audio visualiser</strong> — Plexamp-style animated spectrum in the full player. <code>MTAudioProcessingTap</code> feeds PCM samples into <code>vDSP_fft_zrip</code> (1024-point FFT, Hann window). 28 log-scaled bars spanning ~60 Hz to ~16 kHz with fast-attack/slow-decay smoothing. Rolling-peak auto-normaliser prevents saturation on loud tracks. FFT is skipped entirely when the visualiser isn't visible.</p>
 <p><strong>Audio output picker</strong> — <code>AVRoutePickerView</code> in the full player header for switching between Bluetooth headphones, speakers, and AirPlay without leaving the app.</p>
-<hr>
     </div>
   </section>
 
@@ -708,7 +701,6 @@
 <p>17 findings resolved across content safety, parental control hardening, credential hardening, network hardening, and defence in depth. Deny-by-default explicit filtering. PIN brute-force protection. Settings migrated to Keychain. Download storage secured. URL injection prevention. os.Logger with privacy annotations.</p>
 <h3 id="v080-release--17-april-2026--privacy-hardening">v0.8.0-release — 17 April 2026 — Privacy Hardening</h3>
 <p>Parent Usage report stripped of privacy-infringing sections (Top Tracks, Top Artists, Recent Searches). All time settings migrated to 15-minute granularity with minutes-from-midnight storage. Privacy-first: a parent knows <em>how much</em> and <em>when</em>, not <em>what</em>.</p>
-<hr>
     </div>
   </section>
 
@@ -729,7 +721,6 @@
 <li><strong>Hidden admin access:</strong> Parent dashboard triggered by hidden long-press gesture. No visible logout button, no account screen, no settings path.</li>
 <li><strong>Compile-time backend separation:</strong> SDK build for Tidal review contains zero RE code. RE build for development contains zero SDK dependencies. Verified by binary inspection.</li>
 </ul>
-<hr>
     </div>
   </section>
 
@@ -759,7 +750,6 @@
 <p><strong>Investigation:</strong> The initial implementation included the client secret in the app binary.</p>
 <p><strong>Decision:</strong> Client secret removed entirely. TeenTidal operates as a PKCE-only public client. Tokens stored in iOS Keychain with <code>WhenUnlockedThisDeviceOnly</code> accessibility and iCloud sync disabled.</p>
 <p><strong>Result:</strong> No secrets in the binary. Tokens protected at rest.</p>
-<hr>
     </div>
   </section>
 
@@ -793,7 +783,6 @@
 | Branding compliance | Tidal branding and attribution included per Design Guidelines before public release. |</p>
 <h3 id="production-mode">Production Mode</h3>
 <p>TeenTidal is currently in development mode. Moving to production requires formal review by Tidal including source code review. The application is parked pending this process.</p>
-<hr>
     </div>
   </section>
 
@@ -820,7 +809,6 @@
 | v0.11.0-alpha | Hear It | Announcements, audio cues, simplified navigation |
 | v0.12.0-beta | Hardening | Security review, accessibility audit with real users |
 | v1.0.0-release | Ship | App Store submission |</p>
-<hr>
     </div>
   </section>
 
