@@ -14,7 +14,7 @@ I build things.
 - [TheStreamDeck](https://t0lkim.dev/projects/the-stream-deck/): Raspberry Pi streaming audio appliance with touchscreen, VU meters, and 4-source switching.
 - [PatronVault](https://t0lkim.dev/projects/patron-vault/): Patreon media archival tool using cookie-based auth against JSON:API. Built in Rust.
 - [CourseVault](https://t0lkim.dev/projects/course-vault/): Teachable course archival tool with browser cookie extraction. Built in Go.
-- [MultiMediaManager](https://t0lkim.dev/projects/multi-media-manager/): Image/video organiser with deduplication and EXIF-based renaming. Built in Rust.
+- [ThreeM](https://t0lkim.dev/projects/threem/): Image/video organiser with deduplication and EXIF-based renaming. Built in Rust.
 - [session-manager](https://t0lkim.dev/projects/session-manager/): LLM-agnostic session orchestrator with entity-tag overlap, conflict detection, and relevance-filtered context injection. Built in Rust.
 - [FretNote](https://t0lkim.dev/projects/fretnote/): Guitar note-learning app with real-time YIN pitch detection, gamified drilling, and post-session analytics. Built in Swift for iPadOS/iOS.
 

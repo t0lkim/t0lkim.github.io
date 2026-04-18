@@ -74,7 +74,7 @@ I build things.
 **Language:** Go | **Authentication:** Browser cookie extraction
 ---
 
-## Project: MultiMediaManager
+## Project: ThreeM
 
 **What is MMM?** MMM (MyMediaManager) is a Rust CLI for organising images and videos with deduplication, EXIF-based renaming, and date-based directory structure.
 
