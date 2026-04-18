@@ -267,16 +267,16 @@
     <div class="section-label">The Solution</div>
     <div class="s-solution">
       <h3 id="scan-deduplicate-rename-organise">Scan, deduplicate, rename, organise</h3>
-<p><code>media-organiser</code> is a Rust CLI that takes one or more input directories, finds every image and video, eliminates duplicates by content hash, extracts the original capture date from EXIF metadata, and sorts files into a <code>YYYY/MM/DD</code> directory structure with date-and-location-based filenames.</p>
-<p>A companion binary, <code>dedup-verifier</code>, independently verifies that flagged duplicates are genuine before you delete them — using a deliberately different hashing approach for safety.</p>
+<p><code>mmm</code> is a Rust CLI that takes one or more input directories, finds every image and video, eliminates duplicates by content hash, extracts the original capture date from EXIF metadata, and sorts files into a <code>YYYY/MM/DD</code> directory structure with date-and-location-based filenames.</p>
+<p>A companion binary, <code>mmm-dedup-verifier</code>, independently verifies that flagged duplicates are genuine before you delete them — using a deliberately different hashing approach for safety.</p>
 <pre><code># Preview what would happen (nothing is modified)
-media-organiser ~/Photos --dry-run
+mmm ~/Photos --dry-run
 </code></pre>
 <pre><code># Organise files from multiple sources into a single directory
-media-organiser ~/Photos ~/Camera/DCIM -o ~/Organised
+mmm ~/Photos ~/Camera/DCIM -o ~/Organised
 </code></pre>
 <pre><code># Verify duplicates independently, then clean up
-dedup-verifier ~/Organised/duplicates/
+mmm-dedup-verifier ~/Organised/duplicates/
 </code></pre>
 <p><strong>Output structure:</strong></p>
 <pre><code>~/Organised/
@@ -351,7 +351,7 @@ dedup-verifier ~/Organised/duplicates/
 <p><strong>Dry-run by default philosophy</strong> — The tool is designed so the recommended first step is always <code>--dry-run</code>. The dry-run report shows every planned operation with metadata source tags (<code>[EXIF]</code>, <code>[FS]</code>, <code>[NO DATE]</code>) so you can review before committing. No files are created, moved, or deleted during a dry run.</p>
 </li>
 <li>
-<p><strong>Independent verification binary</strong> — The <code>dedup-verifier</code> uses BLAKE3 keyed mode (a different algorithm from the main binary's unkeyed mode) and always hashes the full file (no partial-hash shortcut). A bug in one binary cannot produce a false positive in both — the same independent-channel principle used in safety-critical systems.</p>
+<p><strong>Independent verification binary</strong> — The <code>mmm-dedup-verifier</code> uses BLAKE3 keyed mode (a different algorithm from the main binary's unkeyed mode) and always hashes the full file (no partial-hash shortcut). A bug in one binary cannot produce a false positive in both — the same independent-channel principle used in safety-critical systems.</p>
 </li>
 <li>
 <p><strong>Offline reverse geocoding</strong> — GPS-to-location lookups use the <code>reverse_geocoder</code> crate with a bundled GeoNames dataset loaded into a k-d tree. No network requests, no API keys, no rate limits. Location data is sanitised for filename safety before being appended.</p>
