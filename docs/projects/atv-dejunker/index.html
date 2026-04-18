@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ATV-deJunker — Case Study</title>
+  <meta name="description" content="A bash script to debloat Android TV devices — replace the stock launcher with AT4K, remove bloatware, install streaming apps, and disable sponsored content.">
+  <meta name="keywords" content="ATV-deJunker, Android TV, debloat, AT4K, launcher, bloatware, ADB, bash">
+  <meta name="author" content="Mike Lott">
+  <link rel="canonical" href="https://t0lkim.dev/projects/atv-dejunker/">
+  <!-- Open Graph -->
+  <meta property="og:title" content="ATV-deJunker — Case Study">
+  <meta property="og:description" content="A bash script to debloat Android TV devices — replace the stock launcher with AT4K, remove bloatware, install streaming apps, and disable sponsored content.">
+  <meta property="og:url" content="https://t0lkim.dev/projects/atv-dejunker/">
+  <meta property="og:site_name" content="t0lkim.dev">
+  <meta property="og:type" content="article">
+  <meta property="og:locale" content="en_SG">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="ATV-deJunker — Case Study">
+  <meta name="twitter:description" content="A bash script to debloat Android TV devices — replace the stock launcher with AT4K, remove bloatware, install streaming apps, and disable sponsored content.">
+  <!-- JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "SoftwareSourceCode",
+        "name": "ATV-deJunker",
+        "description": "ATV-deJunker is a bash script that debloats Android TV devices by replacing the stock Google TV launcher with AT4K, removing preloaded bloatware, installing streaming apps, and disabling sponsored content — all via ADB over WiFi.",
+        "programmingLanguage": "Bash",
+        "author": { "@type": "Person", "name": "Mike Lott", "url": "https://t0lkim.dev" },
+        "url": "https://t0lkim.dev/projects/atv-dejunker/",
+        "applicationCategory": "System Tools"
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is ATV-deJunker?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "ATV-deJunker is a bash script that debloats Android TV devices by replacing the stock Google TV launcher with AT4K, removing preloaded bloatware, installing streaming apps, and disabling sponsored content — all via ADB over WiFi."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How does ATV-deJunker work?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The script connects to your Android TV via ADB over WiFi, installs streaming apps, installs the AT4K launcher and sets it as default, disables the stock launcher, removes bloatware packages, and applies system settings to disable ads. One command, fully automated."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+  <link rel="stylesheet" href="../../assets/css/base.css">
+  <link rel="stylesheet" href="../../assets/css/teentidal.css">
+  <style>
+    /* ── Section-specific styling for ATV-deJunker ── */
+
+    /* ── Section label ── */
+    .section-label {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 16px;
+    }
+
+    /* ── Problem section ── */
+    .s-problem > p strong {
+      color: var(--text);
+      display: block;
+      margin-bottom: 2px;
+    }
+    .s-problem > p {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 22px;
+      margin-bottom: 12px;
+      font-size: 0.95rem;
+    }
+
+    /* ── Solution section ── */
+    .s-solution > h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .s-solution > p {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 12px;
+      position: relative;
+      overflow: hidden;
+      font-size: 0.95rem;
+    }
+    .s-solution > p::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--teal), transparent);
+    }
+    .s-solution > p strong {
+      color: var(--teal);
+    }
+
+    /* ── Design Principles section ── */
+    .s-principles > ul {
+      list-style: none;
+      padding: 0;
+      margin: 20px 0;
+    }
+    .s-principles > ul > li {
+      position: relative;
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .s-principles > ul > li strong {
+      color: var(--teal);
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    /* ── Architecture section ── */
+    .s-arch > h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .s-arch > p {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 22px;
+      margin-bottom: 12px;
+      font-size: 0.95rem;
+    }
+    .s-arch > p strong {
+      color: var(--teal);
+    }
+    .s-arch > ul {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 22px 18px 38px;
+      margin-bottom: 12px;
+    }
+    .s-arch > ul li {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 4px;
+    }
+
+    /* ── Entity Tags section ── */
+    .s-entity > h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .s-entity > p {
+      font-size: 0.95rem;
+    }
+    .s-entity > ul {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 22px 18px 38px;
+      margin-bottom: 16px;
+    }
+    .s-entity > ul li {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 4px;
+    }
+    .s-entity > ul li strong {
+      color: var(--text);
+    }
+    .s-entity table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 16px 0;
+      font-size: 0.9rem;
+    }
+    .s-entity th {
+      background: var(--surface);
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 600;
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+    }
+    .s-entity td {
+      padding: 10px 16px;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+    }
+    .s-entity tr:last-child td { border-bottom: none; }
+
+    /* ── Conflict Detection section ── */
+    .s-conflict > h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .s-conflict > p {
+      font-size: 0.95rem;
+    }
+
+    /* ��─ Work Journal section ── */
+    .s-journal > h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .s-journal > p {
+      font-size: 0.95rem;
+    }
+    .s-journal > p strong {
+      color: var(--teal);
+    }
+
+    /* ── Security section ── */
+    .s-security > h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .s-security > ul {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 22px 18px 38px;
+      margin-bottom: 16px;
+    }
+    .s-security > ul li {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 4px;
+    }
+
+    /* ���─ Token Economics section ── */
+    .s-tokens > h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .s-tokens table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 16px 0;
+      font-size: 0.9rem;
+    }
+    .s-tokens th {
+      background: var(--surface);
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 600;
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+    }
+    .s-tokens td {
+      padding: 10px 16px;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+    }
+    .s-tokens tr:last-child td { border-bottom: none; }
+  </style>
+</head>
+<body>
+
+  <a href="/" class="home-btn" title="Home"><svg width="18" height="18" viewBox="0 0 16 16"><path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6.5 6.5A.5.5 0 0 0 1.5 8.5v5a.5.5 0 0 0 .5.5h3.5a.5.5 0 0 0 .5-.5V11h4v2.5a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-5a.5.5 0 0 0-.146-.354L8.354 1.146ZM2.5 13V8.707l5.5-5.5 5.5 5.5V13H11v-2.5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0-.5.5V13H2.5Z"/></svg></a>
+
+  <!-- Hero -->
+  <header class="hero">
+    <div class="container">
+      <div class="hero-badge">Case Study</div>
+      <h1>ATV-de<span class="accent">Junker</span></h1>
+      <p class="hero-sub">One script to debloat your Android TV. Replace the stock launcher, remove bloatware, install your streaming apps, disable ads. Fully automated via ADB over WiFi.</p>
+    </div>
+  </header>
+
+  <div class="divider"></div>
+
+  <!-- Problem -->
+  <section class="container fade-in">
+    <div class="section-label">The Problem</div>
+    <div class="s-problem">
+      <h3 id="android-tv-ships-with-junk">Android TV ships with junk</h3>
+<p>Android TV devices come loaded with bloatware, recommendation rows that are really ads, and a stock launcher designed to promote Google's content over yours. You can't uninstall most of it through the UI. The home screen shows content you didn't ask for, apps you don't use, and &quot;suggestions&quot; that are paid placements.</p>
+<p>The only way to clean it up is via ADB — Android Debug Bridge — which requires enabling developer mode, connecting over WiFi, and running package management commands one at a time. For a non-technical user, this is impractical. Even for a technical user, doing it manually is tedious and easy to get wrong.</p>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Solution -->
+  <section class="container fade-in">
+    <div class="section-label">The Solution</div>
+    <div class="s-solution">
+      <h3 id="one-command-clean-tv">One command, clean TV</h3>
+<p>ATV-deJunker is a single bash script that automates the entire cleanup process. Connect to your TV via ADB over WiFi, and the script handles everything: installing your streaming apps, replacing the stock launcher with AT4K, removing bloatware, disabling ads, and rebooting into a clean experience.</p>
+<p>The script is interactive where it needs to be (prompting for the TV's IP, waiting for Play Store installs) and automated where it can be (package removal, settings changes, launcher swap).</p>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- What It Does -->
+  <section class="container fade-in">
+    <div class="section-label">What It Does</div>
+    <div class="s-arch">
+      <p>The script runs through six stages:</p>
+<p><strong>1. Connect</strong> — prompts for the TV's IP address, connects via ADB over WiFi, waits for RSA key authorisation, and verifies the device model and Android version.</p>
+<p><strong>2. Install streaming apps</strong> — installs Netflix, Prime Video, Apple TV, YouTube, Plex, and Disney+ via <code>install-existing</code> (if the app is in your Google account) or opens the Play Store on the TV for a single-tap install.</p>
+<p><strong>3. Install AT4K launcher</strong> — installs the <a href="https://at4klauncher.com/">AT4K launcher</a> (recommended via Google Play Store) and sets it as the default home activity. AT4K provides a clean, customisable home screen without ads.</p>
+<p><strong>4. Disable stock launcher</strong> — disables the Google TV launcher so it can't reclaim the home button. Recoverable with one ADB command if needed.</p>
+<p><strong>5. Debloat</strong> — removes 11 bloatware packages including home screen recommendation ads, Live Channels, Play Games, YouTube Music, Google Assistant TV, OEM telemetry, and regional preloads (meWATCH, Viu for Singapore devices).</p>
+<p><strong>6. Apply settings</strong> — disables <code>tv_home_panel_enabled</code> (sponsored home content) and limits background processes to reduce memory pressure on constrained hardware.</p>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Recovery -->
+  <section class="container fade-in">
+    <div class="section-label">Recovery</div>
+    <div class="s-arch">
+      <p>If anything goes wrong, recovery is two commands:</p>
+<pre><code>adb shell pm install-existing com.google.android.tvlauncher
+adb shell pm enable com.google.android.tvlauncher
+</code></pre>
+<p>This reinstates the stock launcher from the system partition. No data is lost — <code>pm uninstall -k --user 0</code> removes packages for the current user only, preserving the system copy.</p>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Design Decisions -->
+  <section class="container fade-in">
+    <div class="section-label">Design Decisions</div>
+    <div class="s-decisions">
+      <ul>
+<li>
+<p><strong>ADB over WiFi, not USB</strong> — Android TV devices rarely have accessible USB ports. WiFi debugging is universally available once developer mode is enabled, requires no cables, and works from any machine on the same network.</p>
+</li>
+<li>
+<p><strong>Interactive where necessary</strong> — the script can't automate Play Store installs for apps not in your Google account. Instead, it opens the Play Store page on the TV and waits for you to press Install, then Enter to continue. Human-in-the-loop where automation isn't possible.</p>
+</li>
+<li>
+<p><strong>Conservative package removal</strong> — uses <code>pm uninstall -k --user 0</code> which removes the package for the current user only. The system copy remains on the partition. A factory reset or the <code>install-existing</code> command brings everything back. No permanent damage possible.</p>
+</li>
+<li>
+<p><strong>macOS-compatible timeout</strong> — macOS doesn't ship <code>timeout(1)</code>. The script tries <code>gtimeout</code> (coreutils), then <code>timeout</code>, then falls back to a pure bash background-job approach. Works on macOS, Linux, and WSL without additional dependencies.</p>
+</li>
+<li>
+<p><strong>No AT4K APK bundled</strong> — the script recommends installing AT4K via the Google Play Store for automatic updates. Manual APK sideloading is supported as a fallback but not the default path.</p>
+</li>
+</ul>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Status -->
+  <section class="container fade-in">
+    <div class="section-label">Current Status</div>
+
+    <div class="status-banner">
+      <div class="status-left">
+        <div class="status-label">Project Status</div>
+        <div class="status-value"><span class="dot"></span>Complete &mdash; v1.0</div>
+      </div>
+      <div class="status-meta">
+        <div class="meta-item">
+          <div class="meta-label">Language</div>
+          <div class="meta-value">Bash</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Tested on</div>
+          <div class="meta-value">Prism+ Android TV 10</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">License</div>
+          <div class="meta-value">MIT</div>
+        </div>
+      </div>
+    </div>
+
+    <p>ATV-deJunker handles the complete debloat pipeline. Re-run after any OTA firmware update &mdash; manufacturer updates can reinstate removed packages.</p>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Footer -->
+  <footer class="footer container">
+    <p class="footer-copy">&copy; 2026 t0lkim</p>
+  </footer>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>

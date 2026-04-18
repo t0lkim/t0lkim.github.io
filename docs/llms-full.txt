@@ -107,3 +107,14 @@ I build things.
 **Language:** Swift 6.0 | **Platform:** iPadOS 17+ / iOS 17+ | **Distribution:** Commercial
 ---
 
+## Project: ATV-deJunker
+
+**What is ATV-deJunker?** A bash script that debloats Android TV devices by replacing the stock Google TV launcher with AT4K, removing preloaded bloatware, installing streaming apps, and disabling sponsored content.
+
+**What problem does ATV-deJunker solve?** Android TV devices ship with bloatware, recommendation ads, and a stock launcher that promotes sponsored content. There is no built-in way to remove these. ATV-deJunker automates the entire cleanup via ADB over WiFi.
+
+**How does ATV-deJunker work?** Connect to the TV via ADB, install streaming apps (Netflix, Prime Video, Apple TV, YouTube, Plex, Disney+), install AT4K launcher, disable the stock launcher, remove bloatware packages, disable home panel ads, and reboot into a clean experience. Recovery is one command if anything goes wrong.
+
+**Language:** Bash | **Category:** System Tools | **Tested on:** Prism+ Android TV 10
+---
+

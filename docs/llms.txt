@@ -17,6 +17,7 @@ I build things.
 - [ThreeM](https://t0lkim.dev/projects/threem/): Image/video organiser with deduplication and EXIF-based renaming. Built in Rust.
 - [session-manager](https://t0lkim.dev/projects/session-manager/): LLM-agnostic session orchestrator with entity-tag overlap, conflict detection, and relevance-filtered context injection. Built in Rust.
 - [FretNote](https://t0lkim.dev/projects/fretnote/): Guitar note-learning app with real-time YIN pitch detection, gamified drilling, and post-session analytics. Built in Swift for iPadOS/iOS.
+- [ATV-deJunker](https://t0lkim.dev/projects/atv-dejunker/): Debloat Android TV — replace stock launcher with AT4K, remove bloatware, disable ads. Bash script via ADB.
 
 ## Links
 
