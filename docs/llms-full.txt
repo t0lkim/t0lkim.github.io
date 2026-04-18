@@ -93,7 +93,7 @@ I build things.
 
 **How does Session Manager work?** Sessions are launched via a thin shim that captures PID and writes heartbeats. The orchestrator (a Rust binary) monitors heartbeats, infers entity tags from session behaviour (file I/O, SSH connections, git activity), computes overlap, and writes per-session context files with only relevant information. ~70% of orchestration is deterministic compiled code with zero LLM tokens. Only narration synthesis uses an LLM (Haiku), at ~6,000 tokens/hour.
 
-**Language:** Rust | **Category:** Developer Tools | **Part of:** maiaOS
+**Language:** Rust | **Category:** Developer Tools
 ---
 
 ## Project: FretNote

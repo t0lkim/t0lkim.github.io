@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Session Manager — Case Study</title>
   <meta name="description" content="An LLM-agnostic session orchestrator that coordinates concurrent AI sessions with entity-tag overlap, conflict detection, and relevance-filtered context injection.">
-  <meta name="keywords" content="session manager, LLM orchestrator, AI sessions, entity tags, conflict detection, context injection, Rust, maiaOS">
+  <meta name="keywords" content="session manager, LLM orchestrator, AI sessions, entity tags, conflict detection, context injection, Rust">
   <meta name="author" content="Mike Lott">
   <link rel="canonical" href="https://t0lkim.dev/projects/session-manager/">
   <!-- Open Graph -->
@@ -398,13 +398,13 @@
 <p>Tags emerge during the session's lifetime. The orchestrator observes the session's PID tree and infers tags from activity:</p>
 <ul>
 <li><strong>Files read/written</strong> — project inferred from path, language from extension</li>
-<li><strong>SSH connections</strong> — host entity inferred from hostname (e.g. pod00 → DaisyNet)</li>
+<li><strong>SSH connections</strong> — host entity inferred from hostname (e.g. db-01 → production-cluster)</li>
 <li><strong>Git activity</strong> — repo/project name from <code>.git/logs/HEAD</code> mtime</li>
 <li><strong>Process children</strong> — tools invoked (cargo → Rust, npm → TypeScript)</li>
 </ul>
 <p>A session starts with zero tags and accumulates them as it works. The orchestrator re-computes overlap every time a tag set changes.</p>
 <h3 id="auto-learned-entity-graph">Auto-learned entity graph</h3>
-<p><code>entities.toml</code> is built by the orchestrator from observed behaviour, not manually authored. Flat tags appear first from file paths and hostnames. Correlations emerge over time — if sessions touching <code>maia-relay</code> frequently SSH to DaisyNet hosts, the orchestrator infers the relationship after a confidence threshold.</p>
+<p><code>entities.toml</code> is built by the orchestrator from observed behaviour, not manually authored. Flat tags appear first from file paths and hostnames. Correlations emerge over time — if sessions touching a project frequently SSH to the same cluster hosts, the orchestrator infers the relationship after a confidence threshold.</p>
 <h3 id="overlap-driven-injection-tiers">Overlap-driven injection tiers</h3>
 <p>| Overlap depth | Injection | Token cost |
 |---|---|---|
@@ -503,12 +503,8 @@
           <div class="meta-value">LLM-agnostic</div>
         </div>
         <div class="meta-item">
-          <div class="meta-label">Part of</div>
-          <div class="meta-value">maiaOS</div>
-        </div>
-        <div class="meta-item">
           <div class="meta-label">License</div>
-          <div class="meta-value">TBD (open source)</div>
+          <div class="meta-value">Apache 2.0</div>
         </div>
       </div>
     </div>
