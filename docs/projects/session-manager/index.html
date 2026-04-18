@@ -406,12 +406,37 @@
 <h3 id="auto-learned-entity-graph">Auto-learned entity graph</h3>
 <p><code>entities.toml</code> is built by the orchestrator from observed behaviour, not manually authored. Flat tags appear first from file paths and hostnames. Correlations emerge over time — if sessions touching a project frequently SSH to the same cluster hosts, the orchestrator infers the relationship after a confidence threshold.</p>
 <h3 id="overlap-driven-injection-tiers">Overlap-driven injection tiers</h3>
-<p>| Overlap depth | Injection | Token cost |
-|---|---|---|
-| 0 tags | Nothing | 0 |
-| 1 tag (indirect) | One-liner summary | ~30 |
-| 2+ tags (direct) | Task + recent action | ~100 |
-| Same file modified | Conflict alert | ~150 |</p>
+<table>
+<thead>
+<tr>
+<th>Overlap depth</th>
+<th>Injection</th>
+<th>Token cost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0 tags</td>
+<td>Nothing</td>
+<td>0</td>
+</tr>
+<tr>
+<td>1 tag (indirect)</td>
+<td>One-liner summary</td>
+<td>~30</td>
+</tr>
+<tr>
+<td>2+ tags (direct)</td>
+<td>Task + recent action</td>
+<td>~100</td>
+</tr>
+<tr>
+<td>Same file modified</td>
+<td>Conflict alert</td>
+<td>~150</td>
+</tr>
+</tbody>
+</table>
     </div>
   </section>
 
@@ -470,14 +495,47 @@
     <div class="section-label">Token Economics</div>
     <div class="s-tokens">
       <h3 id="model-routing">Model routing</h3>
-<p>| Task | Runs as | Tokens |
-|---|---|---|
-| Heartbeat monitoring | Rust binary | 0 |
-| Entity-tag overlap | Rust binary | 0 |
-| Conflict detection | Rust binary | 0 |
-| Registry consolidation | Rust binary | 0 |
-| Narration synthesis | Haiku API | ~200-500/call |
-| Session work | Session's own model | Session's budget |</p>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Runs as</th>
+<th>Tokens</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Heartbeat monitoring</td>
+<td>Rust binary</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Entity-tag overlap</td>
+<td>Rust binary</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Conflict detection</td>
+<td>Rust binary</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Registry consolidation</td>
+<td>Rust binary</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Narration synthesis</td>
+<td>Haiku API</td>
+<td>~200-500/call</td>
+</tr>
+<tr>
+<td>Session work</td>
+<td>Session's own model</td>
+<td>Session's budget</td>
+</tr>
+</tbody>
+</table>
 <p>~10-20 narration calls per hour, ~6,000 tokens/hour, ~48,000 tokens/day. At Haiku pricing: negligible. Complex multi-session narrations fall back to Sonnet. Frontier models stay in sessions.</p>
     </div>
   </section>

@@ -772,15 +772,44 @@
 <li><strong>No stream ripping:</strong> Playback is entirely within the Tidal Player SDK's controlled pipeline.</li>
 </ul>
 <h3 id="prohibited-uses--compliance">Prohibited Uses — Compliance</h3>
-<p>| Tidal Restriction | TeenTidal Compliance |
-|---|---|
-| No AI/ML use of content | No AI or machine learning features. Metadata used only for display and filtering. |
-| No visual synchronisation | No video sync or visual media output from audio content. Visualiser is FFT-only. |
-| No content mixing/remixing | Audio played unmodified through the official Player SDK. |
-| No data scraping | API used only for catalogue browsing and search. No bulk extraction. |
-| No competing service | TeenTidal is a parental filter layer, not a competing music service. |
-| No commercial use | Personal/family tool. Proprietary source code, not distributed. |
-| Branding compliance | Tidal branding and attribution included per Design Guidelines before public release. |</p>
+<table>
+<thead>
+<tr>
+<th>Tidal Restriction</th>
+<th>TeenTidal Compliance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>No AI/ML use of content</td>
+<td>No AI or machine learning features. Metadata used only for display and filtering.</td>
+</tr>
+<tr>
+<td>No visual synchronisation</td>
+<td>No video sync or visual media output from audio content. Visualiser is FFT-only.</td>
+</tr>
+<tr>
+<td>No content mixing/remixing</td>
+<td>Audio played unmodified through the official Player SDK.</td>
+</tr>
+<tr>
+<td>No data scraping</td>
+<td>API used only for catalogue browsing and search. No bulk extraction.</td>
+</tr>
+<tr>
+<td>No competing service</td>
+<td>TeenTidal is a parental filter layer, not a competing music service.</td>
+</tr>
+<tr>
+<td>No commercial use</td>
+<td>Personal/family tool. Proprietary source code, not distributed.</td>
+</tr>
+<tr>
+<td>Branding compliance</td>
+<td>Tidal branding and attribution included per Design Guidelines before public release.</td>
+</tr>
+</tbody>
+</table>
 <h3 id="production-mode">Production Mode</h3>
 <p>TeenTidal is currently in development mode. Moving to production requires formal review by Tidal including source code review. The application is parked pending this process.</p>
     </div>
@@ -801,14 +830,47 @@
 <p>All three modes compose freely — a user can enable Feel It + See It simultaneously. Apple's accessibility services layer on top as refinements, not replacements. Mode preference stored locally in UserDefaults (the child's preference, not a parental control). Zero telemetry on mode usage.</p>
 <h3 id="implementation-sequence">Implementation sequence</h3>
 <p>Phase 1 (Feel It) and Phase 2 (See It) can run in parallel. Phase 3 (Hear It) depends on Phase 2's VoiceOver work.</p>
-<p>| Version | Phase | Content |
-|---|---|---|
-| v0.8.1-alpha | Foundation | InteractionMode model, ModeSelectionView |
-| v0.9.0-alpha | Feel It | HapticBeatEngine, control signatures, visual beat indicator |
-| v0.10.0-alpha | See It | Dynamic Type, VoiceOver, high contrast, Reduce Motion |
-| v0.11.0-alpha | Hear It | Announcements, audio cues, simplified navigation |
-| v0.12.0-beta | Hardening | Security review, accessibility audit with real users |
-| v1.0.0-release | Ship | App Store submission |</p>
+<table>
+<thead>
+<tr>
+<th>Version</th>
+<th>Phase</th>
+<th>Content</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>v0.8.1-alpha</td>
+<td>Foundation</td>
+<td>InteractionMode model, ModeSelectionView</td>
+</tr>
+<tr>
+<td>v0.9.0-alpha</td>
+<td>Feel It</td>
+<td>HapticBeatEngine, control signatures, visual beat indicator</td>
+</tr>
+<tr>
+<td>v0.10.0-alpha</td>
+<td>See It</td>
+<td>Dynamic Type, VoiceOver, high contrast, Reduce Motion</td>
+</tr>
+<tr>
+<td>v0.11.0-alpha</td>
+<td>Hear It</td>
+<td>Announcements, audio cues, simplified navigation</td>
+</tr>
+<tr>
+<td>v0.12.0-beta</td>
+<td>Hardening</td>
+<td>Security review, accessibility audit with real users</td>
+</tr>
+<tr>
+<td>v1.0.0-release</td>
+<td>Ship</td>
+<td>App Store submission</td>
+</tr>
+</tbody>
+</table>
     </div>
   </section>
 
