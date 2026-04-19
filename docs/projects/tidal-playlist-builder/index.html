@@ -60,7 +60,201 @@
   </script>
   <link rel="stylesheet" href="../../assets/css/base.css">
   <link rel="stylesheet" href="../../assets/css/teentidal.css">
-  <style></style>
+  <style>
+    /* ── Section-specific styling for TidalPlaylistBuilder ── */
+
+    /* ── Section label ── */
+    .section-label {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 16px;
+    }
+
+    /* ── Consistent H3 subheading spacing ── */
+    section h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    /* ── Problem section ── */
+    .s-problem > h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .s-problem > p {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 22px;
+      margin-bottom: 12px;
+      font-size: 0.95rem;
+    }
+    .s-problem > p strong {
+      color: var(--text);
+    }
+    .s-problem blockquote {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+      margin: 20px 0;
+      font-style: italic;
+      border-left: 3px solid var(--red);
+      position: relative;
+    }
+    .s-problem blockquote::before {
+      content: 'PROBLEM STATEMENT';
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 12px;
+      font-style: normal;
+    }
+    .s-problem blockquote p {
+      font-size: 1rem;
+      color: var(--text);
+      line-height: 1.7;
+      margin-bottom: 0;
+    }
+    .s-problem > ul {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 16px 0;
+    }
+    .s-problem > ul > li {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: var(--red-dim);
+      border: 1px solid rgba(248, 81, 73, 0.25);
+      border-radius: 8px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .s-problem > ul > li::before {
+      content: '\00d7';
+      color: var(--red);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    /* ── Solution section ── */
+    .s-solution > h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .s-solution > p {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 12px;
+      position: relative;
+      overflow: hidden;
+      font-size: 0.95rem;
+    }
+    .s-solution > p::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--teal), transparent);
+    }
+    .s-solution > p strong {
+      color: var(--teal);
+    }
+
+    /* ── Architecture section ── */
+    .s-arch > h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .s-arch > p {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 22px;
+      margin-bottom: 12px;
+      font-size: 0.95rem;
+    }
+    .s-arch > p strong {
+      color: var(--teal);
+    }
+    .s-arch > ul {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 22px 18px 38px;
+      margin-bottom: 12px;
+    }
+    .s-arch > ul li {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 4px;
+    }
+    .s-arch table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 16px 0;
+      font-size: 0.9rem;
+    }
+    .s-arch th {
+      background: var(--surface);
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 600;
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+    }
+    .s-arch td {
+      padding: 10px 16px;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+    }
+    .s-arch tr:last-child td { border-bottom: none; }
+
+    /* ── Design Decisions section ── */
+    .s-decisions > ul {
+      list-style: none;
+      padding: 0;
+      margin: 20px 0;
+    }
+    .s-decisions > ul > li {
+      position: relative;
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .s-decisions > ul > li strong {
+      color: var(--teal);
+      display: block;
+      margin-bottom: 4px;
+    }
+  </style>
 </head>
 <body>
 
@@ -70,7 +264,7 @@
   <header class="hero">
     <div class="container">
       <div class="hero-badge">Case Study</div>
-      <h1>Tidal<span class="accent">PlaylistBuilder</span></h1>
+      <h1>TidalPlaylistBuilder</h1>
       <p class="hero-sub">Build Tidal playlists from BBC programmes, CSV files, and curated text track listings. Create multi-volume artist anthologies from simple text files.</p>
     </div>
   </header>
@@ -80,20 +274,19 @@
   <!-- Problem -->
   <section class="container fade-in">
     <div class="section-label">The Problem</div>
-    <h2>Manual playlist creation doesn't scale</h2>
-    <p>Tidal has no way to import playlists from external sources. If you hear a track listing on a BBC programme, find a curated list in a magazine, or want to build a comprehensive artist anthology spanning decades of work, the only option is manually searching and adding tracks one by one.</p>
-    <p>For a 10-volume David Bowie anthology covering 60 years, that's hundreds of tracks. Doing it manually would take hours of repetitive searching, and any error means starting a playlist over.</p>
-
-    <div class="problem-card">
-      <div class="label">Problem Statement</div>
-      <blockquote>No tooling exists to programmatically create Tidal playlists from external track listings &mdash; BBC programme tracklists, CSV exports, or curated text files require manual track-by-track searching and adding.</blockquote>
-    </div>
-
-    <div class="constraints">
-      <div class="constraint"><span class="icon">&times;</span> No Tidal playlist import</div>
-      <div class="constraint"><span class="icon">&times;</span> Manual search per track</div>
-      <div class="constraint"><span class="icon">&times;</span> No batch operations in the app</div>
-      <div class="constraint"><span class="icon">&times;</span> Anthology curation is hours of work</div>
+    <div class="s-problem">
+      <h3 id="manual-playlist-creation-doesnt-scale">Manual playlist creation doesn't scale</h3>
+<p>Tidal has no way to import playlists from external sources. If you hear a track listing on a BBC programme, find a curated list in a magazine, or want to build a comprehensive artist anthology spanning decades of work, the only option is manually searching and adding tracks one by one.</p>
+<p>For a 10-volume David Bowie anthology covering 60 years, that's hundreds of tracks. Doing it manually would take hours of repetitive searching, and any error means starting a playlist over.</p>
+<blockquote>
+<p>No tooling exists to programmatically create Tidal playlists from external track listings -- BBC programme tracklists, CSV exports, or curated text files require manual track-by-track searching and adding.</p>
+</blockquote>
+<ul>
+<li>No Tidal playlist import</li>
+<li>Manual search per track</li>
+<li>No batch operations in the app</li>
+<li>Anthology curation is hours of work</li>
+</ul>
     </div>
   </section>
 
@@ -102,45 +295,25 @@
   <!-- Solution -->
   <section class="container fade-in">
     <div class="section-label">The Solution</div>
-    <h2>Text files in, Tidal playlists out</h2>
-    <p><code>tpb</code> (TidalPlaylistBuilder) is a Rust CLI that reads track listings from simple text files, searches Tidal's API for each track, and creates playlists with matched results. It supports three input formats and includes an anthology system for building multi-volume artist collections.</p>
+    <div class="s-solution">
+      <h3 id="text-files-in-tidal-playlists-out">Text files in, Tidal playlists out</h3>
+<p><code>tpb</code> (TidalPlaylistBuilder) is a Rust CLI that reads track listings from simple text files, searches Tidal's API for each track, and creates playlists with matched results. It supports three input formats and includes an anthology system for building multi-volume artist collections.</p>
+<p><strong>Text Files</strong>
+One line per track: <code>Artist - Title</code></p>
+<p><strong>CSV Files</strong>
+Columns for artist, title, album. Exported from spreadsheets or databases.</p>
+<p><strong>BBC Programmes</strong>
+Tracklists from BBC 6 Music, Radio 2, and other BBC programme pages.</p>
+<pre><code>$ tpb auth
+Open this URL to authorise:
+https://link.tidal.com/XXXXX
+Waiting for authorisation...
+Authenticated. Token saved to Keychain.
 
-    <div class="source-cards">
-      <div class="source-card">
-        <div class="icon">&#x1F4DD;</div>
-        <h4>Text Files</h4>
-        <p>One line per track:<br><code>Artist - Title</code></p>
-      </div>
-      <div class="source-card">
-        <div class="icon">&#x1F4CA;</div>
-        <h4>CSV Files</h4>
-        <p>Columns for artist, title, album. Exported from spreadsheets or databases.</p>
-      </div>
-      <div class="source-card">
-        <div class="icon">&#x1F4FB;</div>
-        <h4>BBC Programmes</h4>
-        <p>Tracklists from BBC 6 Music, Radio 2, and other BBC programme pages.</p>
-      </div>
-    </div>
-
-    <div class="terminal">
-      <div class="terminal-bar">
-        <div class="terminal-dot red"></div>
-        <div class="terminal-dot yellow"></div>
-        <div class="terminal-dot green"></div>
-        <span class="terminal-title">tpb auth + status</span>
-      </div>
-      <div class="terminal-body">
-<span class="prompt">$</span> <span class="cmd">tpb auth</span>
-<span class="dim">Open this URL to authorise:</span>
-<span class="dim">https://link.tidal.com/XXXXX</span>
-<span class="dim">Waiting for authorisation...</span>
-<span class="pass-text">Authenticated. Token saved to Keychain.</span>
-
-<span class="prompt">$</span> <span class="cmd">tpb status</span>
-<span class="pass-text">Authenticated</span> <span class="dim">as Mike Lott (HiFi Plus)</span>
-<span class="dim">Token expires: 2026-04-12T08:00:00Z</span>
-      </div>
+$ tpb status
+Authenticated as Mike Lott (HiFi Plus)
+Token expires: 2026-04-12T08:00:00Z
+</code></pre>
     </div>
   </section>
 
@@ -149,49 +322,49 @@
   <!-- Anthologies -->
   <section class="container fade-in">
     <div class="section-label">Anthologies</div>
-    <h2>Multi-volume artist collections</h2>
-    <p>The anthology system builds comprehensive artist collections from a directory of text files and a <code>manifest.json</code>. Each volume becomes a separate Tidal playlist, organised in a named folder. The manifest defines volume titles, descriptions, and artist aliases for search matching.</p>
-
-    <div class="anthology-grid">
-      <div class="anthology-card">
-        <h4>David Bowie &mdash; An Anthology</h4>
-        <div class="volumes">10 volumes</div>
-        <p>From the bewildered boy of 1964 through Ziggy Stardust, the Berlin Trilogy, and the final act of Blackstar. 60 years of reinvention in curated chronological volumes.</p>
-      </div>
-      <div class="anthology-card">
-        <h4>Iron Maiden</h4>
-        <div class="volumes">Anthology</div>
-        <p>The complete Iron Maiden catalogue organised by era.</p>
-      </div>
-      <div class="anthology-card">
-        <h4>New Model Army</h4>
-        <div class="volumes">Anthology</div>
-        <p>Four decades of post-punk, from Vengeance through to the present.</p>
-      </div>
-      <div class="anthology-card">
-        <h4>Ryuichi Sakamoto</h4>
-        <div class="volumes">Anthology</div>
-        <p>YMO, film scores, ambient works, and solo piano across a lifetime of composition.</p>
-      </div>
-    </div>
-
-    <div class="terminal">
-      <div class="terminal-bar">
-        <div class="terminal-dot red"></div>
-        <div class="terminal-dot yellow"></div>
-        <div class="terminal-dot green"></div>
-        <span class="terminal-title">build anthology</span>
-      </div>
-      <div class="terminal-body">
-<span class="prompt">$</span> <span class="cmd">python scripts/build_anthology.py anthologies/david-bowie/ --dry-run</span>
-<span class="dim">Loading manifest: David Bowie - An Anthology (10 volumes)</span>
-<span class="dim">Vol. I: The Bewildered Boy (1964-1969) — 24 tracks</span>
-<span class="dim">Vol. II: The Man Who Sold the World (1970-1971) — 18 tracks</span>
-<span class="dim">Vol. III: Ziggy Stardust & the Spiders (1971-1973) — 22 tracks</span>
-<span class="dim">...</span>
-<span class="dim">Vol. X: The Final Act (2013-2016) — 15 tracks</span>
-<span class="pass-text">Dry run complete. 198 tracks across 10 volumes.</span>
-      </div>
+    <div class="s-arch">
+      <h3 id="multi-volume-artist-collections">Multi-volume artist collections</h3>
+<p>The anthology system builds comprehensive artist collections from a directory of text files and a <code>manifest.json</code>. Each volume becomes a separate Tidal playlist, organised in a named folder. The manifest defines volume titles, descriptions, and artist aliases for search matching.</p>
+<table>
+<thead>
+<tr>
+<th>Artist</th>
+<th>Volumes</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>David Bowie -- An Anthology</strong></td>
+<td>10 volumes</td>
+<td>From the bewildered boy of 1964 through Ziggy Stardust, the Berlin Trilogy, and the final act of Blackstar. 60 years of reinvention in curated chronological volumes.</td>
+</tr>
+<tr>
+<td><strong>Iron Maiden</strong></td>
+<td>Anthology</td>
+<td>The complete Iron Maiden catalogue organised by era.</td>
+</tr>
+<tr>
+<td><strong>New Model Army</strong></td>
+<td>Anthology</td>
+<td>Four decades of post-punk, from Vengeance through to the present.</td>
+</tr>
+<tr>
+<td><strong>Ryuichi Sakamoto</strong></td>
+<td>Anthology</td>
+<td>YMO, film scores, ambient works, and solo piano across a lifetime of composition.</td>
+</tr>
+</tbody>
+</table>
+<pre><code>$ python scripts/build_anthology.py anthologies/david-bowie/ --dry-run
+Loading manifest: David Bowie - An Anthology (10 volumes)
+Vol. I: The Bewildered Boy (1964-1969) — 24 tracks
+Vol. II: The Man Who Sold the World (1970-1971) — 18 tracks
+Vol. III: Ziggy Stardust &amp; the Spiders (1971-1973) — 22 tracks
+...
+Vol. X: The Final Act (2013-2016) — 15 tracks
+Dry run complete. 198 tracks across 10 volumes.
+</code></pre>
     </div>
   </section>
 
@@ -200,30 +373,16 @@
   <!-- Design Decisions -->
   <section class="container fade-in">
     <div class="section-label">Design Decisions</div>
-    <h2>Why it works this way</h2>
-
-    <ul class="decision-list">
-      <li>
-        <strong>Rust CLI with Keychain token storage</strong>
-        <span>Single binary, no runtime dependencies. OAuth tokens are stored in the macOS Keychain via the system's security framework, not in plaintext config files. The device auth flow means no client secret in the binary.</span>
-      </li>
-      <li>
-        <strong>Text files as the universal input format</strong>
-        <span>Every track listing can be reduced to <code>Artist - Title</code> lines in a text file. BBC tracklists, magazine lists, Discogs exports, hand-curated selections &mdash; all become the same simple format. No complex parsers, no brittle scrapers.</span>
-      </li>
-      <li>
-        <strong>Anthology manifest system</strong>
-        <span>A <code>manifest.json</code> defines the folder name, volume titles, descriptions, and artist aliases. This separates curation (the creative work of choosing tracks and writing descriptions) from execution (searching Tidal and creating playlists). The manifest is the human-authored artefact; the tooling handles the mechanical work.</span>
-      </li>
-      <li>
-        <strong>Python scripts alongside Rust CLI</strong>
-        <span>The core CLI (<code>tpb</code>) handles auth, status, and single-playlist creation in Rust. The anthology builder and batch operations use Python scripts that call the Tidal API directly. This reflects the project's evolution &mdash; the Python scripts came first as prototypes, the Rust CLI followed for the permanent tooling.</span>
-      </li>
-      <li>
-        <strong>Dry-run by default for anthologies</strong>
-        <span>Building a 10-volume anthology creates 10 playlists and hundreds of API calls. <code>--dry-run</code> shows what would be created without touching Tidal. This prevents accidental duplicate playlists and lets you verify track matching before committing.</span>
-      </li>
-    </ul>
+    <div class="s-decisions">
+      <h3 id="why-it-works-this-way">Why it works this way</h3>
+<ul>
+<li><strong>Rust CLI with Keychain token storage</strong> -- Single binary, no runtime dependencies. OAuth tokens are stored in the macOS Keychain via the system's security framework, not in plaintext config files. The device auth flow means no client secret in the binary.</li>
+<li><strong>Text files as the universal input format</strong> -- Every track listing can be reduced to <code>Artist - Title</code> lines in a text file. BBC tracklists, magazine lists, Discogs exports, hand-curated selections -- all become the same simple format. No complex parsers, no brittle scrapers.</li>
+<li><strong>Anthology manifest system</strong> -- A <code>manifest.json</code> defines the folder name, volume titles, descriptions, and artist aliases. This separates curation (the creative work of choosing tracks and writing descriptions) from execution (searching Tidal and creating playlists). The manifest is the human-authored artefact; the tooling handles the mechanical work.</li>
+<li><strong>Python scripts alongside Rust CLI</strong> -- The core CLI (<code>tpb</code>) handles auth, status, and single-playlist creation in Rust. The anthology builder and batch operations use Python scripts that call the Tidal API directly. This reflects the project's evolution -- the Python scripts came first as prototypes, the Rust CLI followed for the permanent tooling.</li>
+<li><strong>Dry-run by default for anthologies</strong> -- Building a 10-volume anthology creates 10 playlists and hundreds of API calls. <code>--dry-run</code> shows what would be created without touching Tidal. This prevents accidental duplicate playlists and lets you verify track matching before committing.</li>
+</ul>
+    </div>
   </section>
 
   <div class="divider"></div>
@@ -231,44 +390,14 @@
   <!-- Evolution -->
   <section class="container fade-in">
     <div class="section-label">Evolution</div>
-    <h2>How it was built</h2>
-
-    <div class="evo-version">
-      <div class="evo-header">
-        <span class="evo-badge">v0.1.0</span>
-        <span class="evo-date">6 March 2026</span>
-        <div class="evo-title">Foundation &mdash; CLI, Auth, Keychain</div>
-      </div>
-      <div class="evo-grid">
-        <div class="evo-card">
-          <div class="evo-card-label added">Added</div>
-          <p>Clap CLI skeleton with <code>auth</code>, <code>status</code> subcommands. Tidal OAuth device flow authentication. macOS Keychain token storage. 4.6 MB release binary (LTO + strip).</p>
-        </div>
-        <div class="evo-card">
-          <div class="evo-card-label fixed">Code Review</div>
-          <p>6 findings from full code review: <code>expect()</code> panic replaced with <code>Result</code> propagation, clippy warnings resolved, unused error types removed, redundant builder pattern simplified.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="evo-divider"></div>
-
-    <div class="evo-version">
-      <div class="evo-header">
-        <span class="evo-badge">Scripts</span>
-        <span class="evo-date">Ongoing</span>
-        <div class="evo-title">Anthology Builder &amp; Batch Operations</div>
-      </div>
-      <div class="evo-grid">
-        <div class="evo-card">
-          <div class="evo-card-label added">Added</div>
-          <p>Python anthology builder: reads <code>manifest.json</code> + volume text files, searches Tidal, creates folder + playlists. Dry-run support. Artist alias matching for side projects and collaborations.</p>
-        </div>
-        <div class="evo-card">
-          <div class="evo-card-label added">Added</div>
-          <p>4 curated anthologies: David Bowie (10 volumes), Iron Maiden, New Model Army, Ryuichi Sakamoto. Track reordering script. Batch track addition script.</p>
-        </div>
-      </div>
+    <div class="s-arch">
+      <h3 id="how-it-was-built">How it was built</h3>
+<p><strong>v0.1.0</strong> -- 6 March 2026 -- Foundation -- CLI, Auth, Keychain</p>
+<p>Added: Clap CLI skeleton with <code>auth</code>, <code>status</code> subcommands. Tidal OAuth device flow authentication. macOS Keychain token storage. 4.6 MB release binary (LTO + strip).</p>
+<p>Code Review: 6 findings from full code review: <code>expect()</code> panic replaced with <code>Result</code> propagation, clippy warnings resolved, unused error types removed, redundant builder pattern simplified.</p>
+<p><strong>Scripts</strong> -- Ongoing -- Anthology Builder &amp; Batch Operations</p>
+<p>Added: Python anthology builder: reads <code>manifest.json</code> + volume text files, searches Tidal, creates folder + playlists. Dry-run support. Artist alias matching for side projects and collaborations.</p>
+<p>Added: 4 curated anthologies: David Bowie (10 volumes), Iron Maiden, New Model Army, Ryuichi Sakamoto. Track reordering script. Batch track addition script.</p>
     </div>
   </section>
 
@@ -304,17 +433,20 @@
 
   <div class="divider"></div>
 
+  <!-- Footer -->
   <footer class="footer container">
-    <div class="footer-links">
-      <a href="https://github.com/t0lkim/tidal-playlist-builder">Source on GitHub</a>
-    </div>
     <p class="footer-copy">&copy; 2026 t0lkim</p>
   </footer>
 
   <script>
     const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
     }, { threshold: 0.1 });
+
     document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
   </script>
 </body>
