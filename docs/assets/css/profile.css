@@ -21,10 +21,10 @@
   height: 296px;
   border-radius: 50%;
   border: none;
-  outline: 3px solid rgba(0, 201, 167, 0.3);
-  outline-offset: 4px;
+  outline: 1px solid rgba(255, 255, 255, 0.08);
+  outline-offset: 1px;
   background: var(--surface);
-  box-shadow: 0 0 60px rgba(0, 201, 167, 0.3), 0 0 120px rgba(0, 201, 167, 0.1);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5), 0 2px 6px rgba(0, 0, 0, 0.3);
   object-fit: cover;
   margin-bottom: 16px;
 }
