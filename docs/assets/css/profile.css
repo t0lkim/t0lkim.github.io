@@ -20,9 +20,11 @@
   width: 296px;
   height: 296px;
   border-radius: 50%;
-  border: 2px solid rgba(255, 255, 255, 0.15);
+  border: none;
+  outline: 3px solid rgba(0, 201, 167, 0.3);
+  outline-offset: 4px;
   background: var(--surface);
-  box-shadow: 0 0 40px rgba(0, 201, 167, 0.15);
+  box-shadow: 0 0 60px rgba(0, 201, 167, 0.3), 0 0 120px rgba(0, 201, 167, 0.1);
   object-fit: cover;
   margin-bottom: 16px;
 }
