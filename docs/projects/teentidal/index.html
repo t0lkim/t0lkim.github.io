@@ -74,12 +74,28 @@
     /* ── Section-specific styling for rendered markdown ── */
 
     /* ── Problem section ── */
+    .s-problem > h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .s-problem > p {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 22px;
+      margin-bottom: 12px;
+      font-size: 0.95rem;
+    }
+    .s-problem > p strong {
+      color: var(--text);
+    }
     .s-problem blockquote {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 32px;
-      margin: 28px 0;
+      margin: 20px 0;
       font-style: italic;
       border-left: 3px solid var(--red);
       position: relative;
@@ -96,21 +112,20 @@
       font-style: normal;
     }
     .s-problem blockquote p {
-      font-size: 1.1rem;
+      font-size: 1rem;
       color: var(--text);
       line-height: 1.7;
+      margin-bottom: 0;
     }
-    .s-problem > ul,
-    .s-problem > p + ul {
+    .s-problem > ul {
       list-style: none;
       padding: 0;
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
-      margin: 24px 0;
+      margin: 16px 0;
     }
-    .s-problem > ul li,
-    .s-problem > p + ul li {
+    .s-problem > ul > li {
       display: inline-flex;
       align-items: center;
       gap: 6px;
@@ -121,8 +136,7 @@
       font-size: 13px;
       color: var(--text-muted);
     }
-    .s-problem > ul li::before,
-    .s-problem > p + ul li::before {
+    .s-problem > ul > li::before {
       content: '\00d7';
       color: var(--red);
       font-size: 14px;
