@@ -20,9 +20,9 @@
   width: 296px;
   height: 296px;
   border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   background: var(--surface);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), 0 2px 8px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.06), 0 0 60px rgba(0, 201, 167, 0.04);
   object-fit: cover;
   margin-bottom: 16px;
 }
