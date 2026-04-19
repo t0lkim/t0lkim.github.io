@@ -487,6 +487,25 @@
       margin-bottom: 16px;
     }
 
+    /* ── Hero with icon ── */
+    .hero {
+      padding-bottom: 20px;
+    }
+    .hero .hero-sub {
+      margin-bottom: 0;
+    }
+    .hero + .divider {
+      margin-top: 16px;
+    }
+    .hero-icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 16px;
+      margin: 12px 0 0;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5), 0 2px 6px rgba(0, 0, 0, 0.3);
+    }
+
     /* ── Consistent H3 subheading spacing ── */
     section h3 {
       font-size: 1.15rem;
@@ -504,6 +523,7 @@
     <div class="container">
       <div class="hero-badge">Case Study</div>
       <h1>Teen<span class="accent">Tidal</span></h1>
+      <img class="hero-icon" src="assets/icon.svg" alt="TeenTidal icon">
       <p class="hero-sub">A native iOS app with structural parental controls for Tidal — two-layer explicit content filtering, boundary-based listening controls, and a privacy-first parent dashboard.</p>
     </div>
   </header>

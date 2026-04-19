@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="barGlow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#00E8BF"/>
+      <stop offset="50%" stop-color="#00C9A7"/>
+      <stop offset="100%" stop-color="#009E84"/>
+    </linearGradient>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#111B22"/>
+      <stop offset="100%" stop-color="#0D1117"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1024" height="1024" fill="url(#bgGrad)"/>
+
+  <!-- Audio spectrum — 9 bars with musical asymmetry -->
+  <!-- Bar width: 48px, gap: 20px, total = 9*48 + 8*20 = 592, offset = (1024-592)/2 = 216 -->
+  <!-- Heights follow a natural FFT curve: low-mid peak, trailing highs -->
+  <!-- All bars are vertically centred around y=512 -->
+
+  <!-- Bar 1 — sub bass, moderate -->
+  <rect x="216" y="402" width="48" height="220" rx="24" fill="url(#barGlow)" opacity="0.65"/>
+
+  <!-- Bar 2 — bass, taller -->
+  <rect x="284" y="332" width="48" height="360" rx="24" fill="url(#barGlow)" opacity="0.75"/>
+
+  <!-- Bar 3 — low-mid, peak -->
+  <rect x="352" y="252" width="48" height="520" rx="24" fill="url(#barGlow)" opacity="0.88"/>
+
+  <!-- Bar 4 — mid, tallest -->
+  <rect x="420" y="212" width="48" height="600" rx="24" fill="url(#barGlow)" opacity="1"/>
+
+  <!-- Bar 5 — upper-mid, strong -->
+  <rect x="488" y="272" width="48" height="480" rx="24" fill="url(#barGlow)" opacity="0.92"/>
+
+  <!-- Bar 6 — presence, drops -->
+  <rect x="556" y="332" width="48" height="360" rx="24" fill="url(#barGlow)" opacity="0.8"/>
+
+  <!-- Bar 7 — brilliance, shorter -->
+  <rect x="624" y="382" width="48" height="260" rx="24" fill="url(#barGlow)" opacity="0.7"/>
+
+  <!-- Bar 8 — air, small -->
+  <rect x="692" y="432" width="48" height="160" rx="24" fill="url(#barGlow)" opacity="0.55"/>
+
+  <!-- Bar 9 — ultra-high, tiny -->
+  <rect x="760" y="462" width="48" height="100" rx="24" fill="url(#barGlow)" opacity="0.45"/>
+</svg>
