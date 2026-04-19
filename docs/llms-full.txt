@@ -98,13 +98,13 @@ I build things.
 
 ## Project: FretNote
 
-**What is FretNote?** FretNote is an iPadOS-primary guitar note-learning app that announces a target note and octave, listens to what the user plays via microphone, and judges accuracy using YIN autocorrelation pitch detection with cents-level precision. Gamified session loop with post-session analytics.
+**What is FretNote?** FretNote is an iOS guitar note-learning app that announces a target note and octave, listens to what the user plays via microphone, and judges accuracy using YIN autocorrelation pitch detection with cents-level precision. Gamified session loop with post-session analytics.
 
 **What problem does FretNote solve?** Most guitarists learn patterns (chord shapes, scale boxes) without knowing which note their finger is on. No existing tool drills note identification across the full fretboard with real-time feedback from a live guitar.
 
 **How does FretNote work?** The app announces "A, octave three" via speech synthesis. The user plays the note on their guitar. A YIN pitch detector (pure Swift, zero dependencies) identifies the played pitch and a judge determines the verdict: Clean (±10 cents), Correct (±25 cents), Close (±50 cents), or Wrong. Post-session analytics break down accuracy by note name, fretboard region, and octave band.
 
-**Language:** Swift 6.0 | **Platform:** iPadOS 17+ / iOS 17+ | **Distribution:** Commercial
+**Language:** Swift 6.0 | **Platform:** iOS 17+ | **Distribution:** Commercial
 ---
 
 ## Project: ATV-deJunker
