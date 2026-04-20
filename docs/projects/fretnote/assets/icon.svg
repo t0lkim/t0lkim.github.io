@@ -1,6 +1,23 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
-  <rect width="128" height="128" rx="22" fill="#0B0D10"/>
-  <rect x="19" y="59.25" width="90" height="3.5" rx="0.5" fill="#EDE7D9"/>
-  <circle cx="47.5" cy="61" r="6" fill="#EDE7D9"/>
-  <circle cx="80.5" cy="61" r="6" fill="#EDE7D9"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="inlayGlow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#00E8BF"/>
+      <stop offset="50%" stop-color="#00C9A7"/>
+      <stop offset="100%" stop-color="#009E84"/>
+    </linearGradient>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#111B22"/>
+      <stop offset="100%" stop-color="#0D1117"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background — same gradient palette as TeenTidal; iOS applies the squircle mask at render time -->
+  <rect width="1024" height="1024" fill="url(#bgGrad)"/>
+
+  <!-- Fret wire — 720×28, centred on optical y=488 (24pt lifted from mathematical centre) -->
+  <rect x="152" y="474" width="720" height="28" rx="4" fill="url(#inlayGlow)"/>
+
+  <!-- Twelfth-fret inlay dots — r=48, centre-spacing 264, straddling the fret wire -->
+  <circle cx="380" cy="488" r="48" fill="url(#inlayGlow)"/>
+  <circle cx="644" cy="488" r="48" fill="url(#inlayGlow)"/>
 </svg>

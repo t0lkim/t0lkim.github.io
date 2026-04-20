@@ -17,8 +17,8 @@
 }
 
 .avatar {
-  width: 296px;
-  height: 296px;
+  width: 237px;
+  height: 237px;
   border-radius: 50%;
   border: none;
   outline: 2px solid rgba(255, 255, 255, 0.15);
@@ -275,7 +275,7 @@
     align-items: center;
     text-align: center;
   }
-  .avatar { width: 200px; height: 200px; font-size: 3.5rem; }
+  .avatar { width: 160px; height: 160px; font-size: 3.5rem; }
   .sidebar-meta-item { justify-content: center; }
   .sidebar-stats { justify-content: center; }
   .pinned-grid { grid-template-columns: 1fr; }
