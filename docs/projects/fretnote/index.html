@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FretNote — Case Study</title>
+  <meta name="description" content="An iOS guitar note-learning app with real-time pitch detection, gamified drilling, and post-session analytics for fretboard mastery.">
+  <meta name="keywords" content="FretNote, guitar, fretboard, pitch detection, YIN, iOS app, music education, ear training, Swift">
+  <meta name="author" content="Mike Lott">
+  <link rel="icon" href="../../favicon.ico" type="image/x-icon">
+  <link rel="canonical" href="https://t0lkim.dev/projects/fretnote/">
+  <!-- Open Graph -->
+  <meta property="og:title" content="FretNote — Case Study">
+  <meta property="og:description" content="An iOS guitar note-learning app with real-time pitch detection, gamified drilling, and post-session analytics for fretboard mastery.">
+  <meta property="og:url" content="https://t0lkim.dev/projects/fretnote/">
+  <meta property="og:site_name" content="t0lkim.dev">
+  <meta property="og:type" content="article">
+  <meta property="og:locale" content="en_SG">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="FretNote — Case Study">
+  <meta name="twitter:description" content="An iOS guitar note-learning app with real-time pitch detection, gamified drilling, and post-session analytics for fretboard mastery.">
+  <!-- JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "SoftwareSourceCode",
+        "name": "FretNote",
+        "description": "FretNote is an iOS guitar note-learning app that uses real-time YIN pitch detection to judge whether you played the right note, with gamified drilling and post-session analytics that surface your weak spots.",
+        "programmingLanguage": "Swift",
+        "author": { "@type": "Person", "name": "Mike Lott", "url": "https://t0lkim.dev" },
+        "url": "https://t0lkim.dev/projects/fretnote/",
+        "applicationCategory": "Music Education",
+        "operatingSystem": "iOS"
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is FretNote?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "FretNote is an iOS guitar note-learning app that uses real-time YIN pitch detection to judge whether you played the right note, with gamified drilling and post-session analytics that surface your weak spots."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How does FretNote detect pitch?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "FretNote implements YIN autocorrelation in pure Swift against AVAudioEngine — zero external dependencies. A sound classifier pre-gate rejects non-musical audio, a stability gate requires three consecutive frames to agree, and an octave-lock guard prevents harmonic confusion on low strings."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does FretNote work with any guitar?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes — any guitar through any input. Built-in iPad microphone, audio interface, or Bluetooth. Standard (EADGBE) and Fourths (EADGCF) tunings supported with one-tap switching."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+  <link rel="stylesheet" href="../../assets/css/base.css">
+  <link rel="stylesheet" href="../../assets/css/teentidal.css">
+  <style>
+    /* ── Section-specific styling for FretNote ── */
+
+    /* ── Section label ── */
+    .section-label {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 16px;
+    }
+
+    /* ── Consistent H3 subheading spacing ── */
+    section h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    /* ── Problem section ── */
+    .s-problem > h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .s-problem > p {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 22px;
+      margin-bottom: 12px;
+      font-size: 0.95rem;
+    }
+    .s-problem > p strong {
+      color: var(--text);
+    }
+    .s-problem blockquote {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+      margin: 20px 0;
+      font-style: italic;
+      border-left: 3px solid var(--red);
+      position: relative;
+    }
+    .s-problem blockquote::before {
+      content: 'PROBLEM STATEMENT';
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 12px;
+      font-style: normal;
+    }
+    .s-problem blockquote p {
+      font-size: 1rem;
+      color: var(--text);
+      line-height: 1.7;
+      margin-bottom: 0;
+    }
+    .s-problem > ul {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 16px 0;
+    }
+    .s-problem > ul > li {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: var(--red-dim);
+      border: 1px solid rgba(248, 81, 73, 0.25);
+      border-radius: 8px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .s-problem > ul > li::before {
+      content: '\00d7';
+      color: var(--red);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    /* ── Solution section ── */
+    .s-solution > h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .s-solution > p {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 12px;
+      position: relative;
+      overflow: hidden;
+      font-size: 0.95rem;
+    }
+    .s-solution > p::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--teal), transparent);
+    }
+    .s-solution > p strong {
+      color: var(--teal);
+    }
+
+    /* ── Design Principles section ── */
+    .s-principles > ul {
+      list-style: none;
+      padding: 0;
+      margin: 20px 0;
+    }
+    .s-principles > ul > li {
+      position: relative;
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .s-principles > ul > li strong {
+      color: var(--teal);
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    /* ── Architecture section ── */
+    .s-arch > h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .s-arch > p {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 22px;
+      margin-bottom: 12px;
+      font-size: 0.95rem;
+    }
+    .s-arch > p strong {
+      color: var(--teal);
+    }
+    .s-arch > ul {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 22px 18px 38px;
+      margin-bottom: 12px;
+    }
+    .s-arch > ul li {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 4px;
+    }
+
+    /* ── Entity Tags section ── */
+    .s-entity > h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .s-entity > p {
+      font-size: 0.95rem;
+    }
+    .s-entity > ul {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 22px 18px 38px;
+      margin-bottom: 16px;
+    }
+    .s-entity > ul li {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 4px;
+    }
+    .s-entity > ul li strong {
+      color: var(--text);
+    }
+    .s-entity table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 16px 0;
+      font-size: 0.9rem;
+    }
+    .s-entity th {
+      background: var(--surface);
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 600;
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+    }
+    .s-entity td {
+      padding: 10px 16px;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+    }
+    .s-entity tr:last-child td { border-bottom: none; }
+
+    /* ── Conflict Detection section ── */
+    .s-conflict > h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .s-conflict > p {
+      font-size: 0.95rem;
+    }
+
+    /* ��─ Work Journal section ── */
+    .s-journal > h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .s-journal > p {
+      font-size: 0.95rem;
+    }
+    .s-journal > p strong {
+      color: var(--teal);
+    }
+
+    /* ── Security section ── */
+    .s-security > h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .s-security > ul {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 22px 18px 38px;
+      margin-bottom: 16px;
+    }
+    .s-security > ul li {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 4px;
+    }
+
+    /* ���─ Token Economics section ── */
+    .s-tokens > h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .s-tokens table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 16px 0;
+      font-size: 0.9rem;
+    }
+    .s-tokens th {
+      background: var(--surface);
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 600;
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+    }
+    .s-tokens td {
+      padding: 10px 16px;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+    }
+    .s-tokens tr:last-child td { border-bottom: none; }
+  </style>
+</head>
+<body>
+
+  <a href="/" class="home-btn" title="Home"><svg width="18" height="18" viewBox="0 0 16 16"><path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6.5 6.5A.5.5 0 0 0 1.5 8.5v5a.5.5 0 0 0 .5.5h3.5a.5.5 0 0 0 .5-.5V11h4v2.5a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-5a.5.5 0 0 0-.146-.354L8.354 1.146ZM2.5 13V8.707l5.5-5.5 5.5 5.5V13H11v-2.5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0-.5.5V13H2.5Z"/></svg></a>
+
+  <!-- Hero -->
+  <header class="hero has-icon">
+    <div class="container">
+      <div class="hero-badge">Case Study</div>
+      <h1>Fret<span class="accent">Note</span></h1>
+      <img class="hero-icon" src="assets/icon.svg" alt="FretNote icon">
+      <p class="hero-sub">Practise. Listen. Adapt.</p>
+    </div>
+  </header>
+
+  <div class="divider"></div>
+
+  <!-- Problem -->
+  <section class="container fade-in">
+    <div class="section-label">The Problem</div>
+    <div class="s-problem">
+      <h3 id="knowing-the-fretboard-not-just-the-shapes">Knowing the fretboard, not just the shapes</h3>
+<p>Many guitarists learn patterns — chord shapes, scale boxes, pentatonic positions. They can play in a key without knowing which note their finger is on. This works until it doesn't: improvising over changes, communicating with other musicians, or switching between tunings breaks the pattern-dependent player.</p>
+<p>A few apps do drill note identification with microphone input. FretNote's approach differs in a few areas: enforcing tuning before practice starts, treating Fourths tuning as a first-class peer of Standard rather than an add-on, and building the entire experience around on-device privacy with no accounts or network requests.</p>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Solution -->
+  <section class="container fade-in">
+    <div class="section-label">The Solution</div>
+    <div class="s-solution">
+      <h3 id="a-fretboard-trainer-that-listens">A fretboard trainer that listens</h3>
+<p>FretNote announces a target note and octave aloud — via speech synthesis. You play it on your guitar. The app listens through the device microphone, identifies the note you played, and judges the result: Correct, Close , or Wrong.</p>
+<p>The practice loop runs continuously until the session timer expires. Post-session analytics break down your accuracy by note name, fretboard region, and octave band — surfacing the three weakest areas and biasing the next session's prompts toward them.</p>
+<p>Standard (EADGBE) and Fourths (EADGCF) tunings are treated equally and are switchable with one tap, and works with any guitar through any input — built-in mic, audio interface, or Bluetooth.</p>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Design Philosophy -->
+  <section class="container fade-in">
+    <div class="section-label">Design Philosophy</div>
+    <div class="s-arch">
+      <h3 id="practice-not-distraction">Practice, not distraction</h3>
+<p>FretNote is built for the practice room. You're holding a guitar — the phone is propped up somewhere nearby. Everything about the interface respects that context.</p>
+<p>The target note renders large and clear. Verdict feedback uses colour, shape, and word simultaneously — you can catch the result in peripheral vision without looking away from the fretboard. Dark mode is the default because most practice happens in dim rooms where the screen is the brightest object in your field of view.</p>
+<p>No modal alerts during practice. Route changes (headphones in or out) surface as transient banners, never dialogs. Motion is minimal and purposeful: verdict flashes are quick, score increments are number-rolls. No bounce, no confetti, no looping animations. Nothing pulls your attention from the instrument.</p>
+<p>Feedback is tonally neutral. No celebratory stabs, no punitive flashes. The app respects that practice is deliberate work, not a game show. Patient, confident, informative.</p>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Tune Gate -->
+  <section class="container fade-in">
+    <div class="section-label">Tune Gate</div>
+    <div class="s-arch">
+      <h3 id="practice-doesnt-start-until-your-guitar-is-in-tune">Practice doesn't start until your guitar is in tune</h3>
+<p>Before each practice session, FretNote requires you to tune your guitar. Six per-string indicators show the tuning state of each open string. The start button is disabled until all six are green. An explicit skip override exists but is deliberately not the default action.</p>
+<p>A built-in standalone tuner is also available, reusing the same listening engine. Cents-offset needle with colour-coded thresholds and nearest-open-string highlighting for the current tuning.</p>
+<p>This is an opinionated design choice. Practising with an out-of-tune guitar trains your ear to accept wrong pitches. FretNote won't let you do that by default.</p>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Analytics -->
+  <section class="container fade-in">
+    <div class="section-label">Analytics</div>
+    <div class="s-arch">
+      <h3 id="know-your-weak-spots">Know your weak spots</h3>
+<p>Every attempt is recorded <strong>locally</strong> on your device — prompted note, detected result, verdict, timestamp, and tuning. No network requests, no cloud sync, no accounts.</p>
+<p>Post-session summary renders three views: accuracy by note name (C through B), accuracy by fretboard region (strings by fret zones as a heatmap), and accuracy by octave band. The three weakest areas across all axes are surfaced as the recommended focus for your next session.</p>
+<p>Over time, FretNote builds an increasingly precise map of what you know and what you don't — and steers your practice toward the gaps.</p>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- On-Device Intelligence -->
+  <section class="container fade-in">
+    <div class="section-label">On-Device Intelligence</div>
+    <div class="s-arch">
+      <h3 id="your-guitar-your-device-your-data">Your guitar, your device, your data</h3>
+<p>FretNote uses Apple's on-device frameworks to make practice hands-free and accurate — without sending a single byte off your device.</p>
+<p><strong>Intelligent listening</strong> — the app distinguishes between guitar sounds and background noise. Conversations in the room, TV audio, and environmental sounds are filtered out before note detection begins. You don't need silence to practise.</p>
+<p><strong>Voice commands</strong> — between prompts, an optional voice command listener recognises natural-language commands: skip the current prompt, pause, resume, or switch tuning mid-session. The feature is off by default because ambient conditions vary — enable it in Settings when your practice space is quiet enough.</p>
+<p><strong>Privacy by architecture</strong> — all processing runs entirely on-device. No audio leaves your phone. No analytics are uploaded. No accounts exist to create. This isn't a policy that could change with a terms update — it's how the app is built.</p>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- What's Next -->
+  <section class="container fade-in">
+    <div class="section-label">What's Next</div>
+    <div class="s-arch">
+      <h3 id="roadmap-subject-to-change">Roadmap (subject to change)</h3>
+<ul>
+<li>Physical device precision tuning and validation</li>
+<li>Weak-area biasing for prompt selection</li>
+<li>iCloud personal sync for settings and session history (opt-in)</li>
+<li>Voice picker: curated voice options for call-outs</li>
+<li>Adaptive call-out speed based on rolling session accuracy</li>
+<li>Post-session summary redesign</li>
+<li>Instrument family support — bass guitar (4/5/6-string)</li>
+<li>iPad-optimised layout for music-stand viewing distance</li>
+<li>Accessibility modes for visually and hearing impaired users</li>
+</ul>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Status -->
+  <section class="container fade-in">
+    <div class="section-label">Current Status</div>
+
+    <div class="status-banner">
+      <div class="status-left">
+        <div class="status-label">Project Status</div>
+        <div class="status-value"><span class="dot"></span>Alpha &mdash; Core Pipeline Functional</div>
+      </div>
+      <div class="status-meta">
+        <div class="meta-item">
+          <div class="meta-label">Platform</div>
+          <div class="meta-value">iOS 17+</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Distribution</div>
+          <div class="meta-value">One-time purchase</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Dependencies</div>
+          <div class="meta-value">Zero third-party</div>
+        </div>
+      </div>
+    </div>
+
+    <p>FretNote's listening engine is wired end-to-end. The practice loop, analytics, Siri integration, and tuner are functional. Physical device validation is the next milestone. No accounts, no network requests, no ads.</p>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Footer -->
+  <footer class="footer container">
+    <p class="footer-copy">&copy; 2026 t0lkim</p>
+  </footer>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
